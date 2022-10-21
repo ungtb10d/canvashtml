@@ -5,16 +5,16 @@ exports.visibility = {
     name: 'visible',
     initialValue: 'none',
     prefix: false,
-    type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
+    type: 2 /* IDENT_VALUE */,
     parse: function (_context, visibility) {
         switch (visibility) {
             case 'hidden':
-                return 1 /* VISIBILITY.HIDDEN */;
+                return 1 /* HIDDEN */;
             case 'collapse':
-                return 2 /* VISIBILITY.COLLAPSE */;
+                return 2 /* COLLAPSE */;
             case 'visible':
             default:
-                return 0 /* VISIBILITY.VISIBLE */;
+                return 0 /* VISIBLE */;
         }
     }
 };

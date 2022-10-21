@@ -60,13 +60,13 @@ var parsePathForBorderStroke = function (curves, borderSide) {
 exports.parsePathForBorderStroke = parsePathForBorderStroke;
 var createStrokePathFromCurves = function (outer1, outer2) {
     var path = [];
-    if ((0, bezier_curve_1.isBezierCurve)(outer1)) {
+    if (bezier_curve_1.isBezierCurve(outer1)) {
         path.push(outer1.subdivide(0.5, false));
     }
     else {
         path.push(outer1);
     }
-    if ((0, bezier_curve_1.isBezierCurve)(outer2)) {
+    if (bezier_curve_1.isBezierCurve(outer2)) {
         path.push(outer2.subdivide(0.5, true));
     }
     else {
@@ -76,25 +76,25 @@ var createStrokePathFromCurves = function (outer1, outer2) {
 };
 var createPathFromCurves = function (outer1, inner1, outer2, inner2) {
     var path = [];
-    if ((0, bezier_curve_1.isBezierCurve)(outer1)) {
+    if (bezier_curve_1.isBezierCurve(outer1)) {
         path.push(outer1.subdivide(0.5, false));
     }
     else {
         path.push(outer1);
     }
-    if ((0, bezier_curve_1.isBezierCurve)(outer2)) {
+    if (bezier_curve_1.isBezierCurve(outer2)) {
         path.push(outer2.subdivide(0.5, true));
     }
     else {
         path.push(outer2);
     }
-    if ((0, bezier_curve_1.isBezierCurve)(inner2)) {
+    if (bezier_curve_1.isBezierCurve(inner2)) {
         path.push(inner2.subdivide(0.5, true).reverse());
     }
     else {
         path.push(inner2);
     }
-    if ((0, bezier_curve_1.isBezierCurve)(inner1)) {
+    if (bezier_curve_1.isBezierCurve(inner1)) {
         path.push(inner1.subdivide(0.5, false).reverse());
     }
     else {

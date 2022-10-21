@@ -6,20 +6,20 @@ var getElementDebugType = function (element) {
     var attribute = element.getAttribute(elementDebuggerAttribute);
     switch (attribute) {
         case 'all':
-            return 1 /* DebuggerType.ALL */;
+            return 1 /* ALL */;
         case 'clone':
-            return 2 /* DebuggerType.CLONE */;
+            return 2 /* CLONE */;
         case 'parse':
-            return 3 /* DebuggerType.PARSE */;
+            return 3 /* PARSE */;
         case 'render':
-            return 4 /* DebuggerType.RENDER */;
+            return 4 /* RENDER */;
         default:
-            return 0 /* DebuggerType.NONE */;
+            return 0 /* NONE */;
     }
 };
 var isDebugging = function (element, type) {
     var elementType = getElementDebugType(element);
-    return elementType === 1 /* DebuggerType.ALL */ || type === elementType;
+    return elementType === 1 /* ALL */ || type === elementType;
 };
 exports.isDebugging = isDebugging;
 //# sourceMappingURL=debugger.js.map

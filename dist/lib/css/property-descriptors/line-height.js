@@ -7,17 +7,17 @@ exports.lineHeight = {
     name: 'line-height',
     initialValue: 'normal',
     prefix: false,
-    type: 4 /* PropertyDescriptorParsingType.TOKEN_VALUE */
+    type: 4 /* TOKEN_VALUE */
 };
 var computeLineHeight = function (token, fontSize) {
-    if ((0, parser_1.isIdentToken)(token) && token.value === 'normal') {
+    if (parser_1.isIdentToken(token) && token.value === 'normal') {
         return 1.2 * fontSize;
     }
-    else if (token.type === 17 /* TokenType.NUMBER_TOKEN */) {
+    else if (token.type === 17 /* NUMBER_TOKEN */) {
         return fontSize * token.number;
     }
-    else if ((0, length_percentage_1.isLengthPercentage)(token)) {
-        return (0, length_percentage_1.getAbsoluteValue)(token, fontSize);
+    else if (length_percentage_1.isLengthPercentage(token)) {
+        return length_percentage_1.getAbsoluteValue(token, fontSize);
     }
     return fontSize;
 };

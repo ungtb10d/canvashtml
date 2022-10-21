@@ -171,9 +171,9 @@ describe('cache-storage', function () {
                     return [4 /*yield*/, cache.addImage('http://example.com/test2.jpg')];
                 case 2:
                     _a.sent();
-                    (0, assert_1.deepStrictEqual)(images.length, 2);
-                    (0, assert_1.deepStrictEqual)(images[0].src, 'http://example.com/test.jpg');
-                    (0, assert_1.deepStrictEqual)(images[1].src, 'http://example.com/test2.jpg');
+                    assert_1.deepStrictEqual(images.length, 2);
+                    assert_1.deepStrictEqual(images[0].src, 'http://example.com/test.jpg');
+                    assert_1.deepStrictEqual(images[1].src, 'http://example.com/test2.jpg');
                     return [2 /*return*/];
             }
         });
@@ -190,8 +190,8 @@ describe('cache-storage', function () {
                     return [4 /*yield*/, cache.addImage('http://example.com/test.jpg')];
                 case 2:
                     _a.sent();
-                    (0, assert_1.deepStrictEqual)(images.length, 1);
-                    (0, assert_1.deepStrictEqual)(images[0].src, 'http://example.com/test.jpg');
+                    assert_1.deepStrictEqual(images.length, 1);
+                    assert_1.deepStrictEqual(images[0].src, 'http://example.com/test.jpg');
                     return [2 /*return*/];
             }
         });
@@ -209,9 +209,9 @@ describe('cache-storage', function () {
                         return [4 /*yield*/, cache.addImage('http://example.com/test2.svg')];
                     case 2:
                         _a.sent();
-                        (0, assert_1.deepStrictEqual)(images.length, 2);
-                        (0, assert_1.deepStrictEqual)(images[0].src, 'http://example.com/test.svg');
-                        (0, assert_1.deepStrictEqual)(images[1].src, 'http://example.com/test2.svg');
+                        assert_1.deepStrictEqual(images.length, 2);
+                        assert_1.deepStrictEqual(images[0].src, 'http://example.com/test.svg');
+                        assert_1.deepStrictEqual(images[1].src, 'http://example.com/test2.svg');
                         return [2 /*return*/];
                 }
             });
@@ -229,7 +229,7 @@ describe('cache-storage', function () {
                         return [4 /*yield*/, cache.addImage('http://example.com/test2.svg')];
                     case 2:
                         _a.sent();
-                        (0, assert_1.deepStrictEqual)(images.length, 0);
+                        assert_1.deepStrictEqual(images.length, 0);
                         return [2 /*return*/];
                 }
             });
@@ -247,7 +247,7 @@ describe('cache-storage', function () {
                         return [4 /*yield*/, cache.addImage('http://html2canvas.hertzen.com/test.jpg')];
                     case 1:
                         _a.sent();
-                        (0, assert_1.deepStrictEqual)(images.length, 0);
+                        assert_1.deepStrictEqual(images.length, 0);
                         return [2 /*return*/];
                 }
             });
@@ -264,9 +264,9 @@ describe('cache-storage', function () {
                         return [4 /*yield*/, cache.addImage('http://html2canvas.hertzen.com/test.jpg')];
                     case 1:
                         _a.sent();
-                        (0, assert_1.deepStrictEqual)(images.length, 1);
-                        (0, assert_1.deepStrictEqual)(images[0].src, 'http://html2canvas.hertzen.com/test.jpg');
-                        (0, assert_1.deepStrictEqual)(images[0].crossOrigin, undefined);
+                        assert_1.deepStrictEqual(images.length, 1);
+                        assert_1.deepStrictEqual(images[0].src, 'http://html2canvas.hertzen.com/test.jpg');
+                        assert_1.deepStrictEqual(images[0].crossOrigin, undefined);
                         return [2 /*return*/];
                 }
             });
@@ -280,9 +280,9 @@ describe('cache-storage', function () {
                         return [4 /*yield*/, cache.addImage('http://html2canvas.hertzen.com/test.jpg')];
                     case 1:
                         _a.sent();
-                        (0, assert_1.deepStrictEqual)(images.length, 1);
-                        (0, assert_1.deepStrictEqual)(images[0].src, 'http://html2canvas.hertzen.com/test.jpg');
-                        (0, assert_1.deepStrictEqual)(images[0].crossOrigin, 'anonymous');
+                        assert_1.deepStrictEqual(images.length, 1);
+                        assert_1.deepStrictEqual(images[0].src, 'http://html2canvas.hertzen.com/test.jpg');
+                        assert_1.deepStrictEqual(images[0].crossOrigin, 'anonymous');
                         return [2 /*return*/];
                 }
             });
@@ -300,7 +300,7 @@ describe('cache-storage', function () {
                         return [4 /*yield*/, cache.addImage('http://html2canvas.hertzen.com/test.jpg')];
                     case 1:
                         _a.sent();
-                        (0, assert_1.deepStrictEqual)(images.length, 0);
+                        assert_1.deepStrictEqual(images.length, 0);
                         return [2 /*return*/];
                 }
             });
@@ -314,9 +314,9 @@ describe('cache-storage', function () {
                         return [4 /*yield*/, cache.addImage('http://html2canvas.hertzen.com/test.jpg')];
                     case 1:
                         _a.sent();
-                        (0, assert_1.deepStrictEqual)(images.length, 1);
-                        (0, assert_1.deepStrictEqual)(images[0].src, 'http://html2canvas.hertzen.com/test.jpg');
-                        (0, assert_1.deepStrictEqual)(images[0].crossOrigin, 'anonymous');
+                        assert_1.deepStrictEqual(images.length, 1);
+                        assert_1.deepStrictEqual(images[0].src, 'http://html2canvas.hertzen.com/test.jpg');
+                        assert_1.deepStrictEqual(images[0].crossOrigin, 'anonymous');
                         return [2 /*return*/];
                 }
             });
@@ -330,13 +330,13 @@ describe('cache-storage', function () {
                         return [4 /*yield*/, cache.addImage('http://html2canvas.hertzen.com/test.jpg')];
                     case 1:
                         _a.sent();
-                        (0, assert_1.deepStrictEqual)(xhr.length, 1);
-                        (0, assert_1.deepStrictEqual)(xhr[0].url, "".concat(proxy, "?url=").concat(encodeURIComponent('http://html2canvas.hertzen.com/test.jpg'), "&responseType=text"));
+                        assert_1.deepStrictEqual(xhr.length, 1);
+                        assert_1.deepStrictEqual(xhr[0].url, proxy + "?url=" + encodeURIComponent('http://html2canvas.hertzen.com/test.jpg') + "&responseType=text");
                         return [4 /*yield*/, xhr[0].load(200, '<data response>')];
                     case 2:
                         _a.sent();
-                        (0, assert_1.deepStrictEqual)(images.length, 1);
-                        (0, assert_1.deepStrictEqual)(images[0].src, '<data response>');
+                        assert_1.deepStrictEqual(images.length, 1);
+                        assert_1.deepStrictEqual(images[0].src, '<data response>');
                         return [2 /*return*/];
                 }
             });
@@ -352,9 +352,9 @@ describe('cache-storage', function () {
                         return [4 /*yield*/, cache.addImage('http://html2canvas.hertzen.com/test.jpg')];
                     case 1:
                         _a.sent();
-                        (0, assert_1.deepStrictEqual)(xhr.length, 1);
-                        (0, assert_1.deepStrictEqual)(xhr[0].url, "".concat(proxy, "?url=").concat(encodeURIComponent('http://html2canvas.hertzen.com/test.jpg'), "&responseType=text"));
-                        (0, assert_1.deepStrictEqual)(xhr[0].timeout, 10);
+                        assert_1.deepStrictEqual(xhr.length, 1);
+                        assert_1.deepStrictEqual(xhr[0].url, proxy + "?url=" + encodeURIComponent('http://html2canvas.hertzen.com/test.jpg') + "&responseType=text");
+                        assert_1.deepStrictEqual(xhr[0].timeout, 10);
                         if (xhr[0].ontimeout) {
                             xhr[0].ontimeout();
                         }
@@ -364,7 +364,7 @@ describe('cache-storage', function () {
                         return [4 /*yield*/, cache.match('http://html2canvas.hertzen.com/test.jpg')];
                     case 3:
                         _a.sent();
-                        (0, assert_1.fail)('Expected result to timeout');
+                        assert_1.fail('Expected result to timeout');
                         return [3 /*break*/, 5];
                     case 4:
                         e_1 = _a.sent();
@@ -389,7 +389,7 @@ describe('cache-storage', function () {
                     return [4 /*yield*/, cache.match('http://example.com/test.jpg')];
                 case 2:
                     response = _a.sent();
-                    (0, assert_1.deepStrictEqual)(response.src, 'http://example.com/test.jpg');
+                    assert_1.deepStrictEqual(response.src, 'http://example.com/test.jpg');
                     return [2 /*return*/];
             }
         });
@@ -407,7 +407,7 @@ describe('cache-storage', function () {
                     return [4 /*yield*/, cache.match('http://example.com/test.jpg')];
                 case 2:
                     _a.sent();
-                    (0, assert_1.fail)('Expected result to timeout');
+                    assert_1.fail('Expected result to timeout');
                     return [3 /*break*/, 4];
                 case 3:
                     e_2 = _a.sent();

@@ -103,7 +103,7 @@ var renderElement = function (element, opts) { return __awaiter(void 0, void 0, 
                     inlineImages: foreignObjectRendering,
                     copyStyles: foreignObjectRendering
                 };
-                context.logger.debug("Starting document clone with size ".concat(windowBounds.width, "x").concat(windowBounds.height, " scrolled to ").concat(-windowBounds.left, ",").concat(-windowBounds.top));
+                context.logger.debug("Starting document clone with size " + windowBounds.width + "x" + windowBounds.height + " scrolled to " + -windowBounds.left + "," + -windowBounds.top);
                 documentCloner = new document_cloner_1.DocumentCloner(context, element, cloneOptions);
                 clonedElement = documentCloner.clonedReferenceElement;
                 if (!clonedElement) {
@@ -112,9 +112,9 @@ var renderElement = function (element, opts) { return __awaiter(void 0, void 0, 
                 return [4 /*yield*/, documentCloner.toIFrame(ownerDocument, windowBounds)];
             case 1:
                 container = _u.sent();
-                _a = (0, node_parser_1.isBodyElement)(clonedElement) || (0, node_parser_1.isHTMLElement)(clonedElement)
-                    ? (0, bounds_1.parseDocumentSize)(clonedElement.ownerDocument)
-                    : (0, bounds_1.parseBounds)(context, clonedElement), width = _a.width, height = _a.height, left = _a.left, top = _a.top;
+                _a = node_parser_1.isBodyElement(clonedElement) || node_parser_1.isHTMLElement(clonedElement)
+                    ? bounds_1.parseDocumentSize(clonedElement.ownerDocument)
+                    : bounds_1.parseBounds(context, clonedElement), width = _a.width, height = _a.height, left = _a.left, top = _a.top;
                 backgroundColor = parseBackgroundColor(context, clonedElement, opts.backgroundColor);
                 renderOptions = {
                     canvas: opts.canvas,
@@ -133,13 +133,13 @@ var renderElement = function (element, opts) { return __awaiter(void 0, void 0, 
                 canvas = _u.sent();
                 return [3 /*break*/, 5];
             case 3:
-                context.logger.debug("Document cloned, element located at ".concat(left, ",").concat(top, " with size ").concat(width, "x").concat(height, " using computed rendering"));
+                context.logger.debug("Document cloned, element located at " + left + "," + top + " with size " + width + "x" + height + " using computed rendering");
                 context.logger.debug("Starting DOM parsing");
-                root = (0, node_parser_1.parseTree)(context, clonedElement);
+                root = node_parser_1.parseTree(context, clonedElement);
                 if (backgroundColor === root.styles.backgroundColor) {
                     root.styles.backgroundColor = color_1.COLORS.TRANSPARENT;
                 }
-                context.logger.debug("Starting renderer for element at ".concat(renderOptions.x, ",").concat(renderOptions.y, " with size ").concat(renderOptions.width, "x").concat(renderOptions.height));
+                context.logger.debug("Starting renderer for element at " + renderOptions.x + "," + renderOptions.y + " with size " + renderOptions.width + "x" + renderOptions.height);
                 renderer = new canvas_renderer_1.CanvasRenderer(context, renderOptions);
                 return [4 /*yield*/, renderer.render(root)];
             case 4:
@@ -160,19 +160,19 @@ var parseBackgroundColor = function (context, element, backgroundColorOverride) 
     var ownerDocument = element.ownerDocument;
     // http://www.w3.org/TR/css3-background/#special-backgrounds
     var documentBackgroundColor = ownerDocument.documentElement
-        ? (0, color_1.parseColor)(context, getComputedStyle(ownerDocument.documentElement).backgroundColor)
+        ? color_1.parseColor(context, getComputedStyle(ownerDocument.documentElement).backgroundColor)
         : color_1.COLORS.TRANSPARENT;
     var bodyBackgroundColor = ownerDocument.body
-        ? (0, color_1.parseColor)(context, getComputedStyle(ownerDocument.body).backgroundColor)
+        ? color_1.parseColor(context, getComputedStyle(ownerDocument.body).backgroundColor)
         : color_1.COLORS.TRANSPARENT;
     var defaultBackgroundColor = typeof backgroundColorOverride === 'string'
-        ? (0, color_1.parseColor)(context, backgroundColorOverride)
+        ? color_1.parseColor(context, backgroundColorOverride)
         : backgroundColorOverride === null
             ? color_1.COLORS.TRANSPARENT
             : 0xffffffff;
     return element === ownerDocument.documentElement
-        ? (0, color_1.isTransparent)(documentBackgroundColor)
-            ? (0, color_1.isTransparent)(bodyBackgroundColor)
+        ? color_1.isTransparent(documentBackgroundColor)
+            ? color_1.isTransparent(bodyBackgroundColor)
                 ? defaultBackgroundColor
                 : bodyBackgroundColor
             : documentBackgroundColor

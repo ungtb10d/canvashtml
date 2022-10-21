@@ -23,10 +23,10 @@ var SVGElementContainer = /** @class */ (function (_super) {
     function SVGElementContainer(context, img) {
         var _this = _super.call(this, context, img) || this;
         var s = new XMLSerializer();
-        var bounds = (0, bounds_1.parseBounds)(context, img);
-        img.setAttribute('width', "".concat(bounds.width, "px"));
-        img.setAttribute('height', "".concat(bounds.height, "px"));
-        _this.svg = "data:image/svg+xml,".concat(encodeURIComponent(s.serializeToString(img)));
+        var bounds = bounds_1.parseBounds(context, img);
+        img.setAttribute('width', bounds.width + "px");
+        img.setAttribute('height', bounds.height + "px");
+        _this.svg = "data:image/svg+xml," + encodeURIComponent(s.serializeToString(img));
         _this.intrinsicWidth = img.width.baseVal.value;
         _this.intrinsicHeight = img.height.baseVal.value;
         _this.context.cache.addImage(_this.svg);

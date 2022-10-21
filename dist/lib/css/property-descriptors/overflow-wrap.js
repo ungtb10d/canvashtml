@@ -5,14 +5,14 @@ exports.overflowWrap = {
     name: 'overflow-wrap',
     initialValue: 'normal',
     prefix: false,
-    type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
+    type: 2 /* IDENT_VALUE */,
     parse: function (_context, overflow) {
         switch (overflow) {
             case 'break-word':
-                return "break-word" /* OVERFLOW_WRAP.BREAK_WORD */;
+                return "break-word" /* BREAK_WORD */;
             case 'normal':
             default:
-                return "normal" /* OVERFLOW_WRAP.NORMAL */;
+                return "normal" /* NORMAL */;
         }
     }
 };

@@ -2,22 +2,22 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.borderLeftStyle = exports.borderBottomStyle = exports.borderRightStyle = exports.borderTopStyle = void 0;
 var borderStyleForSide = function (side) { return ({
-    name: "border-".concat(side, "-style"),
+    name: "border-" + side + "-style",
     initialValue: 'solid',
     prefix: false,
-    type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
+    type: 2 /* IDENT_VALUE */,
     parse: function (_context, style) {
         switch (style) {
             case 'none':
-                return 0 /* BORDER_STYLE.NONE */;
+                return 0 /* NONE */;
             case 'dashed':
-                return 2 /* BORDER_STYLE.DASHED */;
+                return 2 /* DASHED */;
             case 'dotted':
-                return 3 /* BORDER_STYLE.DOTTED */;
+                return 3 /* DOTTED */;
             case 'double':
-                return 4 /* BORDER_STYLE.DOUBLE */;
+                return 4 /* DOUBLE */;
         }
-        return 1 /* BORDER_STYLE.SOLID */;
+        return 1 /* SOLID */;
     }
 }); };
 exports.borderTopStyle = borderStyleForSide('top');

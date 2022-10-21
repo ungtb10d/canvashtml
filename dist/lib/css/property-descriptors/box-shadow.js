@@ -8,13 +8,13 @@ var length_1 = require("../types/length");
 exports.boxShadow = {
     name: 'box-shadow',
     initialValue: 'none',
-    type: 1 /* PropertyDescriptorParsingType.LIST */,
+    type: 1 /* LIST */,
     prefix: false,
     parse: function (context, tokens) {
-        if (tokens.length === 1 && (0, parser_1.isIdentWithValue)(tokens[0], 'none')) {
+        if (tokens.length === 1 && parser_1.isIdentWithValue(tokens[0], 'none')) {
             return [];
         }
-        return (0, parser_1.parseFunctionArgs)(tokens).map(function (values) {
+        return parser_1.parseFunctionArgs(tokens).map(function (values) {
             var shadow = {
                 color: 0x000000ff,
                 offsetX: length_percentage_1.ZERO_LENGTH,
@@ -26,10 +26,10 @@ exports.boxShadow = {
             var c = 0;
             for (var i = 0; i < values.length; i++) {
                 var token = values[i];
-                if ((0, parser_1.isIdentWithValue)(token, 'inset')) {
+                if (parser_1.isIdentWithValue(token, 'inset')) {
                     shadow.inset = true;
                 }
-                else if ((0, length_1.isLength)(token)) {
+                else if (length_1.isLength(token)) {
                     if (c === 0) {
                         shadow.offsetX = token;
                     }

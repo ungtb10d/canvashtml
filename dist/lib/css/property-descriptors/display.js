@@ -6,77 +6,77 @@ exports.display = {
     name: 'display',
     initialValue: 'inline-block',
     prefix: false,
-    type: 1 /* PropertyDescriptorParsingType.LIST */,
+    type: 1 /* LIST */,
     parse: function (_context, tokens) {
         return tokens.filter(parser_1.isIdentToken).reduce(function (bit, token) {
             return bit | parseDisplayValue(token.value);
-        }, 0 /* DISPLAY.NONE */);
+        }, 0 /* NONE */);
     }
 };
 var parseDisplayValue = function (display) {
     switch (display) {
         case 'block':
         case '-webkit-box':
-            return 2 /* DISPLAY.BLOCK */;
+            return 2 /* BLOCK */;
         case 'inline':
-            return 4 /* DISPLAY.INLINE */;
+            return 4 /* INLINE */;
         case 'run-in':
-            return 8 /* DISPLAY.RUN_IN */;
+            return 8 /* RUN_IN */;
         case 'flow':
-            return 16 /* DISPLAY.FLOW */;
+            return 16 /* FLOW */;
         case 'flow-root':
-            return 32 /* DISPLAY.FLOW_ROOT */;
+            return 32 /* FLOW_ROOT */;
         case 'table':
-            return 64 /* DISPLAY.TABLE */;
+            return 64 /* TABLE */;
         case 'flex':
         case '-webkit-flex':
-            return 128 /* DISPLAY.FLEX */;
+            return 128 /* FLEX */;
         case 'grid':
         case '-ms-grid':
-            return 256 /* DISPLAY.GRID */;
+            return 256 /* GRID */;
         case 'ruby':
-            return 512 /* DISPLAY.RUBY */;
+            return 512 /* RUBY */;
         case 'subgrid':
-            return 1024 /* DISPLAY.SUBGRID */;
+            return 1024 /* SUBGRID */;
         case 'list-item':
-            return 2048 /* DISPLAY.LIST_ITEM */;
+            return 2048 /* LIST_ITEM */;
         case 'table-row-group':
-            return 4096 /* DISPLAY.TABLE_ROW_GROUP */;
+            return 4096 /* TABLE_ROW_GROUP */;
         case 'table-header-group':
-            return 8192 /* DISPLAY.TABLE_HEADER_GROUP */;
+            return 8192 /* TABLE_HEADER_GROUP */;
         case 'table-footer-group':
-            return 16384 /* DISPLAY.TABLE_FOOTER_GROUP */;
+            return 16384 /* TABLE_FOOTER_GROUP */;
         case 'table-row':
-            return 32768 /* DISPLAY.TABLE_ROW */;
+            return 32768 /* TABLE_ROW */;
         case 'table-cell':
-            return 65536 /* DISPLAY.TABLE_CELL */;
+            return 65536 /* TABLE_CELL */;
         case 'table-column-group':
-            return 131072 /* DISPLAY.TABLE_COLUMN_GROUP */;
+            return 131072 /* TABLE_COLUMN_GROUP */;
         case 'table-column':
-            return 262144 /* DISPLAY.TABLE_COLUMN */;
+            return 262144 /* TABLE_COLUMN */;
         case 'table-caption':
-            return 524288 /* DISPLAY.TABLE_CAPTION */;
+            return 524288 /* TABLE_CAPTION */;
         case 'ruby-base':
-            return 1048576 /* DISPLAY.RUBY_BASE */;
+            return 1048576 /* RUBY_BASE */;
         case 'ruby-text':
-            return 2097152 /* DISPLAY.RUBY_TEXT */;
+            return 2097152 /* RUBY_TEXT */;
         case 'ruby-base-container':
-            return 4194304 /* DISPLAY.RUBY_BASE_CONTAINER */;
+            return 4194304 /* RUBY_BASE_CONTAINER */;
         case 'ruby-text-container':
-            return 8388608 /* DISPLAY.RUBY_TEXT_CONTAINER */;
+            return 8388608 /* RUBY_TEXT_CONTAINER */;
         case 'contents':
-            return 16777216 /* DISPLAY.CONTENTS */;
+            return 16777216 /* CONTENTS */;
         case 'inline-block':
-            return 33554432 /* DISPLAY.INLINE_BLOCK */;
+            return 33554432 /* INLINE_BLOCK */;
         case 'inline-list-item':
-            return 67108864 /* DISPLAY.INLINE_LIST_ITEM */;
+            return 67108864 /* INLINE_LIST_ITEM */;
         case 'inline-table':
-            return 134217728 /* DISPLAY.INLINE_TABLE */;
+            return 134217728 /* INLINE_TABLE */;
         case 'inline-flex':
-            return 268435456 /* DISPLAY.INLINE_FLEX */;
+            return 268435456 /* INLINE_FLEX */;
         case 'inline-grid':
-            return 536870912 /* DISPLAY.INLINE_GRID */;
+            return 536870912 /* INLINE_GRID */;
     }
-    return 0 /* DISPLAY.NONE */;
+    return 0 /* NONE */;
 };
 //# sourceMappingURL=display.js.map

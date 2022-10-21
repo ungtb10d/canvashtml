@@ -5,10 +5,10 @@ var parser_1 = require("../syntax/parser");
 exports.webkitTextStrokeWidth = {
     name: "-webkit-text-stroke-width",
     initialValue: '0',
-    type: 0 /* PropertyDescriptorParsingType.VALUE */,
+    type: 0 /* VALUE */,
     prefix: false,
     parse: function (_context, token) {
-        if ((0, parser_1.isDimensionToken)(token)) {
+        if (parser_1.isDimensionToken(token)) {
             return token.number;
         }
         return 0;

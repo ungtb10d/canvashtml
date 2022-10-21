@@ -90,15 +90,15 @@ var CanvasRenderer = /** @class */ (function (_super) {
         if (!options.canvas) {
             _this.canvas.width = Math.floor(options.width * options.scale);
             _this.canvas.height = Math.floor(options.height * options.scale);
-            _this.canvas.style.width = "".concat(options.width, "px");
-            _this.canvas.style.height = "".concat(options.height, "px");
+            _this.canvas.style.width = options.width + "px";
+            _this.canvas.style.height = options.height + "px";
         }
         _this.fontMetrics = new font_metrics_1.FontMetrics(document);
         _this.ctx.scale(_this.options.scale, _this.options.scale);
         _this.ctx.translate(-options.x, -options.y);
         _this.ctx.textBaseline = 'bottom';
         _this._activeEffects = [];
-        _this.context.logger.debug("Canvas renderer initialized (".concat(options.width, "x").concat(options.height, ") with scale ").concat(options.scale));
+        _this.context.logger.debug("Canvas renderer initialized (" + options.width + "x" + options.height + ") with scale " + options.scale);
         return _this;
     }
     CanvasRenderer.prototype.applyEffects = function (effects) {
@@ -110,15 +110,15 @@ var CanvasRenderer = /** @class */ (function (_super) {
     };
     CanvasRenderer.prototype.applyEffect = function (effect) {
         this.ctx.save();
-        if ((0, effects_1.isOpacityEffect)(effect)) {
+        if (effects_1.isOpacityEffect(effect)) {
             this.ctx.globalAlpha = effect.opacity;
         }
-        if ((0, effects_1.isTransformEffect)(effect)) {
+        if (effects_1.isTransformEffect(effect)) {
             this.ctx.translate(effect.offsetX, effect.offsetY);
             this.ctx.transform(effect.matrix[0], effect.matrix[1], effect.matrix[2], effect.matrix[3], effect.matrix[4], effect.matrix[5]);
             this.ctx.translate(-effect.offsetX, -effect.offsetY);
         }
-        if ((0, effects_1.isClipEffect)(effect)) {
+        if (effects_1.isClipEffect(effect)) {
             this.path(effect.path);
             this.ctx.clip();
         }
@@ -150,7 +150,7 @@ var CanvasRenderer = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if ((0, bitwise_1.contains)(paint.container.flags, 16 /* FLAGS.DEBUG_RENDER */)) {
+                        if (bitwise_1.contains(paint.container.flags, 16 /* DEBUG_RENDER */)) {
                             debugger;
                         }
                         if (!paint.container.styles.isVisible()) return [3 /*break*/, 3];
@@ -172,7 +172,7 @@ var CanvasRenderer = /** @class */ (function (_super) {
             this.ctx.fillText(text.text, text.bounds.left, text.bounds.top + baseline);
         }
         else {
-            var letters = (0, text_1.segmentGraphemes)(text.text);
+            var letters = text_1.segmentGraphemes(text.text);
             letters.reduce(function (left, letter) {
                 _this.ctx.fillText(letter, left, text.bounds.top + baseline);
                 return left + _this.ctx.measureText(letter).width;
@@ -184,9 +184,9 @@ var CanvasRenderer = /** @class */ (function (_super) {
             .filter(function (variant) { return variant === 'normal' || variant === 'small-caps'; })
             .join('');
         var fontFamily = fixIOSSystemFonts(styles.fontFamily).join(', ');
-        var fontSize = (0, parser_1.isDimensionToken)(styles.fontSize)
-            ? "".concat(styles.fontSize.number).concat(styles.fontSize.unit)
-            : "".concat(styles.fontSize.number, "px");
+        var fontSize = parser_1.isDimensionToken(styles.fontSize)
+            ? "" + styles.fontSize.number + styles.fontSize.unit
+            : styles.fontSize.number + "px";
         return [
             [styles.fontStyle, fontVariant, styles.fontWeight, fontSize, fontFamily].join(' '),
             fontFamily,
@@ -200,7 +200,7 @@ var CanvasRenderer = /** @class */ (function (_super) {
             return __generator(this, function (_c) {
                 _a = this.createFontStyle(styles), font = _a[0], fontFamily = _a[1], fontSize = _a[2];
                 this.ctx.font = font;
-                this.ctx.direction = styles.direction === 1 /* DIRECTION.RTL */ ? 'rtl' : 'ltr';
+                this.ctx.direction = styles.direction === 1 /* RTL */ ? 'rtl' : 'ltr';
                 this.ctx.textAlign = 'left';
                 this.ctx.textBaseline = 'alphabetic';
                 _b = this.fontMetrics.getMetrics(fontFamily, fontSize), baseline = _b.baseline, middle = _b.middle;
@@ -208,8 +208,8 @@ var CanvasRenderer = /** @class */ (function (_super) {
                 text.textBounds.forEach(function (text) {
                     paintOrder.forEach(function (paintOrderLayer) {
                         switch (paintOrderLayer) {
-                            case 0 /* PAINT_ORDER_LAYER.FILL */:
-                                _this.ctx.fillStyle = (0, color_1.asString)(styles.color);
+                            case 0 /* FILL */:
+                                _this.ctx.fillStyle = color_1.asString(styles.color);
                                 _this.renderTextWithLetterSpacing(text, styles.letterSpacing, baseline);
                                 var textShadows = styles.textShadow;
                                 if (textShadows.length && text.text.trim().length) {
@@ -217,7 +217,7 @@ var CanvasRenderer = /** @class */ (function (_super) {
                                         .slice(0)
                                         .reverse()
                                         .forEach(function (textShadow) {
-                                        _this.ctx.shadowColor = (0, color_1.asString)(textShadow.color);
+                                        _this.ctx.shadowColor = color_1.asString(textShadow.color);
                                         _this.ctx.shadowOffsetX = textShadow.offsetX.number * _this.options.scale;
                                         _this.ctx.shadowOffsetY = textShadow.offsetY.number * _this.options.scale;
                                         _this.ctx.shadowBlur = textShadow.blur.number;
@@ -229,19 +229,19 @@ var CanvasRenderer = /** @class */ (function (_super) {
                                     _this.ctx.shadowBlur = 0;
                                 }
                                 if (styles.textDecorationLine.length) {
-                                    _this.ctx.fillStyle = (0, color_1.asString)(styles.textDecorationColor || styles.color);
+                                    _this.ctx.fillStyle = color_1.asString(styles.textDecorationColor || styles.color);
                                     styles.textDecorationLine.forEach(function (textDecorationLine) {
                                         switch (textDecorationLine) {
-                                            case 1 /* TEXT_DECORATION_LINE.UNDERLINE */:
+                                            case 1 /* UNDERLINE */:
                                                 // Draws a line at the baseline of the font
                                                 // TODO As some browsers display the line as more than 1px if the font-size is big,
                                                 // need to take that into account both in position and size
                                                 _this.ctx.fillRect(text.bounds.left, Math.round(text.bounds.top + baseline), text.bounds.width, 1);
                                                 break;
-                                            case 2 /* TEXT_DECORATION_LINE.OVERLINE */:
+                                            case 2 /* OVERLINE */:
                                                 _this.ctx.fillRect(text.bounds.left, Math.round(text.bounds.top), text.bounds.width, 1);
                                                 break;
-                                            case 3 /* TEXT_DECORATION_LINE.LINE_THROUGH */:
+                                            case 3 /* LINE_THROUGH */:
                                                 // TODO try and find exact position for line-through
                                                 _this.ctx.fillRect(text.bounds.left, Math.ceil(text.bounds.top + middle), text.bounds.width, 1);
                                                 break;
@@ -249,9 +249,9 @@ var CanvasRenderer = /** @class */ (function (_super) {
                                     });
                                 }
                                 break;
-                            case 1 /* PAINT_ORDER_LAYER.STROKE */:
+                            case 1 /* STROKE */:
                                 if (styles.webkitTextStrokeWidth && text.text.trim().length) {
-                                    _this.ctx.strokeStyle = (0, color_1.asString)(styles.webkitTextStrokeColor);
+                                    _this.ctx.strokeStyle = color_1.asString(styles.webkitTextStrokeColor);
                                     _this.ctx.lineWidth = styles.webkitTextStrokeWidth;
                                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                     _this.ctx.lineJoin = !!window.chrome ? 'miter' : 'round';
@@ -270,8 +270,8 @@ var CanvasRenderer = /** @class */ (function (_super) {
     };
     CanvasRenderer.prototype.renderReplacedElement = function (container, curves, image) {
         if (image && container.intrinsicWidth > 0 && container.intrinsicHeight > 0) {
-            var box = (0, box_sizing_1.contentBox)(container);
-            var path = (0, bound_curves_1.calculatePaddingBoxPath)(curves);
+            var box = box_sizing_1.contentBox(container);
+            var path = bound_curves_1.calculatePaddingBoxPath(curves);
             this.path(path);
             this.ctx.save();
             this.ctx.clip();
@@ -285,7 +285,7 @@ var CanvasRenderer = /** @class */ (function (_super) {
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
-                        this.applyEffects(paint.getEffects(4 /* EffectTarget.CONTENT */));
+                        this.applyEffects(paint.getEffects(4 /* CONTENT */));
                         container = paint.container;
                         curves = paint.curves;
                         styles = container.styles;
@@ -313,7 +313,7 @@ var CanvasRenderer = /** @class */ (function (_super) {
                         return [3 /*break*/, 8];
                     case 7:
                         e_1 = _c.sent();
-                        this.context.logger.error("Error loading image ".concat(container.src));
+                        this.context.logger.error("Error loading image " + container.src);
                         return [3 /*break*/, 8];
                     case 8:
                         if (container instanceof canvas_element_container_1.CanvasElementContainer) {
@@ -330,7 +330,7 @@ var CanvasRenderer = /** @class */ (function (_super) {
                         return [3 /*break*/, 12];
                     case 11:
                         e_2 = _c.sent();
-                        this.context.logger.error("Error loading svg ".concat(container.svg.substring(0, 255)));
+                        this.context.logger.error("Error loading svg " + container.svg.substring(0, 255));
                         return [3 /*break*/, 12];
                     case 12:
                         if (!(container instanceof iframe_element_container_1.IFrameElementContainer && container.tree)) return [3 /*break*/, 14];
@@ -364,7 +364,7 @@ var CanvasRenderer = /** @class */ (function (_super) {
                                         new vector_1.Vector(container.bounds.left + size * 0.84, container.bounds.top + size * 0.34085),
                                         new vector_1.Vector(container.bounds.left + size * 0.39363, container.bounds.top + size * 0.79)
                                     ]);
-                                    this.ctx.fillStyle = (0, color_1.asString)(input_element_container_1.INPUT_COLOR);
+                                    this.ctx.fillStyle = color_1.asString(input_element_container_1.INPUT_COLOR);
                                     this.ctx.fill();
                                     this.ctx.restore();
                                 }
@@ -374,7 +374,7 @@ var CanvasRenderer = /** @class */ (function (_super) {
                                     this.ctx.save();
                                     this.ctx.beginPath();
                                     this.ctx.arc(container.bounds.left + size / 2, container.bounds.top + size / 2, size / 4, 0, Math.PI * 2, true);
-                                    this.ctx.fillStyle = (0, color_1.asString)(input_element_container_1.INPUT_COLOR);
+                                    this.ctx.fillStyle = color_1.asString(input_element_container_1.INPUT_COLOR);
                                     this.ctx.fill();
                                     this.ctx.restore();
                                 }
@@ -384,16 +384,16 @@ var CanvasRenderer = /** @class */ (function (_super) {
                             _b = this.createFontStyle(styles), fontFamily = _b[0], fontSize = _b[1];
                             baseline = this.fontMetrics.getMetrics(fontFamily, fontSize).baseline;
                             this.ctx.font = fontFamily;
-                            this.ctx.fillStyle = (0, color_1.asString)(styles.color);
+                            this.ctx.fillStyle = color_1.asString(styles.color);
                             this.ctx.textBaseline = 'alphabetic';
                             this.ctx.textAlign = canvasTextAlign(container.styles.textAlign);
-                            bounds = (0, box_sizing_1.contentBox)(container);
+                            bounds = box_sizing_1.contentBox(container);
                             x = 0;
                             switch (container.styles.textAlign) {
-                                case 1 /* TEXT_ALIGN.CENTER */:
+                                case 1 /* CENTER */:
                                     x += bounds.width / 2;
                                     break;
-                                case 2 /* TEXT_ALIGN.RIGHT */:
+                                case 2 /* RIGHT */:
                                     x += bounds.width;
                                     break;
                             }
@@ -411,10 +411,10 @@ var CanvasRenderer = /** @class */ (function (_super) {
                             this.ctx.textBaseline = 'alphabetic';
                             this.ctx.textAlign = 'left';
                         }
-                        if (!(0, bitwise_1.contains)(container.styles.display, 2048 /* DISPLAY.LIST_ITEM */)) return [3 /*break*/, 20];
+                        if (!bitwise_1.contains(container.styles.display, 2048 /* LIST_ITEM */)) return [3 /*break*/, 20];
                         if (!(container.styles.listStyleImage !== null)) return [3 /*break*/, 19];
                         img = container.styles.listStyleImage;
-                        if (!(img.type === 0 /* CSSImageType.URL */)) return [3 /*break*/, 18];
+                        if (!(img.type === 0 /* URL */)) return [3 /*break*/, 18];
                         image = void 0;
                         url = img.url;
                         _c.label = 15;
@@ -427,18 +427,18 @@ var CanvasRenderer = /** @class */ (function (_super) {
                         return [3 /*break*/, 18];
                     case 17:
                         e_3 = _c.sent();
-                        this.context.logger.error("Error loading list-style-image ".concat(url));
+                        this.context.logger.error("Error loading list-style-image " + url);
                         return [3 /*break*/, 18];
                     case 18: return [3 /*break*/, 20];
                     case 19:
-                        if (paint.listValue && container.styles.listStyleType !== -1 /* LIST_STYLE_TYPE.NONE */) {
+                        if (paint.listValue && container.styles.listStyleType !== -1 /* NONE */) {
                             fontFamily = this.createFontStyle(styles)[0];
                             this.ctx.font = fontFamily;
-                            this.ctx.fillStyle = (0, color_1.asString)(styles.color);
+                            this.ctx.fillStyle = color_1.asString(styles.color);
                             this.ctx.textBaseline = 'middle';
                             this.ctx.textAlign = 'right';
-                            bounds = new bounds_1.Bounds(container.bounds.left, container.bounds.top + (0, length_percentage_1.getAbsoluteValue)(container.styles.paddingTop, container.bounds.width), container.bounds.width, (0, line_height_1.computeLineHeight)(styles.lineHeight, styles.fontSize.number) / 2 + 1);
-                            this.renderTextWithLetterSpacing(new text_1.TextBounds(paint.listValue, bounds), styles.letterSpacing, (0, line_height_1.computeLineHeight)(styles.lineHeight, styles.fontSize.number) / 2 + 2);
+                            bounds = new bounds_1.Bounds(container.bounds.left, container.bounds.top + length_percentage_1.getAbsoluteValue(container.styles.paddingTop, container.bounds.width), container.bounds.width, line_height_1.computeLineHeight(styles.lineHeight, styles.fontSize.number) / 2 + 1);
+                            this.renderTextWithLetterSpacing(new text_1.TextBounds(paint.listValue, bounds), styles.letterSpacing, line_height_1.computeLineHeight(styles.lineHeight, styles.fontSize.number) / 2 + 2);
                             this.ctx.textBaseline = 'bottom';
                             this.ctx.textAlign = 'left';
                         }
@@ -454,7 +454,7 @@ var CanvasRenderer = /** @class */ (function (_super) {
             return __generator(this, function (_p) {
                 switch (_p.label) {
                     case 0:
-                        if ((0, bitwise_1.contains)(stack.element.container.flags, 16 /* FLAGS.DEBUG_RENDER */)) {
+                        if (bitwise_1.contains(stack.element.container.flags, 16 /* DEBUG_RENDER */)) {
                             debugger;
                         }
                         // https://www.w3.org/TR/css-position-3/#painting-order
@@ -582,14 +582,14 @@ var CanvasRenderer = /** @class */ (function (_super) {
     CanvasRenderer.prototype.formatPath = function (paths) {
         var _this = this;
         paths.forEach(function (point, index) {
-            var start = (0, bezier_curve_1.isBezierCurve)(point) ? point.start : point;
+            var start = bezier_curve_1.isBezierCurve(point) ? point.start : point;
             if (index === 0) {
                 _this.ctx.moveTo(start.x, start.y);
             }
             else {
                 _this.ctx.lineTo(start.x, start.y);
             }
-            if ((0, bezier_curve_1.isBezierCurve)(point)) {
+            if (bezier_curve_1.isBezierCurve(point)) {
                 _this.ctx.bezierCurveTo(point.startControl.x, point.startControl.y, point.endControl.x, point.endControl.y, point.end.x, point.end.y);
             }
         });
@@ -626,7 +626,7 @@ var CanvasRenderer = /** @class */ (function (_super) {
                             return __generator(this, function (_h) {
                                 switch (_h.label) {
                                     case 0:
-                                        if (!(backgroundImage.type === 0 /* CSSImageType.URL */)) return [3 /*break*/, 5];
+                                        if (!(backgroundImage.type === 0 /* URL */)) return [3 /*break*/, 5];
                                         image = void 0;
                                         url = backgroundImage.url;
                                         _h.label = 1;
@@ -638,11 +638,11 @@ var CanvasRenderer = /** @class */ (function (_super) {
                                         return [3 /*break*/, 4];
                                     case 3:
                                         e_4 = _h.sent();
-                                        this_1.context.logger.error("Error loading background-image ".concat(url));
+                                        this_1.context.logger.error("Error loading background-image " + url);
                                         return [3 /*break*/, 4];
                                     case 4:
                                         if (image) {
-                                            _c = (0, background_1.calculateBackgroundRendering)(container, index, [
+                                            _c = background_1.calculateBackgroundRendering(container, index, [
                                                 image.width,
                                                 image.height,
                                                 image.width / image.height
@@ -652,16 +652,16 @@ var CanvasRenderer = /** @class */ (function (_super) {
                                         }
                                         return [3 /*break*/, 6];
                                     case 5:
-                                        if ((0, image_1.isLinearGradient)(backgroundImage)) {
-                                            _d = (0, background_1.calculateBackgroundRendering)(container, index, [null, null, null]), path = _d[0], x = _d[1], y = _d[2], width = _d[3], height = _d[4];
-                                            _e = (0, gradient_1.calculateGradientDirection)(backgroundImage.angle, width, height), lineLength = _e[0], x0 = _e[1], x1 = _e[2], y0 = _e[3], y1 = _e[4];
+                                        if (image_1.isLinearGradient(backgroundImage)) {
+                                            _d = background_1.calculateBackgroundRendering(container, index, [null, null, null]), path = _d[0], x = _d[1], y = _d[2], width = _d[3], height = _d[4];
+                                            _e = gradient_1.calculateGradientDirection(backgroundImage.angle, width, height), lineLength = _e[0], x0 = _e[1], x1 = _e[2], y0 = _e[3], y1 = _e[4];
                                             canvas = document.createElement('canvas');
                                             canvas.width = width;
                                             canvas.height = height;
                                             ctx = canvas.getContext('2d');
                                             gradient_2 = ctx.createLinearGradient(x0, y0, x1, y1);
-                                            (0, gradient_1.processColorStops)(backgroundImage.stops, lineLength).forEach(function (colorStop) {
-                                                return gradient_2.addColorStop(colorStop.stop, (0, color_1.asString)(colorStop.color));
+                                            gradient_1.processColorStops(backgroundImage.stops, lineLength).forEach(function (colorStop) {
+                                                return gradient_2.addColorStop(colorStop.stop, color_1.asString(colorStop.color));
                                             });
                                             ctx.fillStyle = gradient_2;
                                             ctx.fillRect(0, 0, width, height);
@@ -670,20 +670,20 @@ var CanvasRenderer = /** @class */ (function (_super) {
                                                 this_1.renderRepeat(path, pattern, x, y);
                                             }
                                         }
-                                        else if ((0, image_1.isRadialGradient)(backgroundImage)) {
-                                            _f = (0, background_1.calculateBackgroundRendering)(container, index, [
+                                        else if (image_1.isRadialGradient(backgroundImage)) {
+                                            _f = background_1.calculateBackgroundRendering(container, index, [
                                                 null,
                                                 null,
                                                 null
                                             ]), path = _f[0], left = _f[1], top_1 = _f[2], width = _f[3], height = _f[4];
                                             position = backgroundImage.position.length === 0 ? [length_percentage_1.FIFTY_PERCENT] : backgroundImage.position;
-                                            x = (0, length_percentage_1.getAbsoluteValue)(position[0], width);
-                                            y = (0, length_percentage_1.getAbsoluteValue)(position[position.length - 1], height);
-                                            _g = (0, gradient_1.calculateRadius)(backgroundImage, x, y, width, height), rx = _g[0], ry = _g[1];
+                                            x = length_percentage_1.getAbsoluteValue(position[0], width);
+                                            y = length_percentage_1.getAbsoluteValue(position[position.length - 1], height);
+                                            _g = gradient_1.calculateRadius(backgroundImage, x, y, width, height), rx = _g[0], ry = _g[1];
                                             if (rx > 0 && ry > 0) {
                                                 radialGradient_1 = this_1.ctx.createRadialGradient(left + x, top_1 + y, 0, left + x, top_1 + y, rx);
-                                                (0, gradient_1.processColorStops)(backgroundImage.stops, rx * 2).forEach(function (colorStop) {
-                                                    return radialGradient_1.addColorStop(colorStop.stop, (0, color_1.asString)(colorStop.color));
+                                                gradient_1.processColorStops(backgroundImage.stops, rx * 2).forEach(function (colorStop) {
+                                                    return radialGradient_1.addColorStop(colorStop.stop, color_1.asString(colorStop.color));
                                                 });
                                                 this_1.path(path);
                                                 this_1.ctx.fillStyle = radialGradient_1;
@@ -732,8 +732,8 @@ var CanvasRenderer = /** @class */ (function (_super) {
     CanvasRenderer.prototype.renderSolidBorder = function (color, side, curvePoints) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                this.path((0, border_1.parsePathForBorder)(curvePoints, side));
-                this.ctx.fillStyle = (0, color_1.asString)(color);
+                this.path(border_1.parsePathForBorder(curvePoints, side));
+                this.ctx.fillStyle = color_1.asString(color);
                 this.ctx.fill();
                 return [2 /*return*/];
             });
@@ -751,11 +751,11 @@ var CanvasRenderer = /** @class */ (function (_super) {
                         _a.sent();
                         return [2 /*return*/];
                     case 2:
-                        outerPaths = (0, border_1.parsePathForBorderDoubleOuter)(curvePoints, side);
+                        outerPaths = border_1.parsePathForBorderDoubleOuter(curvePoints, side);
                         this.path(outerPaths);
-                        this.ctx.fillStyle = (0, color_1.asString)(color);
+                        this.ctx.fillStyle = color_1.asString(color);
                         this.ctx.fill();
-                        innerPaths = (0, border_1.parsePathForBorderDoubleInner)(curvePoints, side);
+                        innerPaths = border_1.parsePathForBorderDoubleInner(curvePoints, side);
                         this.path(innerPaths);
                         this.ctx.fill();
                         return [2 /*return*/];
@@ -770,22 +770,22 @@ var CanvasRenderer = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        this.applyEffects(paint.getEffects(2 /* EffectTarget.BACKGROUND_BORDERS */));
+                        this.applyEffects(paint.getEffects(2 /* BACKGROUND_BORDERS */));
                         styles = paint.container.styles;
-                        hasBackground = !(0, color_1.isTransparent)(styles.backgroundColor) || styles.backgroundImage.length;
+                        hasBackground = !color_1.isTransparent(styles.backgroundColor) || styles.backgroundImage.length;
                         borders = [
                             { style: styles.borderTopStyle, color: styles.borderTopColor, width: styles.borderTopWidth },
                             { style: styles.borderRightStyle, color: styles.borderRightColor, width: styles.borderRightWidth },
                             { style: styles.borderBottomStyle, color: styles.borderBottomColor, width: styles.borderBottomWidth },
                             { style: styles.borderLeftStyle, color: styles.borderLeftColor, width: styles.borderLeftWidth }
                         ];
-                        backgroundPaintingArea = calculateBackgroundCurvedPaintingArea((0, background_1.getBackgroundValueForIndex)(styles.backgroundClip, 0), paint.curves);
+                        backgroundPaintingArea = calculateBackgroundCurvedPaintingArea(background_1.getBackgroundValueForIndex(styles.backgroundClip, 0), paint.curves);
                         if (!(hasBackground || styles.boxShadow.length)) return [3 /*break*/, 2];
                         this.ctx.save();
                         this.path(backgroundPaintingArea);
                         this.ctx.clip();
-                        if (!(0, color_1.isTransparent)(styles.backgroundColor)) {
-                            this.ctx.fillStyle = (0, color_1.asString)(styles.backgroundColor);
+                        if (!color_1.isTransparent(styles.backgroundColor)) {
+                            this.ctx.fillStyle = color_1.asString(styles.backgroundColor);
                             this.ctx.fill();
                         }
                         return [4 /*yield*/, this.renderBackgroundImage(paint.container)];
@@ -797,9 +797,9 @@ var CanvasRenderer = /** @class */ (function (_super) {
                             .reverse()
                             .forEach(function (shadow) {
                             _this.ctx.save();
-                            var borderBoxArea = (0, bound_curves_1.calculateBorderBoxPath)(paint.curves);
+                            var borderBoxArea = bound_curves_1.calculateBorderBoxPath(paint.curves);
                             var maskOffset = shadow.inset ? 0 : MASK_OFFSET;
-                            var shadowPaintingArea = (0, path_1.transformPath)(borderBoxArea, -maskOffset + (shadow.inset ? 1 : -1) * shadow.spread.number, (shadow.inset ? 1 : -1) * shadow.spread.number, shadow.spread.number * (shadow.inset ? -2 : 2), shadow.spread.number * (shadow.inset ? -2 : 2));
+                            var shadowPaintingArea = path_1.transformPath(borderBoxArea, -maskOffset + (shadow.inset ? 1 : -1) * shadow.spread.number, (shadow.inset ? 1 : -1) * shadow.spread.number, shadow.spread.number * (shadow.inset ? -2 : 2), shadow.spread.number * (shadow.inset ? -2 : 2));
                             if (shadow.inset) {
                                 _this.path(borderBoxArea);
                                 _this.ctx.clip();
@@ -812,9 +812,9 @@ var CanvasRenderer = /** @class */ (function (_super) {
                             }
                             _this.ctx.shadowOffsetX = shadow.offsetX.number + maskOffset;
                             _this.ctx.shadowOffsetY = shadow.offsetY.number;
-                            _this.ctx.shadowColor = (0, color_1.asString)(shadow.color);
+                            _this.ctx.shadowColor = color_1.asString(shadow.color);
                             _this.ctx.shadowBlur = shadow.blur.number;
-                            _this.ctx.fillStyle = shadow.inset ? (0, color_1.asString)(shadow.color) : 'rgba(0,0,0,1)';
+                            _this.ctx.fillStyle = shadow.inset ? color_1.asString(shadow.color) : 'rgba(0,0,0,1)';
                             _this.ctx.fill();
                             _this.ctx.restore();
                         });
@@ -826,20 +826,20 @@ var CanvasRenderer = /** @class */ (function (_super) {
                     case 3:
                         if (!(_i < borders_1.length)) return [3 /*break*/, 13];
                         border = borders_1[_i];
-                        if (!(border.style !== 0 /* BORDER_STYLE.NONE */ && !(0, color_1.isTransparent)(border.color) && border.width > 0)) return [3 /*break*/, 11];
-                        if (!(border.style === 2 /* BORDER_STYLE.DASHED */)) return [3 /*break*/, 5];
-                        return [4 /*yield*/, this.renderDashedDottedBorder(border.color, border.width, side, paint.curves, 2 /* BORDER_STYLE.DASHED */)];
+                        if (!(border.style !== 0 /* NONE */ && !color_1.isTransparent(border.color) && border.width > 0)) return [3 /*break*/, 11];
+                        if (!(border.style === 2 /* DASHED */)) return [3 /*break*/, 5];
+                        return [4 /*yield*/, this.renderDashedDottedBorder(border.color, border.width, side, paint.curves, 2 /* DASHED */)];
                     case 4:
                         _a.sent();
                         return [3 /*break*/, 11];
                     case 5:
-                        if (!(border.style === 3 /* BORDER_STYLE.DOTTED */)) return [3 /*break*/, 7];
-                        return [4 /*yield*/, this.renderDashedDottedBorder(border.color, border.width, side, paint.curves, 3 /* BORDER_STYLE.DOTTED */)];
+                        if (!(border.style === 3 /* DOTTED */)) return [3 /*break*/, 7];
+                        return [4 /*yield*/, this.renderDashedDottedBorder(border.color, border.width, side, paint.curves, 3 /* DOTTED */)];
                     case 6:
                         _a.sent();
                         return [3 /*break*/, 11];
                     case 7:
-                        if (!(border.style === 4 /* BORDER_STYLE.DOUBLE */)) return [3 /*break*/, 9];
+                        if (!(border.style === 4 /* DOUBLE */)) return [3 /*break*/, 9];
                         return [4 /*yield*/, this.renderDoubleBorder(border.color, border.width, side, paint.curves)];
                     case 8:
                         _a.sent();
@@ -864,13 +864,13 @@ var CanvasRenderer = /** @class */ (function (_super) {
             var strokePaths, boxPaths, startX, startY, endX, endY, length, dashLength, spaceLength, useLineDash, multiplier, numberOfDashes, minSpace, maxSpace, path1, path2, path1, path2;
             return __generator(this, function (_a) {
                 this.ctx.save();
-                strokePaths = (0, border_1.parsePathForBorderStroke)(curvePoints, side);
-                boxPaths = (0, border_1.parsePathForBorder)(curvePoints, side);
-                if (style === 2 /* BORDER_STYLE.DASHED */) {
+                strokePaths = border_1.parsePathForBorderStroke(curvePoints, side);
+                boxPaths = border_1.parsePathForBorder(curvePoints, side);
+                if (style === 2 /* DASHED */) {
                     this.path(boxPaths);
                     this.ctx.clip();
                 }
-                if ((0, bezier_curve_1.isBezierCurve)(boxPaths[0])) {
+                if (bezier_curve_1.isBezierCurve(boxPaths[0])) {
                     startX = boxPaths[0].start.x;
                     startY = boxPaths[0].start.y;
                 }
@@ -878,7 +878,7 @@ var CanvasRenderer = /** @class */ (function (_super) {
                     startX = boxPaths[0].x;
                     startY = boxPaths[0].y;
                 }
-                if ((0, bezier_curve_1.isBezierCurve)(boxPaths[1])) {
+                if (bezier_curve_1.isBezierCurve(boxPaths[1])) {
                     endX = boxPaths[1].end.x;
                     endY = boxPaths[1].end.y;
                 }
@@ -893,7 +893,7 @@ var CanvasRenderer = /** @class */ (function (_super) {
                     length = Math.abs(startY - endY);
                 }
                 this.ctx.beginPath();
-                if (style === 3 /* BORDER_STYLE.DOTTED */) {
+                if (style === 3 /* DOTTED */) {
                     this.formatPath(strokePaths);
                 }
                 else {
@@ -901,7 +901,7 @@ var CanvasRenderer = /** @class */ (function (_super) {
                 }
                 dashLength = width < 3 ? width * 3 : width * 2;
                 spaceLength = width < 3 ? width * 2 : width;
-                if (style === 3 /* BORDER_STYLE.DOTTED */) {
+                if (style === 3 /* DOTTED */) {
                     dashLength = width;
                     spaceLength = width;
                 }
@@ -924,33 +924,33 @@ var CanvasRenderer = /** @class */ (function (_super) {
                             : maxSpace;
                 }
                 if (useLineDash) {
-                    if (style === 3 /* BORDER_STYLE.DOTTED */) {
+                    if (style === 3 /* DOTTED */) {
                         this.ctx.setLineDash([0, dashLength + spaceLength]);
                     }
                     else {
                         this.ctx.setLineDash([dashLength, spaceLength]);
                     }
                 }
-                if (style === 3 /* BORDER_STYLE.DOTTED */) {
+                if (style === 3 /* DOTTED */) {
                     this.ctx.lineCap = 'round';
                     this.ctx.lineWidth = width;
                 }
                 else {
                     this.ctx.lineWidth = width * 2 + 1.1;
                 }
-                this.ctx.strokeStyle = (0, color_1.asString)(color);
+                this.ctx.strokeStyle = color_1.asString(color);
                 this.ctx.stroke();
                 this.ctx.setLineDash([]);
                 // dashed round edge gap
-                if (style === 2 /* BORDER_STYLE.DASHED */) {
-                    if ((0, bezier_curve_1.isBezierCurve)(boxPaths[0])) {
+                if (style === 2 /* DASHED */) {
+                    if (bezier_curve_1.isBezierCurve(boxPaths[0])) {
                         path1 = boxPaths[3];
                         path2 = boxPaths[0];
                         this.ctx.beginPath();
                         this.formatPath([new vector_1.Vector(path1.end.x, path1.end.y), new vector_1.Vector(path2.start.x, path2.start.y)]);
                         this.ctx.stroke();
                     }
-                    if ((0, bezier_curve_1.isBezierCurve)(boxPaths[1])) {
+                    if (bezier_curve_1.isBezierCurve(boxPaths[1])) {
                         path1 = boxPaths[1];
                         path2 = boxPaths[2];
                         this.ctx.beginPath();
@@ -970,10 +970,10 @@ var CanvasRenderer = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         if (this.options.backgroundColor) {
-                            this.ctx.fillStyle = (0, color_1.asString)(this.options.backgroundColor);
+                            this.ctx.fillStyle = color_1.asString(this.options.backgroundColor);
                             this.ctx.fillRect(this.options.x, this.options.y, this.options.width, this.options.height);
                         }
-                        stack = (0, stacking_context_1.parseStackingContexts)(element);
+                        stack = stacking_context_1.parseStackingContexts(element);
                         return [4 /*yield*/, this.renderStack(stack)];
                     case 1:
                         _a.sent();
@@ -1000,22 +1000,22 @@ var isTextInputElement = function (container) {
 };
 var calculateBackgroundCurvedPaintingArea = function (clip, curves) {
     switch (clip) {
-        case 0 /* BACKGROUND_CLIP.BORDER_BOX */:
-            return (0, bound_curves_1.calculateBorderBoxPath)(curves);
-        case 2 /* BACKGROUND_CLIP.CONTENT_BOX */:
-            return (0, bound_curves_1.calculateContentBoxPath)(curves);
-        case 1 /* BACKGROUND_CLIP.PADDING_BOX */:
+        case 0 /* BORDER_BOX */:
+            return bound_curves_1.calculateBorderBoxPath(curves);
+        case 2 /* CONTENT_BOX */:
+            return bound_curves_1.calculateContentBoxPath(curves);
+        case 1 /* PADDING_BOX */:
         default:
-            return (0, bound_curves_1.calculatePaddingBoxPath)(curves);
+            return bound_curves_1.calculatePaddingBoxPath(curves);
     }
 };
 var canvasTextAlign = function (textAlign) {
     switch (textAlign) {
-        case 1 /* TEXT_ALIGN.CENTER */:
+        case 1 /* CENTER */:
             return 'center';
-        case 2 /* TEXT_ALIGN.RIGHT */:
+        case 2 /* RIGHT */:
             return 'right';
-        case 0 /* TEXT_ALIGN.LEFT */:
+        case 0 /* LEFT */:
         default:
             return 'left';
     }

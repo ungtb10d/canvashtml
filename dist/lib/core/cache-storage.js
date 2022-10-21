@@ -115,7 +115,7 @@ var Cache = /** @class */ (function () {
                         src = _a.sent();
                         _a.label = 2;
                     case 2:
-                        this.context.logger.debug("Added image ".concat(key.substring(0, 256)));
+                        this.context.logger.debug("Added image " + key.substring(0, 256));
                         return [4 /*yield*/, new Promise(function (resolve, reject) {
                                 var img = new Image();
                                 img.onload = function () { return resolve(img); };
@@ -130,7 +130,7 @@ var Cache = /** @class */ (function () {
                                     setTimeout(function () { return resolve(img); }, 500);
                                 }
                                 if (_this._options.imageTimeout > 0) {
-                                    setTimeout(function () { return reject("Timed out (".concat(_this._options.imageTimeout, "ms) loading image")); }, _this._options.imageTimeout);
+                                    setTimeout(function () { return reject("Timed out (" + _this._options.imageTimeout + "ms) loading image"); }, _this._options.imageTimeout);
                                 }
                             })];
                     case 3: return [2 /*return*/, _a.sent()];
@@ -167,19 +167,19 @@ var Cache = /** @class */ (function () {
                     }
                 }
                 else {
-                    reject("Failed to proxy resource ".concat(key, " with status code ").concat(xhr.status));
+                    reject("Failed to proxy resource " + key + " with status code " + xhr.status);
                 }
             };
             xhr.onerror = reject;
             var queryString = proxy.indexOf('?') > -1 ? '&' : '?';
-            xhr.open('GET', "".concat(proxy).concat(queryString, "url=").concat(encodeURIComponent(src), "&responseType=").concat(responseType));
+            xhr.open('GET', "" + proxy + queryString + "url=" + encodeURIComponent(src) + "&responseType=" + responseType);
             if (responseType !== 'text' && xhr instanceof XMLHttpRequest) {
                 xhr.responseType = responseType;
             }
             if (_this._options.imageTimeout) {
                 var timeout_1 = _this._options.imageTimeout;
                 xhr.timeout = timeout_1;
-                xhr.ontimeout = function () { return reject("Timed out (".concat(timeout_1, "ms) proxying ").concat(key)); };
+                xhr.ontimeout = function () { return reject("Timed out (" + timeout_1 + "ms) proxying " + key); };
             }
             xhr.send();
         });

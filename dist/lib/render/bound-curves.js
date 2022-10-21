@@ -8,10 +8,10 @@ var BoundCurves = /** @class */ (function () {
     function BoundCurves(element) {
         var styles = element.styles;
         var bounds = element.bounds;
-        var _a = (0, length_percentage_1.getAbsoluteValueForTuple)(styles.borderTopLeftRadius, bounds.width, bounds.height), tlh = _a[0], tlv = _a[1];
-        var _b = (0, length_percentage_1.getAbsoluteValueForTuple)(styles.borderTopRightRadius, bounds.width, bounds.height), trh = _b[0], trv = _b[1];
-        var _c = (0, length_percentage_1.getAbsoluteValueForTuple)(styles.borderBottomRightRadius, bounds.width, bounds.height), brh = _c[0], brv = _c[1];
-        var _d = (0, length_percentage_1.getAbsoluteValueForTuple)(styles.borderBottomLeftRadius, bounds.width, bounds.height), blh = _d[0], blv = _d[1];
+        var _a = length_percentage_1.getAbsoluteValueForTuple(styles.borderTopLeftRadius, bounds.width, bounds.height), tlh = _a[0], tlv = _a[1];
+        var _b = length_percentage_1.getAbsoluteValueForTuple(styles.borderTopRightRadius, bounds.width, bounds.height), trh = _b[0], trv = _b[1];
+        var _c = length_percentage_1.getAbsoluteValueForTuple(styles.borderBottomRightRadius, bounds.width, bounds.height), brh = _c[0], brv = _c[1];
+        var _d = length_percentage_1.getAbsoluteValueForTuple(styles.borderBottomLeftRadius, bounds.width, bounds.height), blh = _d[0], blv = _d[1];
         var factors = [];
         factors.push((tlh + trh) / bounds.width);
         factors.push((blh + brh) / bounds.width);
@@ -36,10 +36,10 @@ var BoundCurves = /** @class */ (function () {
         var borderRightWidth = styles.borderRightWidth;
         var borderBottomWidth = styles.borderBottomWidth;
         var borderLeftWidth = styles.borderLeftWidth;
-        var paddingTop = (0, length_percentage_1.getAbsoluteValue)(styles.paddingTop, element.bounds.width);
-        var paddingRight = (0, length_percentage_1.getAbsoluteValue)(styles.paddingRight, element.bounds.width);
-        var paddingBottom = (0, length_percentage_1.getAbsoluteValue)(styles.paddingBottom, element.bounds.width);
-        var paddingLeft = (0, length_percentage_1.getAbsoluteValue)(styles.paddingLeft, element.bounds.width);
+        var paddingTop = length_percentage_1.getAbsoluteValue(styles.paddingTop, element.bounds.width);
+        var paddingRight = length_percentage_1.getAbsoluteValue(styles.paddingRight, element.bounds.width);
+        var paddingBottom = length_percentage_1.getAbsoluteValue(styles.paddingBottom, element.bounds.width);
+        var paddingLeft = length_percentage_1.getAbsoluteValue(styles.paddingLeft, element.bounds.width);
         this.topLeftBorderDoubleOuterBox =
             tlh > 0 || tlv > 0
                 ? getCurvePoints(bounds.left + borderLeftWidth / 3, bounds.top + borderTopWidth / 3, tlh - borderLeftWidth / 3, tlv - borderTopWidth / 3, CORNER.TOP_LEFT)

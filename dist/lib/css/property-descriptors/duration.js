@@ -7,7 +7,7 @@ exports.duration = {
     name: 'duration',
     initialValue: '0s',
     prefix: false,
-    type: 1 /* PropertyDescriptorParsingType.LIST */,
+    type: 1 /* LIST */,
     parse: function (context, tokens) {
         return tokens.filter(parser_1.isDimensionToken).map(function (token) { return time_1.time.parse(context, token); });
     }

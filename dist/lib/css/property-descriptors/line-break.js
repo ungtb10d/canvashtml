@@ -10,7 +10,7 @@ exports.lineBreak = {
     name: 'line-break',
     initialValue: 'normal',
     prefix: false,
-    type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
+    type: 2 /* IDENT_VALUE */,
     parse: function (_context, lineBreak) {
         switch (lineBreak) {
             case 'strict':

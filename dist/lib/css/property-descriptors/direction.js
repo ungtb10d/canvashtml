@@ -5,14 +5,14 @@ exports.direction = {
     name: 'direction',
     initialValue: 'ltr',
     prefix: false,
-    type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
+    type: 2 /* IDENT_VALUE */,
     parse: function (_context, direction) {
         switch (direction) {
             case 'rtl':
-                return 1 /* DIRECTION.RTL */;
+                return 1 /* RTL */;
             case 'ltr':
             default:
-                return 0 /* DIRECTION.LTR */;
+                return 0 /* LTR */;
         }
     }
 };

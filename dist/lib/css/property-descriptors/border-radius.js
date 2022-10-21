@@ -3,12 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.borderBottomLeftRadius = exports.borderBottomRightRadius = exports.borderTopRightRadius = exports.borderTopLeftRadius = void 0;
 var length_percentage_1 = require("../types/length-percentage");
 var borderRadiusForSide = function (side) { return ({
-    name: "border-radius-".concat(side),
+    name: "border-radius-" + side,
     initialValue: '0 0',
     prefix: false,
-    type: 1 /* PropertyDescriptorParsingType.LIST */,
+    type: 1 /* LIST */,
     parse: function (_context, tokens) {
-        return (0, length_percentage_1.parseLengthPercentageTuple)(tokens.filter(length_percentage_1.isLengthPercentage));
+        return length_percentage_1.parseLengthPercentageTuple(tokens.filter(length_percentage_1.isLengthPercentage));
     }
 }); };
 exports.borderTopLeftRadius = borderRadiusForSide('top-left');

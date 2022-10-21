@@ -7,42 +7,42 @@ var length_percentage_1 = require("./length-percentage");
 exports.color = {
     name: 'color',
     parse: function (context, value) {
-        if (value.type === 18 /* TokenType.FUNCTION */) {
+        if (value.type === 18 /* FUNCTION */) {
             var colorFunction = SUPPORTED_COLOR_FUNCTIONS[value.name];
             if (typeof colorFunction === 'undefined') {
-                throw new Error("Attempting to parse an unsupported color function \"".concat(value.name, "\""));
+                throw new Error("Attempting to parse an unsupported color function \"" + value.name + "\"");
             }
             return colorFunction(context, value.values);
         }
-        if (value.type === 5 /* TokenType.HASH_TOKEN */) {
+        if (value.type === 5 /* HASH_TOKEN */) {
             if (value.value.length === 3) {
                 var r = value.value.substring(0, 1);
                 var g = value.value.substring(1, 2);
                 var b = value.value.substring(2, 3);
-                return (0, exports.pack)(parseInt(r + r, 16), parseInt(g + g, 16), parseInt(b + b, 16), 1);
+                return exports.pack(parseInt(r + r, 16), parseInt(g + g, 16), parseInt(b + b, 16), 1);
             }
             if (value.value.length === 4) {
                 var r = value.value.substring(0, 1);
                 var g = value.value.substring(1, 2);
                 var b = value.value.substring(2, 3);
                 var a = value.value.substring(3, 4);
-                return (0, exports.pack)(parseInt(r + r, 16), parseInt(g + g, 16), parseInt(b + b, 16), parseInt(a + a, 16) / 255);
+                return exports.pack(parseInt(r + r, 16), parseInt(g + g, 16), parseInt(b + b, 16), parseInt(a + a, 16) / 255);
             }
             if (value.value.length === 6) {
                 var r = value.value.substring(0, 2);
                 var g = value.value.substring(2, 4);
                 var b = value.value.substring(4, 6);
-                return (0, exports.pack)(parseInt(r, 16), parseInt(g, 16), parseInt(b, 16), 1);
+                return exports.pack(parseInt(r, 16), parseInt(g, 16), parseInt(b, 16), 1);
             }
             if (value.value.length === 8) {
                 var r = value.value.substring(0, 2);
                 var g = value.value.substring(2, 4);
                 var b = value.value.substring(4, 6);
                 var a = value.value.substring(6, 8);
-                return (0, exports.pack)(parseInt(r, 16), parseInt(g, 16), parseInt(b, 16), parseInt(a, 16) / 255);
+                return exports.pack(parseInt(r, 16), parseInt(g, 16), parseInt(b, 16), parseInt(a, 16) / 255);
             }
         }
-        if (value.type === 20 /* TokenType.IDENT_TOKEN */) {
+        if (value.type === 20 /* IDENT_TOKEN */) {
             var namedColor = exports.COLORS[value.value.toUpperCase()];
             if (typeof namedColor !== 'undefined') {
                 return namedColor;
@@ -58,7 +58,7 @@ var asString = function (color) {
     var blue = 0xff & (color >> 8);
     var green = 0xff & (color >> 16);
     var red = 0xff & (color >> 24);
-    return alpha < 255 ? "rgba(".concat(red, ",").concat(green, ",").concat(blue, ",").concat(alpha / 255, ")") : "rgb(".concat(red, ",").concat(green, ",").concat(blue, ")");
+    return alpha < 255 ? "rgba(" + red + "," + green + "," + blue + "," + alpha / 255 + ")" : "rgb(" + red + "," + green + "," + blue + ")";
 };
 exports.asString = asString;
 var pack = function (r, g, b, a) {
@@ -66,10 +66,10 @@ var pack = function (r, g, b, a) {
 };
 exports.pack = pack;
 var getTokenColorValue = function (token, i) {
-    if (token.type === 17 /* TokenType.NUMBER_TOKEN */) {
+    if (token.type === 17 /* NUMBER_TOKEN */) {
         return token.number;
     }
-    if (token.type === 16 /* TokenType.PERCENTAGE_TOKEN */) {
+    if (token.type === 16 /* PERCENTAGE_TOKEN */) {
         var max = i === 3 ? 1 : 255;
         return i === 3 ? (token.number / 100) * max : Math.round((token.number / 100) * max);
     }
@@ -79,11 +79,11 @@ var rgb = function (_context, args) {
     var tokens = args.filter(parser_1.nonFunctionArgSeparator);
     if (tokens.length === 3) {
         var _a = tokens.map(getTokenColorValue), r = _a[0], g = _a[1], b = _a[2];
-        return (0, exports.pack)(r, g, b, 1);
+        return exports.pack(r, g, b, 1);
     }
     if (tokens.length === 4) {
         var _b = tokens.map(getTokenColorValue), r = _b[0], g = _b[1], b = _b[2], a = _b[3];
-        return (0, exports.pack)(r, g, b, a);
+        return exports.pack(r, g, b, a);
     }
     return 0;
 };
@@ -110,19 +110,19 @@ function hue2rgb(t1, t2, hue) {
 var hsl = function (context, args) {
     var tokens = args.filter(parser_1.nonFunctionArgSeparator);
     var hue = tokens[0], saturation = tokens[1], lightness = tokens[2], alpha = tokens[3];
-    var h = (hue.type === 17 /* TokenType.NUMBER_TOKEN */ ? (0, angle_1.deg)(hue.number) : angle_1.angle.parse(context, hue)) / (Math.PI * 2);
-    var s = (0, length_percentage_1.isLengthPercentage)(saturation) ? saturation.number / 100 : 0;
-    var l = (0, length_percentage_1.isLengthPercentage)(lightness) ? lightness.number / 100 : 0;
-    var a = typeof alpha !== 'undefined' && (0, length_percentage_1.isLengthPercentage)(alpha) ? (0, length_percentage_1.getAbsoluteValue)(alpha, 1) : 1;
+    var h = (hue.type === 17 /* NUMBER_TOKEN */ ? angle_1.deg(hue.number) : angle_1.angle.parse(context, hue)) / (Math.PI * 2);
+    var s = length_percentage_1.isLengthPercentage(saturation) ? saturation.number / 100 : 0;
+    var l = length_percentage_1.isLengthPercentage(lightness) ? lightness.number / 100 : 0;
+    var a = typeof alpha !== 'undefined' && length_percentage_1.isLengthPercentage(alpha) ? length_percentage_1.getAbsoluteValue(alpha, 1) : 1;
     if (s === 0) {
-        return (0, exports.pack)(l * 255, l * 255, l * 255, 1);
+        return exports.pack(l * 255, l * 255, l * 255, 1);
     }
     var t2 = l <= 0.5 ? l * (s + 1) : l + s - l * s;
     var t1 = l * 2 - t2;
     var r = hue2rgb(t1, t2, h + 1 / 3);
     var g = hue2rgb(t1, t2, h);
     var b = hue2rgb(t1, t2, h - 1 / 3);
-    return (0, exports.pack)(r * 255, g * 255, b * 255, a);
+    return exports.pack(r * 255, g * 255, b * 255, a);
 };
 var SUPPORTED_COLOR_FUNCTIONS = {
     hsl: hsl,

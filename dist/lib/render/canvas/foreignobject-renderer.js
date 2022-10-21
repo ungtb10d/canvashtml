@@ -64,11 +64,11 @@ var ForeignObjectRenderer = /** @class */ (function (_super) {
         _this.options = options;
         _this.canvas.width = Math.floor(options.width * options.scale);
         _this.canvas.height = Math.floor(options.height * options.scale);
-        _this.canvas.style.width = "".concat(options.width, "px");
-        _this.canvas.style.height = "".concat(options.height, "px");
+        _this.canvas.style.width = options.width + "px";
+        _this.canvas.style.height = options.height + "px";
         _this.ctx.scale(_this.options.scale, _this.options.scale);
         _this.ctx.translate(-options.x, -options.y);
-        _this.context.logger.debug("EXPERIMENTAL ForeignObject renderer initialized (".concat(options.width, "x").concat(options.height, " at ").concat(options.x, ",").concat(options.y, ") with scale ").concat(options.scale));
+        _this.context.logger.debug("EXPERIMENTAL ForeignObject renderer initialized (" + options.width + "x" + options.height + " at " + options.x + "," + options.y + ") with scale " + options.scale);
         return _this;
     }
     ForeignObjectRenderer.prototype.render = function (element) {
@@ -77,12 +77,12 @@ var ForeignObjectRenderer = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        svg = (0, features_1.createForeignObjectSVG)(this.options.width * this.options.scale, this.options.height * this.options.scale, this.options.scale, this.options.scale, element);
-                        return [4 /*yield*/, (0, exports.loadSerializedSVG)(svg)];
+                        svg = features_1.createForeignObjectSVG(this.options.width * this.options.scale, this.options.height * this.options.scale, this.options.scale, this.options.scale, element);
+                        return [4 /*yield*/, exports.loadSerializedSVG(svg)];
                     case 1:
                         img = _a.sent();
                         if (this.options.backgroundColor) {
-                            this.ctx.fillStyle = (0, color_1.asString)(this.options.backgroundColor);
+                            this.ctx.fillStyle = color_1.asString(this.options.backgroundColor);
                             this.ctx.fillRect(0, 0, this.options.width * this.options.scale, this.options.height * this.options.scale);
                         }
                         this.ctx.drawImage(img, -this.options.x * this.options.scale, -this.options.y * this.options.scale);
@@ -101,7 +101,7 @@ var loadSerializedSVG = function (svg) {
             resolve(img);
         };
         img.onerror = reject;
-        img.src = "data:image/svg+xml;charset=utf-8,".concat(encodeURIComponent(new XMLSerializer().serializeToString(svg)));
+        img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(new XMLSerializer().serializeToString(svg));
     });
 };
 exports.loadSerializedSVG = loadSerializedSVG;

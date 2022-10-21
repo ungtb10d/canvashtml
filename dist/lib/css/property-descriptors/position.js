@@ -5,19 +5,19 @@ exports.position = {
     name: 'position',
     initialValue: 'static',
     prefix: false,
-    type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
+    type: 2 /* IDENT_VALUE */,
     parse: function (_context, position) {
         switch (position) {
             case 'relative':
-                return 1 /* POSITION.RELATIVE */;
+                return 1 /* RELATIVE */;
             case 'absolute':
-                return 2 /* POSITION.ABSOLUTE */;
+                return 2 /* ABSOLUTE */;
             case 'fixed':
-                return 3 /* POSITION.FIXED */;
+                return 3 /* FIXED */;
             case 'sticky':
-                return 4 /* POSITION.STICKY */;
+                return 4 /* STICKY */;
         }
-        return 0 /* POSITION.STATIC */;
+        return 0 /* STATIC */;
     }
 };
 //# sourceMappingURL=position.js.map

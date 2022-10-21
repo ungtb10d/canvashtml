@@ -43,7 +43,7 @@ var FontMetrics = /** @class */ (function () {
         return { baseline: baseline, middle: middle };
     };
     FontMetrics.prototype.getMetrics = function (fontFamily, fontSize) {
-        var key = "".concat(fontFamily, " ").concat(fontSize);
+        var key = fontFamily + " " + fontSize;
         if (typeof this._data[key] === 'undefined') {
             this._data[key] = this.parseMetrics(fontFamily, fontSize);
         }

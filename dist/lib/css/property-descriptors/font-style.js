@@ -5,16 +5,16 @@ exports.fontStyle = {
     name: 'font-style',
     initialValue: 'normal',
     prefix: false,
-    type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
+    type: 2 /* IDENT_VALUE */,
     parse: function (_context, overflow) {
         switch (overflow) {
             case 'oblique':
-                return "oblique" /* FONT_STYLE.OBLIQUE */;
+                return "oblique" /* OBLIQUE */;
             case 'italic':
-                return "italic" /* FONT_STYLE.ITALIC */;
+                return "italic" /* ITALIC */;
             case 'normal':
             default:
-                return "normal" /* FONT_STYLE.NORMAL */;
+                return "normal" /* NORMAL */;
         }
     }
 };

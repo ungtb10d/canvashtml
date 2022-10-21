@@ -8,7 +8,7 @@ var testRangeBounds = function (document) {
         var range = document.createRange();
         if (range.getBoundingClientRect) {
             var testElement = document.createElement('boundtest');
-            testElement.style.height = "".concat(TEST_HEIGHT, "px");
+            testElement.style.height = TEST_HEIGHT + "px";
             testElement.style.display = 'block';
             document.body.appendChild(testElement);
             range.selectNode(testElement);
@@ -33,7 +33,7 @@ var testIOSLineBreak = function (document) {
     var range = document.createRange();
     testElement.innerHTML = typeof ''.repeat === 'function' ? '&#128104;'.repeat(10) : '';
     var node = testElement.firstChild;
-    var textList = (0, css_line_break_1.toCodePoints)(node.data).map(function (i) { return (0, css_line_break_1.fromCodePoint)(i); });
+    var textList = css_line_break_1.toCodePoints(node.data).map(function (i) { return css_line_break_1.fromCodePoint(i); });
     var offset = 0;
     var prev = {};
     // ios 13 does not handle range getBoundingClientRect line changes correctly #2177
@@ -88,21 +88,21 @@ var testForeignObject = function (document) {
     var img = new Image();
     var greenImageSrc = canvas.toDataURL();
     img.src = greenImageSrc;
-    var svg = (0, exports.createForeignObjectSVG)(size, size, 0, 0, img);
+    var svg = exports.createForeignObjectSVG(size, size, 0, 0, img);
     ctx.fillStyle = 'red';
     ctx.fillRect(0, 0, size, size);
-    return (0, exports.loadSerializedSVG)(svg)
+    return exports.loadSerializedSVG(svg)
         .then(function (img) {
         ctx.drawImage(img, 0, 0);
         var data = ctx.getImageData(0, 0, size, size).data;
         ctx.fillStyle = 'red';
         ctx.fillRect(0, 0, size, size);
         var node = document.createElement('div');
-        node.style.backgroundImage = "url(".concat(greenImageSrc, ")");
-        node.style.height = "".concat(size, "px");
+        node.style.backgroundImage = "url(" + greenImageSrc + ")";
+        node.style.height = size + "px";
         // Firefox 55 does not render inline <img /> tags
         return isGreenPixel(data)
-            ? (0, exports.loadSerializedSVG)((0, exports.createForeignObjectSVG)(size, size, 0, 0, node))
+            ? exports.loadSerializedSVG(exports.createForeignObjectSVG(size, size, 0, 0, node))
             : Promise.reject(false);
     })
         .then(function (img) {
@@ -133,7 +133,7 @@ var loadSerializedSVG = function (svg) {
         var img = new Image();
         img.onload = function () { return resolve(img); };
         img.onerror = reject;
-        img.src = "data:image/svg+xml;charset=utf-8,".concat(encodeURIComponent(new XMLSerializer().serializeToString(svg)));
+        img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(new XMLSerializer().serializeToString(svg));
     });
 };
 exports.loadSerializedSVG = loadSerializedSVG;

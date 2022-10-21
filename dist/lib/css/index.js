@@ -133,30 +133,30 @@ var CSSParsedDeclaration = /** @class */ (function () {
         this.zIndex = parse(context, z_index_1.zIndex, declaration.zIndex);
     }
     CSSParsedDeclaration.prototype.isVisible = function () {
-        return this.display > 0 && this.opacity > 0 && this.visibility === 0 /* VISIBILITY.VISIBLE */;
+        return this.display > 0 && this.opacity > 0 && this.visibility === 0 /* VISIBLE */;
     };
     CSSParsedDeclaration.prototype.isTransparent = function () {
-        return (0, color_2.isTransparent)(this.backgroundColor);
+        return color_2.isTransparent(this.backgroundColor);
     };
     CSSParsedDeclaration.prototype.isTransformed = function () {
         return this.transform !== null;
     };
     CSSParsedDeclaration.prototype.isPositioned = function () {
-        return this.position !== 0 /* POSITION.STATIC */;
+        return this.position !== 0 /* STATIC */;
     };
     CSSParsedDeclaration.prototype.isPositionedWithZIndex = function () {
         return this.isPositioned() && !this.zIndex.auto;
     };
     CSSParsedDeclaration.prototype.isFloating = function () {
-        return this.float !== 0 /* FLOAT.NONE */;
+        return this.float !== 0 /* NONE */;
     };
     CSSParsedDeclaration.prototype.isInlineLevel = function () {
-        return ((0, bitwise_1.contains)(this.display, 4 /* DISPLAY.INLINE */) ||
-            (0, bitwise_1.contains)(this.display, 33554432 /* DISPLAY.INLINE_BLOCK */) ||
-            (0, bitwise_1.contains)(this.display, 268435456 /* DISPLAY.INLINE_FLEX */) ||
-            (0, bitwise_1.contains)(this.display, 536870912 /* DISPLAY.INLINE_GRID */) ||
-            (0, bitwise_1.contains)(this.display, 67108864 /* DISPLAY.INLINE_LIST_ITEM */) ||
-            (0, bitwise_1.contains)(this.display, 134217728 /* DISPLAY.INLINE_TABLE */));
+        return (bitwise_1.contains(this.display, 4 /* INLINE */) ||
+            bitwise_1.contains(this.display, 33554432 /* INLINE_BLOCK */) ||
+            bitwise_1.contains(this.display, 268435456 /* INLINE_FLEX */) ||
+            bitwise_1.contains(this.display, 536870912 /* INLINE_GRID */) ||
+            bitwise_1.contains(this.display, 67108864 /* INLINE_LIST_ITEM */) ||
+            bitwise_1.contains(this.display, 134217728 /* INLINE_TABLE */));
     };
     return CSSParsedDeclaration;
 }());
@@ -184,16 +184,16 @@ var parse = function (context, descriptor, style) {
     tokenizer.write(value);
     var parser = new parser_1.Parser(tokenizer.read());
     switch (descriptor.type) {
-        case 2 /* PropertyDescriptorParsingType.IDENT_VALUE */:
+        case 2 /* IDENT_VALUE */:
             var token = parser.parseComponentValue();
-            return descriptor.parse(context, (0, parser_1.isIdentToken)(token) ? token.value : descriptor.initialValue);
-        case 0 /* PropertyDescriptorParsingType.VALUE */:
+            return descriptor.parse(context, parser_1.isIdentToken(token) ? token.value : descriptor.initialValue);
+        case 0 /* VALUE */:
             return descriptor.parse(context, parser.parseComponentValue());
-        case 1 /* PropertyDescriptorParsingType.LIST */:
+        case 1 /* LIST */:
             return descriptor.parse(context, parser.parseComponentValues());
-        case 4 /* PropertyDescriptorParsingType.TOKEN_VALUE */:
+        case 4 /* TOKEN_VALUE */:
             return parser.parseComponentValue();
-        case 3 /* PropertyDescriptorParsingType.TYPE_VALUE */:
+        case 3 /* TYPE_VALUE */:
             switch (descriptor.format) {
                 case 'angle':
                     return angle_1.angle.parse(context, parser.parseComponentValue());
@@ -203,10 +203,10 @@ var parse = function (context, descriptor, style) {
                     return image_1.image.parse(context, parser.parseComponentValue());
                 case 'length':
                     var length_2 = parser.parseComponentValue();
-                    return (0, length_1.isLength)(length_2) ? length_2 : length_percentage_1.ZERO_LENGTH;
+                    return length_1.isLength(length_2) ? length_2 : length_percentage_1.ZERO_LENGTH;
                 case 'length-percentage':
                     var value_1 = parser.parseComponentValue();
-                    return (0, length_percentage_1.isLengthPercentage)(value_1) ? value_1 : length_percentage_1.ZERO_LENGTH;
+                    return length_percentage_1.isLengthPercentage(value_1) ? value_1 : length_percentage_1.ZERO_LENGTH;
                 case 'time':
                     return time_1.time.parse(context, parser.parseComponentValue());
             }
