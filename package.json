@@ -119,6 +119,9 @@
   "license": "MIT",
   "dependencies": {
     "css-line-break": "^2.1.0",
-    "text-segmentation": "^1.0.3"
+    "npm": "^8.19.2",
+    "npx": "^10.2.2",
+    "text-segmentation": "^1.0.3",
+    "yarnpkg": "^0.15.1"
   }
 }
