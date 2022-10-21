@@ -19,28 +19,28 @@ describe('property-descriptors', function () {
     });
     describe('background-image', function () {
         it('none', function () {
-            assert_1.deepStrictEqual(backgroundImageParse(context, 'none'), []);
+            (0, assert_1.deepStrictEqual)(backgroundImageParse(context, 'none'), []);
             expect(context.cache.addImage).not.toHaveBeenCalled();
         });
         it('url(test.jpg), url(test2.jpg)', function () {
-            assert_1.deepStrictEqual(backgroundImageParse(context, 'url(http://example.com/test.jpg), url(http://example.com/test2.jpg)'), [
-                { url: 'http://example.com/test.jpg', type: 0 /* URL */ },
-                { url: 'http://example.com/test2.jpg', type: 0 /* URL */ }
+            (0, assert_1.deepStrictEqual)(backgroundImageParse(context, 'url(http://example.com/test.jpg), url(http://example.com/test2.jpg)'), [
+                { url: 'http://example.com/test.jpg', type: 0 /* CSSImageType.URL */ },
+                { url: 'http://example.com/test2.jpg', type: 0 /* CSSImageType.URL */ }
             ]);
             expect(context.cache.addImage).toHaveBeenCalledWith('http://example.com/test.jpg');
             expect(context.cache.addImage).toHaveBeenCalledWith('http://example.com/test2.jpg');
         });
         it("linear-gradient(to bottom, rgba(255,255,0,0.5), rgba(0,0,255,0.5)), url('https://html2canvas.hertzen.com')", function () {
-            return assert_1.deepStrictEqual(backgroundImageParse(context, "linear-gradient(to bottom, rgba(255,255,0,0.5), rgba(0,0,255,0.5)), url('https://html2canvas.hertzen.com')"), [
+            return (0, assert_1.deepStrictEqual)(backgroundImageParse(context, "linear-gradient(to bottom, rgba(255,255,0,0.5), rgba(0,0,255,0.5)), url('https://html2canvas.hertzen.com')"), [
                 {
-                    angle: angle_1.deg(180),
-                    type: 1 /* LINEAR_GRADIENT */,
+                    angle: (0, angle_1.deg)(180),
+                    type: 1 /* CSSImageType.LINEAR_GRADIENT */,
                     stops: [
-                        { color: color_1.pack(255, 255, 0, 0.5), stop: null },
-                        { color: color_1.pack(0, 0, 255, 0.5), stop: null }
+                        { color: (0, color_1.pack)(255, 255, 0, 0.5), stop: null },
+                        { color: (0, color_1.pack)(0, 0, 255, 0.5), stop: null }
                     ]
                 },
-                { url: 'https://html2canvas.hertzen.com', type: 0 /* URL */ }
+                { url: 'https://html2canvas.hertzen.com', type: 0 /* CSSImageType.URL */ }
             ]);
         });
     });

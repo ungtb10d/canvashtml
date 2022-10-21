@@ -16,33 +16,33 @@ var LIST_OWNERS = ['OL', 'UL', 'MENU'];
 var parseNodeTree = function (context, node, parent, root) {
     for (var childNode = node.firstChild, nextNode = void 0; childNode; childNode = nextNode) {
         nextNode = childNode.nextSibling;
-        if (exports.isTextNode(childNode) && childNode.data.trim().length > 0) {
+        if ((0, exports.isTextNode)(childNode) && childNode.data.trim().length > 0) {
             parent.textNodes.push(new text_container_1.TextContainer(context, childNode, parent.styles));
         }
-        else if (exports.isElementNode(childNode)) {
-            if (exports.isSlotElement(childNode) && childNode.assignedNodes) {
+        else if ((0, exports.isElementNode)(childNode)) {
+            if ((0, exports.isSlotElement)(childNode) && childNode.assignedNodes) {
                 childNode.assignedNodes().forEach(function (childNode) { return parseNodeTree(context, childNode, parent, root); });
             }
             else {
                 var container = createContainer(context, childNode);
                 if (container.styles.isVisible()) {
                     if (createsRealStackingContext(childNode, container, root)) {
-                        container.flags |= 4 /* CREATES_REAL_STACKING_CONTEXT */;
+                        container.flags |= 4 /* FLAGS.CREATES_REAL_STACKING_CONTEXT */;
                     }
                     else if (createsStackingContext(container.styles)) {
-                        container.flags |= 2 /* CREATES_STACKING_CONTEXT */;
+                        container.flags |= 2 /* FLAGS.CREATES_STACKING_CONTEXT */;
                     }
                     if (LIST_OWNERS.indexOf(childNode.tagName) !== -1) {
-                        container.flags |= 8 /* IS_LIST_OWNER */;
+                        container.flags |= 8 /* FLAGS.IS_LIST_OWNER */;
                     }
                     parent.elements.push(container);
                     childNode.slot;
                     if (childNode.shadowRoot) {
                         parseNodeTree(context, childNode.shadowRoot, container, root);
                     }
-                    else if (!exports.isTextareaElement(childNode) &&
-                        !exports.isSVGElement(childNode) &&
-                        !exports.isSelectElement(childNode)) {
+                    else if (!(0, exports.isTextareaElement)(childNode) &&
+                        !(0, exports.isSVGElement)(childNode) &&
+                        !(0, exports.isSelectElement)(childNode)) {
                         parseNodeTree(context, childNode, container, root);
                     }
                 }
@@ -51,38 +51,38 @@ var parseNodeTree = function (context, node, parent, root) {
     }
 };
 var createContainer = function (context, element) {
-    if (exports.isImageElement(element)) {
+    if ((0, exports.isImageElement)(element)) {
         return new image_element_container_1.ImageElementContainer(context, element);
     }
-    if (exports.isCanvasElement(element)) {
+    if ((0, exports.isCanvasElement)(element)) {
         return new canvas_element_container_1.CanvasElementContainer(context, element);
     }
-    if (exports.isSVGElement(element)) {
+    if ((0, exports.isSVGElement)(element)) {
         return new svg_element_container_1.SVGElementContainer(context, element);
     }
-    if (exports.isLIElement(element)) {
+    if ((0, exports.isLIElement)(element)) {
         return new li_element_container_1.LIElementContainer(context, element);
     }
-    if (exports.isOLElement(element)) {
+    if ((0, exports.isOLElement)(element)) {
         return new ol_element_container_1.OLElementContainer(context, element);
     }
-    if (exports.isInputElement(element)) {
+    if ((0, exports.isInputElement)(element)) {
         return new input_element_container_1.InputElementContainer(context, element);
     }
-    if (exports.isSelectElement(element)) {
+    if ((0, exports.isSelectElement)(element)) {
         return new select_element_container_1.SelectElementContainer(context, element);
     }
-    if (exports.isTextareaElement(element)) {
+    if ((0, exports.isTextareaElement)(element)) {
         return new textarea_element_container_1.TextareaElementContainer(context, element);
     }
-    if (exports.isIFrameElement(element)) {
+    if ((0, exports.isIFrameElement)(element)) {
         return new iframe_element_container_1.IFrameElementContainer(context, element);
     }
     return new element_container_1.ElementContainer(context, element);
 };
 var parseTree = function (context, element) {
     var container = createContainer(context, element);
-    container.flags |= 4 /* CREATES_REAL_STACKING_CONTEXT */;
+    container.flags |= 4 /* FLAGS.CREATES_REAL_STACKING_CONTEXT */;
     parseNodeTree(context, element, container, container);
     return container;
 };
@@ -91,7 +91,7 @@ var createsRealStackingContext = function (node, container, root) {
     return (container.styles.isPositionedWithZIndex() ||
         container.styles.opacity < 1 ||
         container.styles.isTransformed() ||
-        (exports.isBodyElement(node) && root.styles.isTransparent()));
+        ((0, exports.isBodyElement)(node) && root.styles.isTransparent()));
 };
 var createsStackingContext = function (styles) { return styles.isPositioned() || styles.isFloating(); };
 var isTextNode = function (node) { return node.nodeType === Node.TEXT_NODE; };
@@ -99,7 +99,7 @@ exports.isTextNode = isTextNode;
 var isElementNode = function (node) { return node.nodeType === Node.ELEMENT_NODE; };
 exports.isElementNode = isElementNode;
 var isHTMLElementNode = function (node) {
-    return exports.isElementNode(node) && typeof node.style !== 'undefined' && !exports.isSVGElementNode(node);
+    return (0, exports.isElementNode)(node) && typeof node.style !== 'undefined' && !(0, exports.isSVGElementNode)(node);
 };
 exports.isHTMLElementNode = isHTMLElementNode;
 var isSVGElementNode = function (element) {

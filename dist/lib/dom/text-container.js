@@ -5,18 +5,18 @@ var text_1 = require("../css/layout/text");
 var TextContainer = /** @class */ (function () {
     function TextContainer(context, node, styles) {
         this.text = transform(node.data, styles.textTransform);
-        this.textBounds = text_1.parseTextBounds(context, this.text, styles, node);
+        this.textBounds = (0, text_1.parseTextBounds)(context, this.text, styles, node);
     }
     return TextContainer;
 }());
 exports.TextContainer = TextContainer;
 var transform = function (text, transform) {
     switch (transform) {
-        case 1 /* LOWERCASE */:
+        case 1 /* TEXT_TRANSFORM.LOWERCASE */:
             return text.toLowerCase();
-        case 3 /* CAPITALIZE */:
+        case 3 /* TEXT_TRANSFORM.CAPITALIZE */:
             return text.replace(CAPITALIZE, capitalize);
-        case 2 /* UPPERCASE */:
+        case 2 /* TEXT_TRANSFORM.UPPERCASE */:
             return text.toUpperCase();
         default:
             return text;

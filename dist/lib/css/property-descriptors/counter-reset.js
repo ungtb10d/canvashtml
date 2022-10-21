@@ -6,7 +6,7 @@ exports.counterReset = {
     name: 'counter-reset',
     initialValue: 'none',
     prefix: true,
-    type: 1 /* LIST */,
+    type: 1 /* PropertyDescriptorParsingType.LIST */,
     parse: function (_context, tokens) {
         if (tokens.length === 0) {
             return [];
@@ -16,8 +16,8 @@ exports.counterReset = {
         for (var i = 0; i < filtered.length; i++) {
             var counter = filtered[i];
             var next = filtered[i + 1];
-            if (parser_1.isIdentToken(counter) && counter.value !== 'none') {
-                var reset = next && parser_1.isNumberToken(next) ? next.number : 0;
+            if ((0, parser_1.isIdentToken)(counter) && counter.value !== 'none') {
+                var reset = next && (0, parser_1.isNumberToken)(next) ? next.number : 0;
                 resets.push({ counter: counter.value, reset: reset });
             }
         }

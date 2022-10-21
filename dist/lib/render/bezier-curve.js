@@ -7,7 +7,7 @@ var lerp = function (a, b, t) {
 };
 var BezierCurve = /** @class */ (function () {
     function BezierCurve(start, startControl, endControl, end) {
-        this.type = 1 /* BEZIER_CURVE */;
+        this.type = 1 /* PathType.BEZIER_CURVE */;
         this.start = start;
         this.startControl = startControl;
         this.endControl = endControl;
@@ -31,6 +31,6 @@ var BezierCurve = /** @class */ (function () {
     return BezierCurve;
 }());
 exports.BezierCurve = BezierCurve;
-var isBezierCurve = function (path) { return path.type === 1 /* BEZIER_CURVE */; };
+var isBezierCurve = function (path) { return path.type === 1 /* PathType.BEZIER_CURVE */; };
 exports.isBezierCurve = isBezierCurve;
 //# sourceMappingURL=bezier-curve.js.map

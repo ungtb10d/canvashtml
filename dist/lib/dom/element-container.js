@@ -11,11 +11,11 @@ var ElementContainer = /** @class */ (function () {
         this.textNodes = [];
         this.elements = [];
         this.flags = 0;
-        if (debugger_1.isDebugging(element, 3 /* PARSE */)) {
+        if ((0, debugger_1.isDebugging)(element, 3 /* DebuggerType.PARSE */)) {
             debugger;
         }
         this.styles = new index_1.CSSParsedDeclaration(context, window.getComputedStyle(element, null));
-        if (node_parser_1.isHTMLElementNode(element)) {
+        if ((0, node_parser_1.isHTMLElementNode)(element)) {
             if (this.styles.animationDuration.some(function (duration) { return duration > 0; })) {
                 element.style.animationDuration = '0s';
             }
@@ -24,9 +24,9 @@ var ElementContainer = /** @class */ (function () {
                 element.style.transform = 'none';
             }
         }
-        this.bounds = bounds_1.parseBounds(this.context, element);
-        if (debugger_1.isDebugging(element, 4 /* RENDER */)) {
-            this.flags |= 16 /* DEBUG_RENDER */;
+        this.bounds = (0, bounds_1.parseBounds)(this.context, element);
+        if ((0, debugger_1.isDebugging)(element, 4 /* DebuggerType.RENDER */)) {
+            this.flags |= 16 /* FLAGS.DEBUG_RENDER */;
         }
     }
     return ElementContainer;

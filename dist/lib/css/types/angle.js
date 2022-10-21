@@ -10,7 +10,7 @@ var TURN = 'turn';
 exports.angle = {
     name: 'angle',
     parse: function (_context, value) {
-        if (value.type === 15 /* DIMENSION_TOKEN */) {
+        if (value.type === 15 /* TokenType.DIMENSION_TOKEN */) {
             switch (value.unit) {
                 case DEG:
                     return (Math.PI * value.number) / 180;
@@ -26,7 +26,7 @@ exports.angle = {
     }
 };
 var isAngle = function (value) {
-    if (value.type === 15 /* DIMENSION_TOKEN */) {
+    if (value.type === 15 /* TokenType.DIMENSION_TOKEN */) {
         if (value.unit === DEG || value.unit === GRAD || value.unit === RAD || value.unit === TURN) {
             return true;
         }
@@ -47,7 +47,7 @@ var parseNamedSide = function (tokens) {
             return [length_percentage_1.ZERO_LENGTH, length_percentage_1.ZERO_LENGTH];
         case 'to top':
         case 'bottom':
-            return exports.deg(0);
+            return (0, exports.deg)(0);
         case 'to bottom left':
         case 'to left bottom':
         case 'right top':
@@ -55,7 +55,7 @@ var parseNamedSide = function (tokens) {
             return [length_percentage_1.ZERO_LENGTH, length_percentage_1.HUNDRED_PERCENT];
         case 'to right':
         case 'left':
-            return exports.deg(90);
+            return (0, exports.deg)(90);
         case 'to top left':
         case 'to left top':
         case 'right bottom':
@@ -63,7 +63,7 @@ var parseNamedSide = function (tokens) {
             return [length_percentage_1.HUNDRED_PERCENT, length_percentage_1.HUNDRED_PERCENT];
         case 'to bottom':
         case 'top':
-            return exports.deg(180);
+            return (0, exports.deg)(180);
         case 'to top right':
         case 'to right top':
         case 'left bottom':
@@ -71,7 +71,7 @@ var parseNamedSide = function (tokens) {
             return [length_percentage_1.HUNDRED_PERCENT, length_percentage_1.ZERO_LENGTH];
         case 'to left':
         case 'right':
-            return exports.deg(270);
+            return (0, exports.deg)(270);
     }
     return 0;
 };

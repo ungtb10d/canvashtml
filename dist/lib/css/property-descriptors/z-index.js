@@ -6,12 +6,12 @@ exports.zIndex = {
     name: 'z-index',
     initialValue: 'auto',
     prefix: false,
-    type: 0 /* VALUE */,
+    type: 0 /* PropertyDescriptorParsingType.VALUE */,
     parse: function (_context, token) {
-        if (token.type === 20 /* IDENT_TOKEN */) {
+        if (token.type === 20 /* TokenType.IDENT_TOKEN */) {
             return { auto: true, order: 0 };
         }
-        if (parser_1.isNumberToken(token)) {
+        if ((0, parser_1.isNumberToken)(token)) {
             return { auto: false, order: token.number };
         }
         throw new Error("Invalid z-index number parsed");

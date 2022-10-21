@@ -5,13 +5,13 @@ var parser_1 = require("../syntax/parser");
 exports.fontWeight = {
     name: 'font-weight',
     initialValue: 'normal',
-    type: 0 /* VALUE */,
+    type: 0 /* PropertyDescriptorParsingType.VALUE */,
     prefix: false,
     parse: function (_context, token) {
-        if (parser_1.isNumberToken(token)) {
+        if ((0, parser_1.isNumberToken)(token)) {
             return token.number;
         }
-        if (parser_1.isIdentToken(token)) {
+        if ((0, parser_1.isIdentToken)(token)) {
             switch (token.value) {
                 case 'bold':
                     return 700;

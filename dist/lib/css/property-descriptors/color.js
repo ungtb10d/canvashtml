@@ -5,7 +5,7 @@ exports.color = {
     name: "color",
     initialValue: 'transparent',
     prefix: false,
-    type: 3 /* TYPE_VALUE */,
+    type: 3 /* PropertyDescriptorParsingType.TYPE_VALUE */,
     format: 'color'
 };
 //# sourceMappingURL=color.js.map

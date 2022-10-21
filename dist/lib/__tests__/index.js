@@ -68,7 +68,7 @@ describe('html2canvas', function () {
             switch (_a.label) {
                 case 0:
                     document_cloner_1.DocumentCloner.destroy = jest.fn().mockReturnValue(true);
-                    return [4 /*yield*/, index_1.default(element)];
+                    return [4 /*yield*/, (0, index_1.default)(element)];
                 case 1:
                     _a.sent();
                     expect(canvas_renderer_1.CanvasRenderer).toHaveBeenLastCalledWith(expect.objectContaining({
@@ -92,7 +92,7 @@ describe('html2canvas', function () {
     it('should have transparent background with backgroundColor: null', function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, index_1.default(element, { backgroundColor: null })];
+                case 0: return [4 /*yield*/, (0, index_1.default)(element, { backgroundColor: null })];
                 case 1:
                     _a.sent();
                     expect(canvas_renderer_1.CanvasRenderer).toHaveBeenLastCalledWith(expect.anything(), expect.objectContaining({
@@ -108,7 +108,7 @@ describe('html2canvas', function () {
             switch (_a.label) {
                 case 0:
                     canvas = {};
-                    return [4 /*yield*/, index_1.default(element, { canvas: canvas })];
+                    return [4 /*yield*/, (0, index_1.default)(element, { canvas: canvas })];
                 case 1:
                     _a.sent();
                     expect(canvas_renderer_1.CanvasRenderer).toHaveBeenLastCalledWith(expect.anything(), expect.objectContaining({
@@ -123,7 +123,7 @@ describe('html2canvas', function () {
             switch (_a.label) {
                 case 0:
                     document_cloner_1.DocumentCloner.destroy = jest.fn();
-                    return [4 /*yield*/, index_1.default(element, { removeContainer: false })];
+                    return [4 /*yield*/, (0, index_1.default)(element, { removeContainer: false })];
                 case 1:
                     _a.sent();
                     expect(canvas_renderer_1.CanvasRenderer).toHaveBeenLastCalledWith(expect.anything(), expect.objectContaining({

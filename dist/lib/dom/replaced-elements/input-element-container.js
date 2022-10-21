@@ -20,7 +20,7 @@ var element_container_1 = require("../element-container");
 var bounds_1 = require("../../css/layout/bounds");
 var CHECKBOX_BORDER_RADIUS = [
     {
-        type: 15 /* DIMENSION_TOKEN */,
+        type: 15 /* TokenType.DIMENSION_TOKEN */,
         flags: 0,
         unit: 'px',
         number: 3
@@ -28,7 +28,7 @@ var CHECKBOX_BORDER_RADIUS = [
 ];
 var RADIO_BORDER_RADIUS = [
     {
-        type: 16 /* PERCENTAGE_TOKEN */,
+        type: 16 /* TokenType.PERCENTAGE_TOKEN */,
         flags: 0,
         number: 50
     }
@@ -73,9 +73,9 @@ var InputElementContainer = /** @class */ (function (_super) {
                 _this.styles.borderRightStyle =
                     _this.styles.borderBottomStyle =
                         _this.styles.borderLeftStyle =
-                            1 /* SOLID */;
-            _this.styles.backgroundClip = [0 /* BORDER_BOX */];
-            _this.styles.backgroundOrigin = [0 /* BORDER_BOX */];
+                            1 /* BORDER_STYLE.SOLID */;
+            _this.styles.backgroundClip = [0 /* BACKGROUND_CLIP.BORDER_BOX */];
+            _this.styles.backgroundOrigin = [0 /* BACKGROUND_ORIGIN.BORDER_BOX */];
             _this.bounds = reformatInputBounds(_this.bounds);
         }
         switch (_this.type) {

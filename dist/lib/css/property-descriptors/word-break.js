@@ -11,7 +11,7 @@ exports.wordBreak = {
     name: 'word-break',
     initialValue: 'normal',
     prefix: false,
-    type: 2 /* IDENT_VALUE */,
+    type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
     parse: function (_context, wordBreak) {
         switch (wordBreak) {
             case 'break-all':

@@ -7,9 +7,9 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.html2canvas = factory());
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
-    /*! *****************************************************************************
+    /******************************************************************************
     Copyright (c) Microsoft Corporation.
 
     Permission to use, copy, modify, and/or distribute this software for any
@@ -96,7 +96,7 @@
                 ar[i] = from[i];
             }
         }
-        return to.concat(ar || from);
+        return to.concat(ar || Array.prototype.slice.call(from));
     }
 
     var Bounds = /** @class */ (function () {
@@ -992,38 +992,38 @@
         return sign * (int + frac * Math.pow(10, -fracd)) * Math.pow(10, expsign * exp);
     };
     var LEFT_PARENTHESIS_TOKEN = {
-        type: 2 /* LEFT_PARENTHESIS_TOKEN */
+        type: 2 /* TokenType.LEFT_PARENTHESIS_TOKEN */
     };
     var RIGHT_PARENTHESIS_TOKEN = {
-        type: 3 /* RIGHT_PARENTHESIS_TOKEN */
+        type: 3 /* TokenType.RIGHT_PARENTHESIS_TOKEN */
     };
-    var COMMA_TOKEN = { type: 4 /* COMMA_TOKEN */ };
-    var SUFFIX_MATCH_TOKEN = { type: 13 /* SUFFIX_MATCH_TOKEN */ };
-    var PREFIX_MATCH_TOKEN = { type: 8 /* PREFIX_MATCH_TOKEN */ };
-    var COLUMN_TOKEN = { type: 21 /* COLUMN_TOKEN */ };
-    var DASH_MATCH_TOKEN = { type: 9 /* DASH_MATCH_TOKEN */ };
-    var INCLUDE_MATCH_TOKEN = { type: 10 /* INCLUDE_MATCH_TOKEN */ };
+    var COMMA_TOKEN = { type: 4 /* TokenType.COMMA_TOKEN */ };
+    var SUFFIX_MATCH_TOKEN = { type: 13 /* TokenType.SUFFIX_MATCH_TOKEN */ };
+    var PREFIX_MATCH_TOKEN = { type: 8 /* TokenType.PREFIX_MATCH_TOKEN */ };
+    var COLUMN_TOKEN = { type: 21 /* TokenType.COLUMN_TOKEN */ };
+    var DASH_MATCH_TOKEN = { type: 9 /* TokenType.DASH_MATCH_TOKEN */ };
+    var INCLUDE_MATCH_TOKEN = { type: 10 /* TokenType.INCLUDE_MATCH_TOKEN */ };
     var LEFT_CURLY_BRACKET_TOKEN = {
-        type: 11 /* LEFT_CURLY_BRACKET_TOKEN */
+        type: 11 /* TokenType.LEFT_CURLY_BRACKET_TOKEN */
     };
     var RIGHT_CURLY_BRACKET_TOKEN = {
-        type: 12 /* RIGHT_CURLY_BRACKET_TOKEN */
+        type: 12 /* TokenType.RIGHT_CURLY_BRACKET_TOKEN */
     };
-    var SUBSTRING_MATCH_TOKEN = { type: 14 /* SUBSTRING_MATCH_TOKEN */ };
-    var BAD_URL_TOKEN = { type: 23 /* BAD_URL_TOKEN */ };
-    var BAD_STRING_TOKEN = { type: 1 /* BAD_STRING_TOKEN */ };
-    var CDO_TOKEN = { type: 25 /* CDO_TOKEN */ };
-    var CDC_TOKEN = { type: 24 /* CDC_TOKEN */ };
-    var COLON_TOKEN = { type: 26 /* COLON_TOKEN */ };
-    var SEMICOLON_TOKEN = { type: 27 /* SEMICOLON_TOKEN */ };
+    var SUBSTRING_MATCH_TOKEN = { type: 14 /* TokenType.SUBSTRING_MATCH_TOKEN */ };
+    var BAD_URL_TOKEN = { type: 23 /* TokenType.BAD_URL_TOKEN */ };
+    var BAD_STRING_TOKEN = { type: 1 /* TokenType.BAD_STRING_TOKEN */ };
+    var CDO_TOKEN = { type: 25 /* TokenType.CDO_TOKEN */ };
+    var CDC_TOKEN = { type: 24 /* TokenType.CDC_TOKEN */ };
+    var COLON_TOKEN = { type: 26 /* TokenType.COLON_TOKEN */ };
+    var SEMICOLON_TOKEN = { type: 27 /* TokenType.SEMICOLON_TOKEN */ };
     var LEFT_SQUARE_BRACKET_TOKEN = {
-        type: 28 /* LEFT_SQUARE_BRACKET_TOKEN */
+        type: 28 /* TokenType.LEFT_SQUARE_BRACKET_TOKEN */
     };
     var RIGHT_SQUARE_BRACKET_TOKEN = {
-        type: 29 /* RIGHT_SQUARE_BRACKET_TOKEN */
+        type: 29 /* TokenType.RIGHT_SQUARE_BRACKET_TOKEN */
     };
-    var WHITESPACE_TOKEN = { type: 31 /* WHITESPACE_TOKEN */ };
-    var EOF_TOKEN = { type: 32 /* EOF_TOKEN */ };
+    var WHITESPACE_TOKEN = { type: 31 /* TokenType.WHITESPACE_TOKEN */ };
+    var EOF_TOKEN = { type: 32 /* TokenType.EOF_TOKEN */ };
     var Tokenizer = /** @class */ (function () {
         function Tokenizer() {
             this._value = [];
@@ -1052,7 +1052,7 @@
                     if (isNameCodePoint(c1) || isValidEscape(c2, c3)) {
                         var flags = isIdentifierStart(c1, c2, c3) ? FLAG_ID : FLAG_UNRESTRICTED;
                         var value = this.consumeName();
-                        return { type: 5 /* HASH_TOKEN */, value: value, flags: flags };
+                        return { type: 5 /* TokenType.HASH_TOKEN */, value: value, flags: flags };
                     }
                     break;
                 case DOLLAR_SIGN:
@@ -1141,7 +1141,7 @@
                     var a3 = this.peekCodePoint(2);
                     if (isIdentifierStart(a1, a2, a3)) {
                         var value = this.consumeName();
-                        return { type: 7 /* AT_KEYWORD_TOKEN */, value: value };
+                        return { type: 7 /* TokenType.AT_KEYWORD_TOKEN */, value: value };
                     }
                     break;
                 case LEFT_SQUARE_BRACKET:
@@ -1205,7 +1205,7 @@
                 this.reconsumeCodePoint(codePoint);
                 return this.consumeIdentLikeToken();
             }
-            return { type: 6 /* DELIM_TOKEN */, value: fromCodePoint$1(codePoint) };
+            return { type: 6 /* TokenType.DELIM_TOKEN */, value: fromCodePoint$1(codePoint) };
         };
         Tokenizer.prototype.consumeCodePoint = function () {
             var value = this._value.shift();
@@ -1236,7 +1236,7 @@
             if (questionMarks) {
                 var start_1 = parseInt(fromCodePoint$1.apply(void 0, digits.map(function (digit) { return (digit === QUESTION_MARK ? ZERO : digit); })), 16);
                 var end = parseInt(fromCodePoint$1.apply(void 0, digits.map(function (digit) { return (digit === QUESTION_MARK ? F : digit); })), 16);
-                return { type: 30 /* UNICODE_RANGE_TOKEN */, start: start_1, end: end };
+                return { type: 30 /* TokenType.UNICODE_RANGE_TOKEN */, start: start_1, end: end };
             }
             var start = parseInt(fromCodePoint$1.apply(void 0, digits), 16);
             if (this.peekCodePoint(0) === HYPHEN_MINUS && isHex(this.peekCodePoint(1))) {
@@ -1248,10 +1248,10 @@
                     codePoint = this.consumeCodePoint();
                 }
                 var end = parseInt(fromCodePoint$1.apply(void 0, endDigits), 16);
-                return { type: 30 /* UNICODE_RANGE_TOKEN */, start: start, end: end };
+                return { type: 30 /* TokenType.UNICODE_RANGE_TOKEN */, start: start, end: end };
             }
             else {
-                return { type: 30 /* UNICODE_RANGE_TOKEN */, start: start, end: start };
+                return { type: 30 /* TokenType.UNICODE_RANGE_TOKEN */, start: start, end: start };
             }
         };
         Tokenizer.prototype.consumeIdentLikeToken = function () {
@@ -1262,24 +1262,24 @@
             }
             else if (this.peekCodePoint(0) === LEFT_PARENTHESIS) {
                 this.consumeCodePoint();
-                return { type: 19 /* FUNCTION_TOKEN */, value: value };
+                return { type: 19 /* TokenType.FUNCTION_TOKEN */, value: value };
             }
-            return { type: 20 /* IDENT_TOKEN */, value: value };
+            return { type: 20 /* TokenType.IDENT_TOKEN */, value: value };
         };
         Tokenizer.prototype.consumeUrlToken = function () {
             var value = [];
             this.consumeWhiteSpace();
             if (this.peekCodePoint(0) === EOF) {
-                return { type: 22 /* URL_TOKEN */, value: '' };
+                return { type: 22 /* TokenType.URL_TOKEN */, value: '' };
             }
             var next = this.peekCodePoint(0);
             if (next === APOSTROPHE || next === QUOTATION_MARK) {
                 var stringToken = this.consumeStringToken(this.consumeCodePoint());
-                if (stringToken.type === 0 /* STRING_TOKEN */) {
+                if (stringToken.type === 0 /* TokenType.STRING_TOKEN */) {
                     this.consumeWhiteSpace();
                     if (this.peekCodePoint(0) === EOF || this.peekCodePoint(0) === RIGHT_PARENTHESIS) {
                         this.consumeCodePoint();
-                        return { type: 22 /* URL_TOKEN */, value: stringToken.value };
+                        return { type: 22 /* TokenType.URL_TOKEN */, value: stringToken.value };
                     }
                 }
                 this.consumeBadUrlRemnants();
@@ -1288,13 +1288,13 @@
             while (true) {
                 var codePoint = this.consumeCodePoint();
                 if (codePoint === EOF || codePoint === RIGHT_PARENTHESIS) {
-                    return { type: 22 /* URL_TOKEN */, value: fromCodePoint$1.apply(void 0, value) };
+                    return { type: 22 /* TokenType.URL_TOKEN */, value: fromCodePoint$1.apply(void 0, value) };
                 }
                 else if (isWhiteSpace(codePoint)) {
                     this.consumeWhiteSpace();
                     if (this.peekCodePoint(0) === EOF || this.peekCodePoint(0) === RIGHT_PARENTHESIS) {
                         this.consumeCodePoint();
-                        return { type: 22 /* URL_TOKEN */, value: fromCodePoint$1.apply(void 0, value) };
+                        return { type: 22 /* TokenType.URL_TOKEN */, value: fromCodePoint$1.apply(void 0, value) };
                     }
                     this.consumeBadUrlRemnants();
                     return BAD_URL_TOKEN;
@@ -1354,7 +1354,7 @@
                 var codePoint = this._value[i];
                 if (codePoint === EOF || codePoint === undefined || codePoint === endingCodePoint) {
                     value += this.consumeStringSlice(i);
-                    return { type: 0 /* STRING_TOKEN */, value: value };
+                    return { type: 0 /* TokenType.STRING_TOKEN */, value: value };
                 }
                 if (codePoint === LINE_FEED) {
                     this._value.splice(0, i);
@@ -1416,13 +1416,13 @@
             var c3 = this.peekCodePoint(2);
             if (isIdentifierStart(c1, c2, c3)) {
                 var unit = this.consumeName();
-                return { type: 15 /* DIMENSION_TOKEN */, number: number, flags: flags, unit: unit };
+                return { type: 15 /* TokenType.DIMENSION_TOKEN */, number: number, flags: flags, unit: unit };
             }
             if (c1 === PERCENTAGE_SIGN) {
                 this.consumeCodePoint();
-                return { type: 16 /* PERCENTAGE_TOKEN */, number: number, flags: flags };
+                return { type: 16 /* TokenType.PERCENTAGE_TOKEN */, number: number, flags: flags };
             }
-            return { type: 17 /* NUMBER_TOKEN */, number: number, flags: flags };
+            return { type: 17 /* TokenType.NUMBER_TOKEN */, number: number, flags: flags };
         };
         Tokenizer.prototype.consumeEscapedCodePoint = function () {
             var codePoint = this.consumeCodePoint();
@@ -1481,18 +1481,18 @@
         };
         Parser.prototype.parseComponentValue = function () {
             var token = this.consumeToken();
-            while (token.type === 31 /* WHITESPACE_TOKEN */) {
+            while (token.type === 31 /* TokenType.WHITESPACE_TOKEN */) {
                 token = this.consumeToken();
             }
-            if (token.type === 32 /* EOF_TOKEN */) {
+            if (token.type === 32 /* TokenType.EOF_TOKEN */) {
                 throw new SyntaxError("Error parsing CSS component value, unexpected EOF");
             }
             this.reconsumeToken(token);
             var value = this.consumeComponentValue();
             do {
                 token = this.consumeToken();
-            } while (token.type === 31 /* WHITESPACE_TOKEN */);
-            if (token.type === 32 /* EOF_TOKEN */) {
+            } while (token.type === 31 /* TokenType.WHITESPACE_TOKEN */);
+            if (token.type === 32 /* TokenType.EOF_TOKEN */) {
                 return value;
             }
             throw new SyntaxError("Error parsing CSS component value, multiple values found when expecting only one");
@@ -1501,7 +1501,7 @@
             var values = [];
             while (true) {
                 var value = this.consumeComponentValue();
-                if (value.type === 32 /* EOF_TOKEN */) {
+                if (value.type === 32 /* TokenType.EOF_TOKEN */) {
                     return values;
                 }
                 values.push(value);
@@ -1511,11 +1511,11 @@
         Parser.prototype.consumeComponentValue = function () {
             var token = this.consumeToken();
             switch (token.type) {
-                case 11 /* LEFT_CURLY_BRACKET_TOKEN */:
-                case 28 /* LEFT_SQUARE_BRACKET_TOKEN */:
-                case 2 /* LEFT_PARENTHESIS_TOKEN */:
+                case 11 /* TokenType.LEFT_CURLY_BRACKET_TOKEN */:
+                case 28 /* TokenType.LEFT_SQUARE_BRACKET_TOKEN */:
+                case 2 /* TokenType.LEFT_PARENTHESIS_TOKEN */:
                     return this.consumeSimpleBlock(token.type);
-                case 19 /* FUNCTION_TOKEN */:
+                case 19 /* TokenType.FUNCTION_TOKEN */:
                     return this.consumeFunction(token);
             }
             return token;
@@ -1524,7 +1524,7 @@
             var block = { type: type, values: [] };
             var token = this.consumeToken();
             while (true) {
-                if (token.type === 32 /* EOF_TOKEN */ || isEndingTokenFor(token, type)) {
+                if (token.type === 32 /* TokenType.EOF_TOKEN */ || isEndingTokenFor(token, type)) {
                     return block;
                 }
                 this.reconsumeToken(token);
@@ -1536,11 +1536,11 @@
             var cssFunction = {
                 name: functionToken.value,
                 values: [],
-                type: 18 /* FUNCTION */
+                type: 18 /* TokenType.FUNCTION */
             };
             while (true) {
                 var token = this.consumeToken();
-                if (token.type === 32 /* EOF_TOKEN */ || token.type === 3 /* RIGHT_PARENTHESIS_TOKEN */) {
+                if (token.type === 32 /* TokenType.EOF_TOKEN */ || token.type === 3 /* TokenType.RIGHT_PARENTHESIS_TOKEN */) {
                     return cssFunction;
                 }
                 this.reconsumeToken(token);
@@ -1556,22 +1556,22 @@
         };
         return Parser;
     }());
-    var isDimensionToken = function (token) { return token.type === 15 /* DIMENSION_TOKEN */; };
-    var isNumberToken = function (token) { return token.type === 17 /* NUMBER_TOKEN */; };
-    var isIdentToken = function (token) { return token.type === 20 /* IDENT_TOKEN */; };
-    var isStringToken = function (token) { return token.type === 0 /* STRING_TOKEN */; };
+    var isDimensionToken = function (token) { return token.type === 15 /* TokenType.DIMENSION_TOKEN */; };
+    var isNumberToken = function (token) { return token.type === 17 /* TokenType.NUMBER_TOKEN */; };
+    var isIdentToken = function (token) { return token.type === 20 /* TokenType.IDENT_TOKEN */; };
+    var isStringToken = function (token) { return token.type === 0 /* TokenType.STRING_TOKEN */; };
     var isIdentWithValue = function (token, value) {
         return isIdentToken(token) && token.value === value;
     };
-    var nonWhiteSpace = function (token) { return token.type !== 31 /* WHITESPACE_TOKEN */; };
+    var nonWhiteSpace = function (token) { return token.type !== 31 /* TokenType.WHITESPACE_TOKEN */; };
     var nonFunctionArgSeparator = function (token) {
-        return token.type !== 31 /* WHITESPACE_TOKEN */ && token.type !== 4 /* COMMA_TOKEN */;
+        return token.type !== 31 /* TokenType.WHITESPACE_TOKEN */ && token.type !== 4 /* TokenType.COMMA_TOKEN */;
     };
     var parseFunctionArgs = function (tokens) {
         var args = [];
         var arg = [];
         tokens.forEach(function (token) {
-            if (token.type === 4 /* COMMA_TOKEN */) {
+            if (token.type === 4 /* TokenType.COMMA_TOKEN */) {
                 if (arg.length === 0) {
                     throw new Error("Error parsing function args, zero tokens for arg");
                 }
@@ -1579,7 +1579,7 @@
                 arg = [];
                 return;
             }
-            if (token.type !== 31 /* WHITESPACE_TOKEN */) {
+            if (token.type !== 31 /* TokenType.WHITESPACE_TOKEN */) {
                 arg.push(token);
             }
         });
@@ -1589,37 +1589,37 @@
         return args;
     };
     var isEndingTokenFor = function (token, type) {
-        if (type === 11 /* LEFT_CURLY_BRACKET_TOKEN */ && token.type === 12 /* RIGHT_CURLY_BRACKET_TOKEN */) {
+        if (type === 11 /* TokenType.LEFT_CURLY_BRACKET_TOKEN */ && token.type === 12 /* TokenType.RIGHT_CURLY_BRACKET_TOKEN */) {
             return true;
         }
-        if (type === 28 /* LEFT_SQUARE_BRACKET_TOKEN */ && token.type === 29 /* RIGHT_SQUARE_BRACKET_TOKEN */) {
+        if (type === 28 /* TokenType.LEFT_SQUARE_BRACKET_TOKEN */ && token.type === 29 /* TokenType.RIGHT_SQUARE_BRACKET_TOKEN */) {
             return true;
         }
-        return type === 2 /* LEFT_PARENTHESIS_TOKEN */ && token.type === 3 /* RIGHT_PARENTHESIS_TOKEN */;
+        return type === 2 /* TokenType.LEFT_PARENTHESIS_TOKEN */ && token.type === 3 /* TokenType.RIGHT_PARENTHESIS_TOKEN */;
     };
 
     var isLength = function (token) {
-        return token.type === 17 /* NUMBER_TOKEN */ || token.type === 15 /* DIMENSION_TOKEN */;
+        return token.type === 17 /* TokenType.NUMBER_TOKEN */ || token.type === 15 /* TokenType.DIMENSION_TOKEN */;
     };
 
     var isLengthPercentage = function (token) {
-        return token.type === 16 /* PERCENTAGE_TOKEN */ || isLength(token);
+        return token.type === 16 /* TokenType.PERCENTAGE_TOKEN */ || isLength(token);
     };
     var parseLengthPercentageTuple = function (tokens) {
         return tokens.length > 1 ? [tokens[0], tokens[1]] : [tokens[0]];
     };
     var ZERO_LENGTH = {
-        type: 17 /* NUMBER_TOKEN */,
+        type: 17 /* TokenType.NUMBER_TOKEN */,
         number: 0,
         flags: FLAG_INTEGER
     };
     var FIFTY_PERCENT = {
-        type: 16 /* PERCENTAGE_TOKEN */,
+        type: 16 /* TokenType.PERCENTAGE_TOKEN */,
         number: 50,
         flags: FLAG_INTEGER
     };
     var HUNDRED_PERCENT = {
-        type: 16 /* PERCENTAGE_TOKEN */,
+        type: 16 /* TokenType.PERCENTAGE_TOKEN */,
         number: 100,
         flags: FLAG_INTEGER
     };
@@ -1628,7 +1628,7 @@
         return [getAbsoluteValue(x, width), getAbsoluteValue(typeof y !== 'undefined' ? y : x, height)];
     };
     var getAbsoluteValue = function (token, parent) {
-        if (token.type === 16 /* PERCENTAGE_TOKEN */) {
+        if (token.type === 16 /* TokenType.PERCENTAGE_TOKEN */) {
             return (token.number / 100) * parent;
         }
         if (isDimensionToken(token)) {
@@ -1651,7 +1651,7 @@
     var angle = {
         name: 'angle',
         parse: function (_context, value) {
-            if (value.type === 15 /* DIMENSION_TOKEN */) {
+            if (value.type === 15 /* TokenType.DIMENSION_TOKEN */) {
                 switch (value.unit) {
                     case DEG:
                         return (Math.PI * value.number) / 180;
@@ -1667,7 +1667,7 @@
         }
     };
     var isAngle = function (value) {
-        if (value.type === 15 /* DIMENSION_TOKEN */) {
+        if (value.type === 15 /* TokenType.DIMENSION_TOKEN */) {
             if (value.unit === DEG || value.unit === GRAD || value.unit === RAD || value.unit === TURN) {
                 return true;
             }
@@ -1720,14 +1720,14 @@
     var color$1 = {
         name: 'color',
         parse: function (context, value) {
-            if (value.type === 18 /* FUNCTION */) {
+            if (value.type === 18 /* TokenType.FUNCTION */) {
                 var colorFunction = SUPPORTED_COLOR_FUNCTIONS[value.name];
                 if (typeof colorFunction === 'undefined') {
-                    throw new Error("Attempting to parse an unsupported color function \"" + value.name + "\"");
+                    throw new Error("Attempting to parse an unsupported color function \"".concat(value.name, "\""));
                 }
                 return colorFunction(context, value.values);
             }
-            if (value.type === 5 /* HASH_TOKEN */) {
+            if (value.type === 5 /* TokenType.HASH_TOKEN */) {
                 if (value.value.length === 3) {
                     var r = value.value.substring(0, 1);
                     var g = value.value.substring(1, 2);
@@ -1755,7 +1755,7 @@
                     return pack(parseInt(r, 16), parseInt(g, 16), parseInt(b, 16), parseInt(a, 16) / 255);
                 }
             }
-            if (value.type === 20 /* IDENT_TOKEN */) {
+            if (value.type === 20 /* TokenType.IDENT_TOKEN */) {
                 var namedColor = COLORS[value.value.toUpperCase()];
                 if (typeof namedColor !== 'undefined') {
                     return namedColor;
@@ -1770,16 +1770,16 @@
         var blue = 0xff & (color >> 8);
         var green = 0xff & (color >> 16);
         var red = 0xff & (color >> 24);
-        return alpha < 255 ? "rgba(" + red + "," + green + "," + blue + "," + alpha / 255 + ")" : "rgb(" + red + "," + green + "," + blue + ")";
+        return alpha < 255 ? "rgba(".concat(red, ",").concat(green, ",").concat(blue, ",").concat(alpha / 255, ")") : "rgb(".concat(red, ",").concat(green, ",").concat(blue, ")");
     };
     var pack = function (r, g, b, a) {
         return ((r << 24) | (g << 16) | (b << 8) | (Math.round(a * 255) << 0)) >>> 0;
     };
     var getTokenColorValue = function (token, i) {
-        if (token.type === 17 /* NUMBER_TOKEN */) {
+        if (token.type === 17 /* TokenType.NUMBER_TOKEN */) {
             return token.number;
         }
-        if (token.type === 16 /* PERCENTAGE_TOKEN */) {
+        if (token.type === 16 /* TokenType.PERCENTAGE_TOKEN */) {
             var max = i === 3 ? 1 : 255;
             return i === 3 ? (token.number / 100) * max : Math.round((token.number / 100) * max);
         }
@@ -1820,7 +1820,7 @@
     var hsl = function (context, args) {
         var tokens = args.filter(nonFunctionArgSeparator);
         var hue = tokens[0], saturation = tokens[1], lightness = tokens[2], alpha = tokens[3];
-        var h = (hue.type === 17 /* NUMBER_TOKEN */ ? deg(hue.number) : angle.parse(context, hue)) / (Math.PI * 2);
+        var h = (hue.type === 17 /* TokenType.NUMBER_TOKEN */ ? deg(hue.number) : angle.parse(context, hue)) / (Math.PI * 2);
         var s = isLengthPercentage(saturation) ? saturation.number / 100 : 0;
         var l = isLengthPercentage(lightness) ? lightness.number / 100 : 0;
         var a = typeof alpha !== 'undefined' && isLengthPercentage(alpha) ? getAbsoluteValue(alpha, 1) : 1;
@@ -1999,18 +1999,18 @@
         name: 'background-clip',
         initialValue: 'border-box',
         prefix: false,
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         parse: function (_context, tokens) {
             return tokens.map(function (token) {
                 if (isIdentToken(token)) {
                     switch (token.value) {
                         case 'padding-box':
-                            return 1 /* PADDING_BOX */;
+                            return 1 /* BACKGROUND_CLIP.PADDING_BOX */;
                         case 'content-box':
-                            return 2 /* CONTENT_BOX */;
+                            return 2 /* BACKGROUND_CLIP.CONTENT_BOX */;
                     }
                 }
-                return 0 /* BORDER_BOX */;
+                return 0 /* BACKGROUND_CLIP.BORDER_BOX */;
             });
         }
     };
@@ -2019,7 +2019,7 @@
         name: "background-color",
         initialValue: 'transparent',
         prefix: false,
-        type: 3 /* TYPE_VALUE */,
+        type: 3 /* PropertyDescriptorParsingType.TYPE_VALUE */,
         format: 'color'
     };
 
@@ -2122,24 +2122,24 @@
         var rx = 0;
         var ry = 0;
         switch (gradient.size) {
-            case 0 /* CLOSEST_SIDE */:
+            case 0 /* CSSRadialExtent.CLOSEST_SIDE */:
                 // The ending shape is sized so that that it exactly meets the side of the gradient box closest to the gradient’s center.
                 // If the shape is an ellipse, it exactly meets the closest side in each dimension.
-                if (gradient.shape === 0 /* CIRCLE */) {
+                if (gradient.shape === 0 /* CSSRadialShape.CIRCLE */) {
                     rx = ry = Math.min(Math.abs(x), Math.abs(x - width), Math.abs(y), Math.abs(y - height));
                 }
-                else if (gradient.shape === 1 /* ELLIPSE */) {
+                else if (gradient.shape === 1 /* CSSRadialShape.ELLIPSE */) {
                     rx = Math.min(Math.abs(x), Math.abs(x - width));
                     ry = Math.min(Math.abs(y), Math.abs(y - height));
                 }
                 break;
-            case 2 /* CLOSEST_CORNER */:
+            case 2 /* CSSRadialExtent.CLOSEST_CORNER */:
                 // The ending shape is sized so that that it passes through the corner of the gradient box closest to the gradient’s center.
                 // If the shape is an ellipse, the ending shape is given the same aspect-ratio it would have if closest-side were specified.
-                if (gradient.shape === 0 /* CIRCLE */) {
+                if (gradient.shape === 0 /* CSSRadialShape.CIRCLE */) {
                     rx = ry = Math.min(distance(x, y), distance(x, y - height), distance(x - width, y), distance(x - width, y - height));
                 }
-                else if (gradient.shape === 1 /* ELLIPSE */) {
+                else if (gradient.shape === 1 /* CSSRadialShape.ELLIPSE */) {
                     // Compute the ratio ry/rx (which is to be the same as for "closest-side")
                     var c = Math.min(Math.abs(y), Math.abs(y - height)) / Math.min(Math.abs(x), Math.abs(x - width));
                     var _a = findCorner(width, height, x, y, true), cx = _a[0], cy = _a[1];
@@ -2147,23 +2147,23 @@
                     ry = c * rx;
                 }
                 break;
-            case 1 /* FARTHEST_SIDE */:
+            case 1 /* CSSRadialExtent.FARTHEST_SIDE */:
                 // Same as closest-side, except the ending shape is sized based on the farthest side(s)
-                if (gradient.shape === 0 /* CIRCLE */) {
+                if (gradient.shape === 0 /* CSSRadialShape.CIRCLE */) {
                     rx = ry = Math.max(Math.abs(x), Math.abs(x - width), Math.abs(y), Math.abs(y - height));
                 }
-                else if (gradient.shape === 1 /* ELLIPSE */) {
+                else if (gradient.shape === 1 /* CSSRadialShape.ELLIPSE */) {
                     rx = Math.max(Math.abs(x), Math.abs(x - width));
                     ry = Math.max(Math.abs(y), Math.abs(y - height));
                 }
                 break;
-            case 3 /* FARTHEST_CORNER */:
+            case 3 /* CSSRadialExtent.FARTHEST_CORNER */:
                 // Same as closest-corner, except the ending shape is sized based on the farthest corner.
                 // If the shape is an ellipse, the ending shape is given the same aspect ratio it would have if farthest-side were specified.
-                if (gradient.shape === 0 /* CIRCLE */) {
+                if (gradient.shape === 0 /* CSSRadialShape.CIRCLE */) {
                     rx = ry = Math.max(distance(x, y), distance(x, y - height), distance(x - width, y), distance(x - width, y - height));
                 }
-                else if (gradient.shape === 1 /* ELLIPSE */) {
+                else if (gradient.shape === 1 /* CSSRadialShape.ELLIPSE */) {
                     // Compute the ratio ry/rx (which is to be the same as for "farthest-side")
                     var c = Math.max(Math.abs(y), Math.abs(y - height)) / Math.max(Math.abs(x), Math.abs(x - width));
                     var _b = findCorner(width, height, x, y, false), cx = _b[0], cy = _b[1];
@@ -2185,7 +2185,7 @@
         parseFunctionArgs(tokens).forEach(function (arg, i) {
             if (i === 0) {
                 var firstToken = arg[0];
-                if (firstToken.type === 20 /* IDENT_TOKEN */ && firstToken.value === 'to') {
+                if (firstToken.type === 20 /* TokenType.IDENT_TOKEN */ && firstToken.value === 'to') {
                     angle$1 = parseNamedSide(arg);
                     return;
                 }
@@ -2197,7 +2197,7 @@
             var colorStop = parseColorStop(context, arg);
             stops.push(colorStop);
         });
-        return { angle: angle$1, stops: stops, type: 1 /* LINEAR_GRADIENT */ };
+        return { angle: angle$1, stops: stops, type: 1 /* CSSImageType.LINEAR_GRADIENT */ };
     };
 
     var prefixLinearGradient = function (context, tokens) {
@@ -2206,7 +2206,7 @@
         parseFunctionArgs(tokens).forEach(function (arg, i) {
             if (i === 0) {
                 var firstToken = arg[0];
-                if (firstToken.type === 20 /* IDENT_TOKEN */ &&
+                if (firstToken.type === 20 /* TokenType.IDENT_TOKEN */ &&
                     ['top', 'left', 'right', 'bottom'].indexOf(firstToken.value) !== -1) {
                     angle$1 = parseNamedSide(arg);
                     return;
@@ -2222,30 +2222,30 @@
         return {
             angle: angle$1,
             stops: stops,
-            type: 1 /* LINEAR_GRADIENT */
+            type: 1 /* CSSImageType.LINEAR_GRADIENT */
         };
     };
 
     var webkitGradient = function (context, tokens) {
         var angle = deg(180);
         var stops = [];
-        var type = 1 /* LINEAR_GRADIENT */;
-        var shape = 0 /* CIRCLE */;
-        var size = 3 /* FARTHEST_CORNER */;
+        var type = 1 /* CSSImageType.LINEAR_GRADIENT */;
+        var shape = 0 /* CSSRadialShape.CIRCLE */;
+        var size = 3 /* CSSRadialExtent.FARTHEST_CORNER */;
         var position = [];
         parseFunctionArgs(tokens).forEach(function (arg, i) {
             var firstToken = arg[0];
             if (i === 0) {
                 if (isIdentToken(firstToken) && firstToken.value === 'linear') {
-                    type = 1 /* LINEAR_GRADIENT */;
+                    type = 1 /* CSSImageType.LINEAR_GRADIENT */;
                     return;
                 }
                 else if (isIdentToken(firstToken) && firstToken.value === 'radial') {
-                    type = 2 /* RADIAL_GRADIENT */;
+                    type = 2 /* CSSImageType.RADIAL_GRADIENT */;
                     return;
                 }
             }
-            if (firstToken.type === 18 /* FUNCTION */) {
+            if (firstToken.type === 18 /* TokenType.FUNCTION */) {
                 if (firstToken.name === 'from') {
                     var color = color$1.parse(context, firstToken.values[0]);
                     stops.push({ stop: ZERO_LENGTH, color: color });
@@ -2261,7 +2261,7 @@
                         var stop_1 = values[0];
                         if (isNumberToken(stop_1)) {
                             stops.push({
-                                stop: { type: 16 /* PERCENTAGE_TOKEN */, number: stop_1.number * 100, flags: stop_1.flags },
+                                stop: { type: 16 /* TokenType.PERCENTAGE_TOKEN */, number: stop_1.number * 100, flags: stop_1.flags },
                                 color: color
                             });
                         }
@@ -2269,7 +2269,7 @@
                 }
             }
         });
-        return type === 1 /* LINEAR_GRADIENT */
+        return type === 1 /* CSSImageType.LINEAR_GRADIENT */
             ? {
                 angle: (angle + deg(180)) % deg(360),
                 stops: stops,
@@ -2287,8 +2287,8 @@
     var COVER = 'cover';
     var CONTAIN = 'contain';
     var radialGradient = function (context, tokens) {
-        var shape = 0 /* CIRCLE */;
-        var size = 3 /* FARTHEST_CORNER */;
+        var shape = 0 /* CSSRadialShape.CIRCLE */;
+        var size = 3 /* CSSRadialExtent.FARTHEST_CORNER */;
         var stops = [];
         var position = [];
         parseFunctionArgs(tokens).forEach(function (arg, i) {
@@ -2319,27 +2319,27 @@
                     else if (isIdentToken(token)) {
                         switch (token.value) {
                             case CIRCLE:
-                                shape = 0 /* CIRCLE */;
+                                shape = 0 /* CSSRadialShape.CIRCLE */;
                                 return false;
                             case ELLIPSE:
-                                shape = 1 /* ELLIPSE */;
+                                shape = 1 /* CSSRadialShape.ELLIPSE */;
                                 return false;
                             case 'at':
                                 isAtPosition_1 = true;
                                 return false;
                             case CLOSEST_SIDE:
-                                size = 0 /* CLOSEST_SIDE */;
+                                size = 0 /* CSSRadialExtent.CLOSEST_SIDE */;
                                 return false;
                             case COVER:
                             case FARTHEST_SIDE:
-                                size = 1 /* FARTHEST_SIDE */;
+                                size = 1 /* CSSRadialExtent.FARTHEST_SIDE */;
                                 return false;
                             case CONTAIN:
                             case CLOSEST_CORNER:
-                                size = 2 /* CLOSEST_CORNER */;
+                                size = 2 /* CSSRadialExtent.CLOSEST_CORNER */;
                                 return false;
                             case FARTHEST_CORNER:
-                                size = 3 /* FARTHEST_CORNER */;
+                                size = 3 /* CSSRadialExtent.FARTHEST_CORNER */;
                                 return false;
                         }
                     }
@@ -2358,12 +2358,12 @@
                 stops.push(colorStop);
             }
         });
-        return { size: size, shape: shape, stops: stops, position: position, type: 2 /* RADIAL_GRADIENT */ };
+        return { size: size, shape: shape, stops: stops, position: position, type: 2 /* CSSImageType.RADIAL_GRADIENT */ };
     };
 
     var prefixRadialGradient = function (context, tokens) {
-        var shape = 0 /* CIRCLE */;
-        var size = 3 /* FARTHEST_CORNER */;
+        var shape = 0 /* CSSRadialShape.CIRCLE */;
+        var size = 3 /* CSSRadialExtent.FARTHEST_CORNER */;
         var stops = [];
         var position = [];
         parseFunctionArgs(tokens).forEach(function (arg, i) {
@@ -2397,24 +2397,24 @@
                     if (isIdentToken(token)) {
                         switch (token.value) {
                             case CIRCLE:
-                                shape = 0 /* CIRCLE */;
+                                shape = 0 /* CSSRadialShape.CIRCLE */;
                                 return false;
                             case ELLIPSE:
-                                shape = 1 /* ELLIPSE */;
+                                shape = 1 /* CSSRadialShape.ELLIPSE */;
                                 return false;
                             case CONTAIN:
                             case CLOSEST_SIDE:
-                                size = 0 /* CLOSEST_SIDE */;
+                                size = 0 /* CSSRadialExtent.CLOSEST_SIDE */;
                                 return false;
                             case FARTHEST_SIDE:
-                                size = 1 /* FARTHEST_SIDE */;
+                                size = 1 /* CSSRadialExtent.FARTHEST_SIDE */;
                                 return false;
                             case CLOSEST_CORNER:
-                                size = 2 /* CLOSEST_CORNER */;
+                                size = 2 /* CSSRadialExtent.CLOSEST_CORNER */;
                                 return false;
                             case COVER:
                             case FARTHEST_CORNER:
-                                size = 3 /* FARTHEST_CORNER */;
+                                size = 3 /* CSSRadialExtent.FARTHEST_CORNER */;
                                 return false;
                         }
                     }
@@ -2433,36 +2433,36 @@
                 stops.push(colorStop);
             }
         });
-        return { size: size, shape: shape, stops: stops, position: position, type: 2 /* RADIAL_GRADIENT */ };
+        return { size: size, shape: shape, stops: stops, position: position, type: 2 /* CSSImageType.RADIAL_GRADIENT */ };
     };
 
     var isLinearGradient = function (background) {
-        return background.type === 1 /* LINEAR_GRADIENT */;
+        return background.type === 1 /* CSSImageType.LINEAR_GRADIENT */;
     };
     var isRadialGradient = function (background) {
-        return background.type === 2 /* RADIAL_GRADIENT */;
+        return background.type === 2 /* CSSImageType.RADIAL_GRADIENT */;
     };
     var image = {
         name: 'image',
         parse: function (context, value) {
-            if (value.type === 22 /* URL_TOKEN */) {
-                var image_1 = { url: value.value, type: 0 /* URL */ };
+            if (value.type === 22 /* TokenType.URL_TOKEN */) {
+                var image_1 = { url: value.value, type: 0 /* CSSImageType.URL */ };
                 context.cache.addImage(value.value);
                 return image_1;
             }
-            if (value.type === 18 /* FUNCTION */) {
+            if (value.type === 18 /* TokenType.FUNCTION */) {
                 var imageFunction = SUPPORTED_IMAGE_FUNCTIONS[value.name];
                 if (typeof imageFunction === 'undefined') {
-                    throw new Error("Attempting to parse an unsupported image function \"" + value.name + "\"");
+                    throw new Error("Attempting to parse an unsupported image function \"".concat(value.name, "\""));
                 }
                 return imageFunction(context, value.values);
             }
-            throw new Error("Unsupported image type " + value.type);
+            throw new Error("Unsupported image type ".concat(value.type));
         }
     };
     function isSupportedImage(value) {
-        return (!(value.type === 20 /* IDENT_TOKEN */ && value.value === 'none') &&
-            (value.type !== 18 /* FUNCTION */ || !!SUPPORTED_IMAGE_FUNCTIONS[value.name]));
+        return (!(value.type === 20 /* TokenType.IDENT_TOKEN */ && value.value === 'none') &&
+            (value.type !== 18 /* TokenType.FUNCTION */ || !!SUPPORTED_IMAGE_FUNCTIONS[value.name]));
     }
     var SUPPORTED_IMAGE_FUNCTIONS = {
         'linear-gradient': linearGradient,
@@ -2481,14 +2481,14 @@
     var backgroundImage = {
         name: 'background-image',
         initialValue: 'none',
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         prefix: false,
         parse: function (context, tokens) {
             if (tokens.length === 0) {
                 return [];
             }
             var first = tokens[0];
-            if (first.type === 20 /* IDENT_TOKEN */ && first.value === 'none') {
+            if (first.type === 20 /* TokenType.IDENT_TOKEN */ && first.value === 'none') {
                 return [];
             }
             return tokens
@@ -2501,18 +2501,18 @@
         name: 'background-origin',
         initialValue: 'border-box',
         prefix: false,
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         parse: function (_context, tokens) {
             return tokens.map(function (token) {
                 if (isIdentToken(token)) {
                     switch (token.value) {
                         case 'padding-box':
-                            return 1 /* PADDING_BOX */;
+                            return 1 /* BACKGROUND_ORIGIN.PADDING_BOX */;
                         case 'content-box':
-                            return 2 /* CONTENT_BOX */;
+                            return 2 /* BACKGROUND_ORIGIN.CONTENT_BOX */;
                     }
                 }
-                return 0 /* BORDER_BOX */;
+                return 0 /* BACKGROUND_ORIGIN.BORDER_BOX */;
             });
         }
     };
@@ -2520,7 +2520,7 @@
     var backgroundPosition = {
         name: 'background-position',
         initialValue: '0% 0%',
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         prefix: false,
         parse: function (_context, tokens) {
             return parseFunctionArgs(tokens)
@@ -2533,7 +2533,7 @@
         name: 'background-repeat',
         initialValue: 'repeat',
         prefix: false,
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         parse: function (_context, tokens) {
             return parseFunctionArgs(tokens)
                 .map(function (values) {
@@ -2548,16 +2548,16 @@
     var parseBackgroundRepeat = function (value) {
         switch (value) {
             case 'no-repeat':
-                return 1 /* NO_REPEAT */;
+                return 1 /* BACKGROUND_REPEAT.NO_REPEAT */;
             case 'repeat-x':
             case 'repeat no-repeat':
-                return 2 /* REPEAT_X */;
+                return 2 /* BACKGROUND_REPEAT.REPEAT_X */;
             case 'repeat-y':
             case 'no-repeat repeat':
-                return 3 /* REPEAT_Y */;
+                return 3 /* BACKGROUND_REPEAT.REPEAT_Y */;
             case 'repeat':
             default:
-                return 0 /* REPEAT */;
+                return 0 /* BACKGROUND_REPEAT.REPEAT */;
         }
     };
 
@@ -2571,7 +2571,7 @@
         name: 'background-size',
         initialValue: '0',
         prefix: false,
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         parse: function (_context, tokens) {
             return parseFunctionArgs(tokens).map(function (values) { return values.filter(isBackgroundSizeInfoToken); });
         }
@@ -2581,10 +2581,10 @@
     };
 
     var borderColorForSide = function (side) { return ({
-        name: "border-" + side + "-color",
+        name: "border-".concat(side, "-color"),
         initialValue: 'transparent',
         prefix: false,
-        type: 3 /* TYPE_VALUE */,
+        type: 3 /* PropertyDescriptorParsingType.TYPE_VALUE */,
         format: 'color'
     }); };
     var borderTopColor = borderColorForSide('top');
@@ -2593,10 +2593,10 @@
     var borderLeftColor = borderColorForSide('left');
 
     var borderRadiusForSide = function (side) { return ({
-        name: "border-radius-" + side,
+        name: "border-radius-".concat(side),
         initialValue: '0 0',
         prefix: false,
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         parse: function (_context, tokens) {
             return parseLengthPercentageTuple(tokens.filter(isLengthPercentage));
         }
@@ -2607,22 +2607,22 @@
     var borderBottomLeftRadius = borderRadiusForSide('bottom-left');
 
     var borderStyleForSide = function (side) { return ({
-        name: "border-" + side + "-style",
+        name: "border-".concat(side, "-style"),
         initialValue: 'solid',
         prefix: false,
-        type: 2 /* IDENT_VALUE */,
+        type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
         parse: function (_context, style) {
             switch (style) {
                 case 'none':
-                    return 0 /* NONE */;
+                    return 0 /* BORDER_STYLE.NONE */;
                 case 'dashed':
-                    return 2 /* DASHED */;
+                    return 2 /* BORDER_STYLE.DASHED */;
                 case 'dotted':
-                    return 3 /* DOTTED */;
+                    return 3 /* BORDER_STYLE.DOTTED */;
                 case 'double':
-                    return 4 /* DOUBLE */;
+                    return 4 /* BORDER_STYLE.DOUBLE */;
             }
-            return 1 /* SOLID */;
+            return 1 /* BORDER_STYLE.SOLID */;
         }
     }); };
     var borderTopStyle = borderStyleForSide('top');
@@ -2631,9 +2631,9 @@
     var borderLeftStyle = borderStyleForSide('left');
 
     var borderWidthForSide = function (side) { return ({
-        name: "border-" + side + "-width",
+        name: "border-".concat(side, "-width"),
         initialValue: '0',
-        type: 0 /* VALUE */,
+        type: 0 /* PropertyDescriptorParsingType.VALUE */,
         prefix: false,
         parse: function (_context, token) {
             if (isDimensionToken(token)) {
@@ -2651,7 +2651,7 @@
         name: "color",
         initialValue: 'transparent',
         prefix: false,
-        type: 3 /* TYPE_VALUE */,
+        type: 3 /* PropertyDescriptorParsingType.TYPE_VALUE */,
         format: 'color'
     };
 
@@ -2659,14 +2659,14 @@
         name: 'direction',
         initialValue: 'ltr',
         prefix: false,
-        type: 2 /* IDENT_VALUE */,
+        type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
         parse: function (_context, direction) {
             switch (direction) {
                 case 'rtl':
-                    return 1 /* RTL */;
+                    return 1 /* DIRECTION.RTL */;
                 case 'ltr':
                 default:
-                    return 0 /* LTR */;
+                    return 0 /* DIRECTION.LTR */;
             }
         }
     };
@@ -2675,97 +2675,97 @@
         name: 'display',
         initialValue: 'inline-block',
         prefix: false,
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         parse: function (_context, tokens) {
             return tokens.filter(isIdentToken).reduce(function (bit, token) {
                 return bit | parseDisplayValue(token.value);
-            }, 0 /* NONE */);
+            }, 0 /* DISPLAY.NONE */);
         }
     };
     var parseDisplayValue = function (display) {
         switch (display) {
             case 'block':
             case '-webkit-box':
-                return 2 /* BLOCK */;
+                return 2 /* DISPLAY.BLOCK */;
             case 'inline':
-                return 4 /* INLINE */;
+                return 4 /* DISPLAY.INLINE */;
             case 'run-in':
-                return 8 /* RUN_IN */;
+                return 8 /* DISPLAY.RUN_IN */;
             case 'flow':
-                return 16 /* FLOW */;
+                return 16 /* DISPLAY.FLOW */;
             case 'flow-root':
-                return 32 /* FLOW_ROOT */;
+                return 32 /* DISPLAY.FLOW_ROOT */;
             case 'table':
-                return 64 /* TABLE */;
+                return 64 /* DISPLAY.TABLE */;
             case 'flex':
             case '-webkit-flex':
-                return 128 /* FLEX */;
+                return 128 /* DISPLAY.FLEX */;
             case 'grid':
             case '-ms-grid':
-                return 256 /* GRID */;
+                return 256 /* DISPLAY.GRID */;
             case 'ruby':
-                return 512 /* RUBY */;
+                return 512 /* DISPLAY.RUBY */;
             case 'subgrid':
-                return 1024 /* SUBGRID */;
+                return 1024 /* DISPLAY.SUBGRID */;
             case 'list-item':
-                return 2048 /* LIST_ITEM */;
+                return 2048 /* DISPLAY.LIST_ITEM */;
             case 'table-row-group':
-                return 4096 /* TABLE_ROW_GROUP */;
+                return 4096 /* DISPLAY.TABLE_ROW_GROUP */;
             case 'table-header-group':
-                return 8192 /* TABLE_HEADER_GROUP */;
+                return 8192 /* DISPLAY.TABLE_HEADER_GROUP */;
             case 'table-footer-group':
-                return 16384 /* TABLE_FOOTER_GROUP */;
+                return 16384 /* DISPLAY.TABLE_FOOTER_GROUP */;
             case 'table-row':
-                return 32768 /* TABLE_ROW */;
+                return 32768 /* DISPLAY.TABLE_ROW */;
             case 'table-cell':
-                return 65536 /* TABLE_CELL */;
+                return 65536 /* DISPLAY.TABLE_CELL */;
             case 'table-column-group':
-                return 131072 /* TABLE_COLUMN_GROUP */;
+                return 131072 /* DISPLAY.TABLE_COLUMN_GROUP */;
             case 'table-column':
-                return 262144 /* TABLE_COLUMN */;
+                return 262144 /* DISPLAY.TABLE_COLUMN */;
             case 'table-caption':
-                return 524288 /* TABLE_CAPTION */;
+                return 524288 /* DISPLAY.TABLE_CAPTION */;
             case 'ruby-base':
-                return 1048576 /* RUBY_BASE */;
+                return 1048576 /* DISPLAY.RUBY_BASE */;
             case 'ruby-text':
-                return 2097152 /* RUBY_TEXT */;
+                return 2097152 /* DISPLAY.RUBY_TEXT */;
             case 'ruby-base-container':
-                return 4194304 /* RUBY_BASE_CONTAINER */;
+                return 4194304 /* DISPLAY.RUBY_BASE_CONTAINER */;
             case 'ruby-text-container':
-                return 8388608 /* RUBY_TEXT_CONTAINER */;
+                return 8388608 /* DISPLAY.RUBY_TEXT_CONTAINER */;
             case 'contents':
-                return 16777216 /* CONTENTS */;
+                return 16777216 /* DISPLAY.CONTENTS */;
             case 'inline-block':
-                return 33554432 /* INLINE_BLOCK */;
+                return 33554432 /* DISPLAY.INLINE_BLOCK */;
             case 'inline-list-item':
-                return 67108864 /* INLINE_LIST_ITEM */;
+                return 67108864 /* DISPLAY.INLINE_LIST_ITEM */;
             case 'inline-table':
-                return 134217728 /* INLINE_TABLE */;
+                return 134217728 /* DISPLAY.INLINE_TABLE */;
             case 'inline-flex':
-                return 268435456 /* INLINE_FLEX */;
+                return 268435456 /* DISPLAY.INLINE_FLEX */;
             case 'inline-grid':
-                return 536870912 /* INLINE_GRID */;
+                return 536870912 /* DISPLAY.INLINE_GRID */;
         }
-        return 0 /* NONE */;
+        return 0 /* DISPLAY.NONE */;
     };
 
     var float = {
         name: 'float',
         initialValue: 'none',
         prefix: false,
-        type: 2 /* IDENT_VALUE */,
+        type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
         parse: function (_context, float) {
             switch (float) {
                 case 'left':
-                    return 1 /* LEFT */;
+                    return 1 /* FLOAT.LEFT */;
                 case 'right':
-                    return 2 /* RIGHT */;
+                    return 2 /* FLOAT.RIGHT */;
                 case 'inline-start':
-                    return 3 /* INLINE_START */;
+                    return 3 /* FLOAT.INLINE_START */;
                 case 'inline-end':
-                    return 4 /* INLINE_END */;
+                    return 4 /* FLOAT.INLINE_END */;
             }
-            return 0 /* NONE */;
+            return 0 /* FLOAT.NONE */;
         }
     };
 
@@ -2773,15 +2773,15 @@
         name: 'letter-spacing',
         initialValue: '0',
         prefix: false,
-        type: 0 /* VALUE */,
+        type: 0 /* PropertyDescriptorParsingType.VALUE */,
         parse: function (_context, token) {
-            if (token.type === 20 /* IDENT_TOKEN */ && token.value === 'normal') {
+            if (token.type === 20 /* TokenType.IDENT_TOKEN */ && token.value === 'normal') {
                 return 0;
             }
-            if (token.type === 17 /* NUMBER_TOKEN */) {
+            if (token.type === 17 /* TokenType.NUMBER_TOKEN */) {
                 return token.number;
             }
-            if (token.type === 15 /* DIMENSION_TOKEN */) {
+            if (token.type === 15 /* TokenType.DIMENSION_TOKEN */) {
                 return token.number;
             }
             return 0;
@@ -2797,7 +2797,7 @@
         name: 'line-break',
         initialValue: 'normal',
         prefix: false,
-        type: 2 /* IDENT_VALUE */,
+        type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
         parse: function (_context, lineBreak) {
             switch (lineBreak) {
                 case 'strict':
@@ -2813,13 +2813,13 @@
         name: 'line-height',
         initialValue: 'normal',
         prefix: false,
-        type: 4 /* TOKEN_VALUE */
+        type: 4 /* PropertyDescriptorParsingType.TOKEN_VALUE */
     };
     var computeLineHeight = function (token, fontSize) {
         if (isIdentToken(token) && token.value === 'normal') {
             return 1.2 * fontSize;
         }
-        else if (token.type === 17 /* NUMBER_TOKEN */) {
+        else if (token.type === 17 /* TokenType.NUMBER_TOKEN */) {
             return fontSize * token.number;
         }
         else if (isLengthPercentage(token)) {
@@ -2831,10 +2831,10 @@
     var listStyleImage = {
         name: 'list-style-image',
         initialValue: 'none',
-        type: 0 /* VALUE */,
+        type: 0 /* PropertyDescriptorParsingType.VALUE */,
         prefix: false,
         parse: function (context, token) {
-            if (token.type === 20 /* IDENT_TOKEN */ && token.value === 'none') {
+            if (token.type === 20 /* TokenType.IDENT_TOKEN */ && token.value === 'none') {
                 return null;
             }
             return image.parse(context, token);
@@ -2845,14 +2845,14 @@
         name: 'list-style-position',
         initialValue: 'outside',
         prefix: false,
-        type: 2 /* IDENT_VALUE */,
+        type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
         parse: function (_context, position) {
             switch (position) {
                 case 'inside':
-                    return 0 /* INSIDE */;
+                    return 0 /* LIST_STYLE_POSITION.INSIDE */;
                 case 'outside':
                 default:
-                    return 1 /* OUTSIDE */;
+                    return 1 /* LIST_STYLE_POSITION.OUTSIDE */;
             }
         }
     };
@@ -2861,127 +2861,127 @@
         name: 'list-style-type',
         initialValue: 'none',
         prefix: false,
-        type: 2 /* IDENT_VALUE */,
+        type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
         parse: function (_context, type) {
             switch (type) {
                 case 'disc':
-                    return 0 /* DISC */;
+                    return 0 /* LIST_STYLE_TYPE.DISC */;
                 case 'circle':
-                    return 1 /* CIRCLE */;
+                    return 1 /* LIST_STYLE_TYPE.CIRCLE */;
                 case 'square':
-                    return 2 /* SQUARE */;
+                    return 2 /* LIST_STYLE_TYPE.SQUARE */;
                 case 'decimal':
-                    return 3 /* DECIMAL */;
+                    return 3 /* LIST_STYLE_TYPE.DECIMAL */;
                 case 'cjk-decimal':
-                    return 4 /* CJK_DECIMAL */;
+                    return 4 /* LIST_STYLE_TYPE.CJK_DECIMAL */;
                 case 'decimal-leading-zero':
-                    return 5 /* DECIMAL_LEADING_ZERO */;
+                    return 5 /* LIST_STYLE_TYPE.DECIMAL_LEADING_ZERO */;
                 case 'lower-roman':
-                    return 6 /* LOWER_ROMAN */;
+                    return 6 /* LIST_STYLE_TYPE.LOWER_ROMAN */;
                 case 'upper-roman':
-                    return 7 /* UPPER_ROMAN */;
+                    return 7 /* LIST_STYLE_TYPE.UPPER_ROMAN */;
                 case 'lower-greek':
-                    return 8 /* LOWER_GREEK */;
+                    return 8 /* LIST_STYLE_TYPE.LOWER_GREEK */;
                 case 'lower-alpha':
-                    return 9 /* LOWER_ALPHA */;
+                    return 9 /* LIST_STYLE_TYPE.LOWER_ALPHA */;
                 case 'upper-alpha':
-                    return 10 /* UPPER_ALPHA */;
+                    return 10 /* LIST_STYLE_TYPE.UPPER_ALPHA */;
                 case 'arabic-indic':
-                    return 11 /* ARABIC_INDIC */;
+                    return 11 /* LIST_STYLE_TYPE.ARABIC_INDIC */;
                 case 'armenian':
-                    return 12 /* ARMENIAN */;
+                    return 12 /* LIST_STYLE_TYPE.ARMENIAN */;
                 case 'bengali':
-                    return 13 /* BENGALI */;
+                    return 13 /* LIST_STYLE_TYPE.BENGALI */;
                 case 'cambodian':
-                    return 14 /* CAMBODIAN */;
+                    return 14 /* LIST_STYLE_TYPE.CAMBODIAN */;
                 case 'cjk-earthly-branch':
-                    return 15 /* CJK_EARTHLY_BRANCH */;
+                    return 15 /* LIST_STYLE_TYPE.CJK_EARTHLY_BRANCH */;
                 case 'cjk-heavenly-stem':
-                    return 16 /* CJK_HEAVENLY_STEM */;
+                    return 16 /* LIST_STYLE_TYPE.CJK_HEAVENLY_STEM */;
                 case 'cjk-ideographic':
-                    return 17 /* CJK_IDEOGRAPHIC */;
+                    return 17 /* LIST_STYLE_TYPE.CJK_IDEOGRAPHIC */;
                 case 'devanagari':
-                    return 18 /* DEVANAGARI */;
+                    return 18 /* LIST_STYLE_TYPE.DEVANAGARI */;
                 case 'ethiopic-numeric':
-                    return 19 /* ETHIOPIC_NUMERIC */;
+                    return 19 /* LIST_STYLE_TYPE.ETHIOPIC_NUMERIC */;
                 case 'georgian':
-                    return 20 /* GEORGIAN */;
+                    return 20 /* LIST_STYLE_TYPE.GEORGIAN */;
                 case 'gujarati':
-                    return 21 /* GUJARATI */;
+                    return 21 /* LIST_STYLE_TYPE.GUJARATI */;
                 case 'gurmukhi':
-                    return 22 /* GURMUKHI */;
+                    return 22 /* LIST_STYLE_TYPE.GURMUKHI */;
                 case 'hebrew':
-                    return 22 /* HEBREW */;
+                    return 22 /* LIST_STYLE_TYPE.HEBREW */;
                 case 'hiragana':
-                    return 23 /* HIRAGANA */;
+                    return 23 /* LIST_STYLE_TYPE.HIRAGANA */;
                 case 'hiragana-iroha':
-                    return 24 /* HIRAGANA_IROHA */;
+                    return 24 /* LIST_STYLE_TYPE.HIRAGANA_IROHA */;
                 case 'japanese-formal':
-                    return 25 /* JAPANESE_FORMAL */;
+                    return 25 /* LIST_STYLE_TYPE.JAPANESE_FORMAL */;
                 case 'japanese-informal':
-                    return 26 /* JAPANESE_INFORMAL */;
+                    return 26 /* LIST_STYLE_TYPE.JAPANESE_INFORMAL */;
                 case 'kannada':
-                    return 27 /* KANNADA */;
+                    return 27 /* LIST_STYLE_TYPE.KANNADA */;
                 case 'katakana':
-                    return 28 /* KATAKANA */;
+                    return 28 /* LIST_STYLE_TYPE.KATAKANA */;
                 case 'katakana-iroha':
-                    return 29 /* KATAKANA_IROHA */;
+                    return 29 /* LIST_STYLE_TYPE.KATAKANA_IROHA */;
                 case 'khmer':
-                    return 30 /* KHMER */;
+                    return 30 /* LIST_STYLE_TYPE.KHMER */;
                 case 'korean-hangul-formal':
-                    return 31 /* KOREAN_HANGUL_FORMAL */;
+                    return 31 /* LIST_STYLE_TYPE.KOREAN_HANGUL_FORMAL */;
                 case 'korean-hanja-formal':
-                    return 32 /* KOREAN_HANJA_FORMAL */;
+                    return 32 /* LIST_STYLE_TYPE.KOREAN_HANJA_FORMAL */;
                 case 'korean-hanja-informal':
-                    return 33 /* KOREAN_HANJA_INFORMAL */;
+                    return 33 /* LIST_STYLE_TYPE.KOREAN_HANJA_INFORMAL */;
                 case 'lao':
-                    return 34 /* LAO */;
+                    return 34 /* LIST_STYLE_TYPE.LAO */;
                 case 'lower-armenian':
-                    return 35 /* LOWER_ARMENIAN */;
+                    return 35 /* LIST_STYLE_TYPE.LOWER_ARMENIAN */;
                 case 'malayalam':
-                    return 36 /* MALAYALAM */;
+                    return 36 /* LIST_STYLE_TYPE.MALAYALAM */;
                 case 'mongolian':
-                    return 37 /* MONGOLIAN */;
+                    return 37 /* LIST_STYLE_TYPE.MONGOLIAN */;
                 case 'myanmar':
-                    return 38 /* MYANMAR */;
+                    return 38 /* LIST_STYLE_TYPE.MYANMAR */;
                 case 'oriya':
-                    return 39 /* ORIYA */;
+                    return 39 /* LIST_STYLE_TYPE.ORIYA */;
                 case 'persian':
-                    return 40 /* PERSIAN */;
+                    return 40 /* LIST_STYLE_TYPE.PERSIAN */;
                 case 'simp-chinese-formal':
-                    return 41 /* SIMP_CHINESE_FORMAL */;
+                    return 41 /* LIST_STYLE_TYPE.SIMP_CHINESE_FORMAL */;
                 case 'simp-chinese-informal':
-                    return 42 /* SIMP_CHINESE_INFORMAL */;
+                    return 42 /* LIST_STYLE_TYPE.SIMP_CHINESE_INFORMAL */;
                 case 'tamil':
-                    return 43 /* TAMIL */;
+                    return 43 /* LIST_STYLE_TYPE.TAMIL */;
                 case 'telugu':
-                    return 44 /* TELUGU */;
+                    return 44 /* LIST_STYLE_TYPE.TELUGU */;
                 case 'thai':
-                    return 45 /* THAI */;
+                    return 45 /* LIST_STYLE_TYPE.THAI */;
                 case 'tibetan':
-                    return 46 /* TIBETAN */;
+                    return 46 /* LIST_STYLE_TYPE.TIBETAN */;
                 case 'trad-chinese-formal':
-                    return 47 /* TRAD_CHINESE_FORMAL */;
+                    return 47 /* LIST_STYLE_TYPE.TRAD_CHINESE_FORMAL */;
                 case 'trad-chinese-informal':
-                    return 48 /* TRAD_CHINESE_INFORMAL */;
+                    return 48 /* LIST_STYLE_TYPE.TRAD_CHINESE_INFORMAL */;
                 case 'upper-armenian':
-                    return 49 /* UPPER_ARMENIAN */;
+                    return 49 /* LIST_STYLE_TYPE.UPPER_ARMENIAN */;
                 case 'disclosure-open':
-                    return 50 /* DISCLOSURE_OPEN */;
+                    return 50 /* LIST_STYLE_TYPE.DISCLOSURE_OPEN */;
                 case 'disclosure-closed':
-                    return 51 /* DISCLOSURE_CLOSED */;
+                    return 51 /* LIST_STYLE_TYPE.DISCLOSURE_CLOSED */;
                 case 'none':
                 default:
-                    return -1 /* NONE */;
+                    return -1 /* LIST_STYLE_TYPE.NONE */;
             }
         }
     };
 
     var marginForSide = function (side) { return ({
-        name: "margin-" + side,
+        name: "margin-".concat(side),
         initialValue: '0',
         prefix: false,
-        type: 4 /* TOKEN_VALUE */
+        type: 4 /* PropertyDescriptorParsingType.TOKEN_VALUE */
     }); };
     var marginTop = marginForSide('top');
     var marginRight = marginForSide('right');
@@ -2992,21 +2992,21 @@
         name: 'overflow',
         initialValue: 'visible',
         prefix: false,
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         parse: function (_context, tokens) {
             return tokens.filter(isIdentToken).map(function (overflow) {
                 switch (overflow.value) {
                     case 'hidden':
-                        return 1 /* HIDDEN */;
+                        return 1 /* OVERFLOW.HIDDEN */;
                     case 'scroll':
-                        return 2 /* SCROLL */;
+                        return 2 /* OVERFLOW.SCROLL */;
                     case 'clip':
-                        return 3 /* CLIP */;
+                        return 3 /* OVERFLOW.CLIP */;
                     case 'auto':
-                        return 4 /* AUTO */;
+                        return 4 /* OVERFLOW.AUTO */;
                     case 'visible':
                     default:
-                        return 0 /* VISIBLE */;
+                        return 0 /* OVERFLOW.VISIBLE */;
                 }
             });
         }
@@ -3016,23 +3016,23 @@
         name: 'overflow-wrap',
         initialValue: 'normal',
         prefix: false,
-        type: 2 /* IDENT_VALUE */,
+        type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
         parse: function (_context, overflow) {
             switch (overflow) {
                 case 'break-word':
-                    return "break-word" /* BREAK_WORD */;
+                    return "break-word" /* OVERFLOW_WRAP.BREAK_WORD */;
                 case 'normal':
                 default:
-                    return "normal" /* NORMAL */;
+                    return "normal" /* OVERFLOW_WRAP.NORMAL */;
             }
         }
     };
 
     var paddingForSide = function (side) { return ({
-        name: "padding-" + side,
+        name: "padding-".concat(side),
         initialValue: '0',
         prefix: false,
-        type: 3 /* TYPE_VALUE */,
+        type: 3 /* PropertyDescriptorParsingType.TYPE_VALUE */,
         format: 'length-percentage'
     }); };
     var paddingTop = paddingForSide('top');
@@ -3044,17 +3044,17 @@
         name: 'text-align',
         initialValue: 'left',
         prefix: false,
-        type: 2 /* IDENT_VALUE */,
+        type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
         parse: function (_context, textAlign) {
             switch (textAlign) {
                 case 'right':
-                    return 2 /* RIGHT */;
+                    return 2 /* TEXT_ALIGN.RIGHT */;
                 case 'center':
                 case 'justify':
-                    return 1 /* CENTER */;
+                    return 1 /* TEXT_ALIGN.CENTER */;
                 case 'left':
                 default:
-                    return 0 /* LEFT */;
+                    return 0 /* TEXT_ALIGN.LEFT */;
             }
         }
     };
@@ -3063,26 +3063,26 @@
         name: 'position',
         initialValue: 'static',
         prefix: false,
-        type: 2 /* IDENT_VALUE */,
+        type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
         parse: function (_context, position) {
             switch (position) {
                 case 'relative':
-                    return 1 /* RELATIVE */;
+                    return 1 /* POSITION.RELATIVE */;
                 case 'absolute':
-                    return 2 /* ABSOLUTE */;
+                    return 2 /* POSITION.ABSOLUTE */;
                 case 'fixed':
-                    return 3 /* FIXED */;
+                    return 3 /* POSITION.FIXED */;
                 case 'sticky':
-                    return 4 /* STICKY */;
+                    return 4 /* POSITION.STICKY */;
             }
-            return 0 /* STATIC */;
+            return 0 /* POSITION.STATIC */;
         }
     };
 
     var textShadow = {
         name: 'text-shadow',
         initialValue: 'none',
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         prefix: false,
         parse: function (context, tokens) {
             if (tokens.length === 1 && isIdentWithValue(tokens[0], 'none')) {
@@ -3123,17 +3123,17 @@
         name: 'text-transform',
         initialValue: 'none',
         prefix: false,
-        type: 2 /* IDENT_VALUE */,
+        type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
         parse: function (_context, textTransform) {
             switch (textTransform) {
                 case 'uppercase':
-                    return 2 /* UPPERCASE */;
+                    return 2 /* TEXT_TRANSFORM.UPPERCASE */;
                 case 'lowercase':
-                    return 1 /* LOWERCASE */;
+                    return 1 /* TEXT_TRANSFORM.LOWERCASE */;
                 case 'capitalize':
-                    return 3 /* CAPITALIZE */;
+                    return 3 /* TEXT_TRANSFORM.CAPITALIZE */;
             }
-            return 0 /* NONE */;
+            return 0 /* TEXT_TRANSFORM.NONE */;
         }
     };
 
@@ -3141,15 +3141,15 @@
         name: 'transform',
         initialValue: 'none',
         prefix: true,
-        type: 0 /* VALUE */,
+        type: 0 /* PropertyDescriptorParsingType.VALUE */,
         parse: function (_context, token) {
-            if (token.type === 20 /* IDENT_TOKEN */ && token.value === 'none') {
+            if (token.type === 20 /* TokenType.IDENT_TOKEN */ && token.value === 'none') {
                 return null;
             }
-            if (token.type === 18 /* FUNCTION */) {
+            if (token.type === 18 /* TokenType.FUNCTION */) {
                 var transformFunction = SUPPORTED_TRANSFORM_FUNCTIONS[token.name];
                 if (typeof transformFunction === 'undefined') {
-                    throw new Error("Attempting to parse an unsupported transform function \"" + token.name + "\"");
+                    throw new Error("Attempting to parse an unsupported transform function \"".concat(token.name, "\""));
                 }
                 return transformFunction(token.values);
             }
@@ -3157,12 +3157,12 @@
         }
     };
     var matrix = function (args) {
-        var values = args.filter(function (arg) { return arg.type === 17 /* NUMBER_TOKEN */; }).map(function (arg) { return arg.number; });
+        var values = args.filter(function (arg) { return arg.type === 17 /* TokenType.NUMBER_TOKEN */; }).map(function (arg) { return arg.number; });
         return values.length === 6 ? values : null;
     };
     // doesn't support 3D transforms at the moment
     var matrix3d = function (args) {
-        var values = args.filter(function (arg) { return arg.type === 17 /* NUMBER_TOKEN */; }).map(function (arg) { return arg.number; });
+        var values = args.filter(function (arg) { return arg.type === 17 /* TokenType.NUMBER_TOKEN */; }).map(function (arg) { return arg.number; });
         var a1 = values[0], b1 = values[1]; values[2]; values[3]; var a2 = values[4], b2 = values[5]; values[6]; values[7]; values[8]; values[9]; values[10]; values[11]; var a4 = values[12], b4 = values[13]; values[14]; values[15];
         return values.length === 16 ? [a1, b1, a2, b2, a4, b4] : null;
     };
@@ -3172,7 +3172,7 @@
     };
 
     var DEFAULT_VALUE = {
-        type: 16 /* PERCENTAGE_TOKEN */,
+        type: 16 /* TokenType.PERCENTAGE_TOKEN */,
         number: 50,
         flags: FLAG_INTEGER
     };
@@ -3181,7 +3181,7 @@
         name: 'transform-origin',
         initialValue: '50% 50%',
         prefix: true,
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         parse: function (_context, tokens) {
             var origins = tokens.filter(isLengthPercentage);
             if (origins.length !== 2) {
@@ -3195,16 +3195,16 @@
         name: 'visible',
         initialValue: 'none',
         prefix: false,
-        type: 2 /* IDENT_VALUE */,
+        type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
         parse: function (_context, visibility) {
             switch (visibility) {
                 case 'hidden':
-                    return 1 /* HIDDEN */;
+                    return 1 /* VISIBILITY.HIDDEN */;
                 case 'collapse':
-                    return 2 /* COLLAPSE */;
+                    return 2 /* VISIBILITY.COLLAPSE */;
                 case 'visible':
                 default:
-                    return 0 /* VISIBLE */;
+                    return 0 /* VISIBILITY.VISIBLE */;
             }
         }
     };
@@ -3219,7 +3219,7 @@
         name: 'word-break',
         initialValue: 'normal',
         prefix: false,
-        type: 2 /* IDENT_VALUE */,
+        type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
         parse: function (_context, wordBreak) {
             switch (wordBreak) {
                 case 'break-all':
@@ -3237,9 +3237,9 @@
         name: 'z-index',
         initialValue: 'auto',
         prefix: false,
-        type: 0 /* VALUE */,
+        type: 0 /* PropertyDescriptorParsingType.VALUE */,
         parse: function (_context, token) {
-            if (token.type === 20 /* IDENT_TOKEN */) {
+            if (token.type === 20 /* TokenType.IDENT_TOKEN */) {
                 return { auto: true, order: 0 };
             }
             if (isNumberToken(token)) {
@@ -3252,7 +3252,7 @@
     var time = {
         name: 'time',
         parse: function (_context, value) {
-            if (value.type === 15 /* DIMENSION_TOKEN */) {
+            if (value.type === 15 /* TokenType.DIMENSION_TOKEN */) {
                 switch (value.unit.toLowerCase()) {
                     case 's':
                         return 1000 * value.number;
@@ -3267,7 +3267,7 @@
     var opacity = {
         name: 'opacity',
         initialValue: '1',
-        type: 0 /* VALUE */,
+        type: 0 /* PropertyDescriptorParsingType.VALUE */,
         prefix: false,
         parse: function (_context, token) {
             if (isNumberToken(token)) {
@@ -3281,7 +3281,7 @@
         name: "text-decoration-color",
         initialValue: 'transparent',
         prefix: false,
-        type: 3 /* TYPE_VALUE */,
+        type: 3 /* PropertyDescriptorParsingType.TYPE_VALUE */,
         format: 'color'
     };
 
@@ -3289,24 +3289,24 @@
         name: 'text-decoration-line',
         initialValue: 'none',
         prefix: false,
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         parse: function (_context, tokens) {
             return tokens
                 .filter(isIdentToken)
                 .map(function (token) {
                 switch (token.value) {
                     case 'underline':
-                        return 1 /* UNDERLINE */;
+                        return 1 /* TEXT_DECORATION_LINE.UNDERLINE */;
                     case 'overline':
-                        return 2 /* OVERLINE */;
+                        return 2 /* TEXT_DECORATION_LINE.OVERLINE */;
                     case 'line-through':
-                        return 3 /* LINE_THROUGH */;
+                        return 3 /* TEXT_DECORATION_LINE.LINE_THROUGH */;
                     case 'none':
-                        return 4 /* BLINK */;
+                        return 4 /* TEXT_DECORATION_LINE.BLINK */;
                 }
-                return 0 /* NONE */;
+                return 0 /* TEXT_DECORATION_LINE.NONE */;
             })
-                .filter(function (line) { return line !== 0 /* NONE */; });
+                .filter(function (line) { return line !== 0 /* TEXT_DECORATION_LINE.NONE */; });
         }
     };
 
@@ -3314,20 +3314,20 @@
         name: "font-family",
         initialValue: '',
         prefix: false,
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         parse: function (_context, tokens) {
             var accumulator = [];
             var results = [];
             tokens.forEach(function (token) {
                 switch (token.type) {
-                    case 20 /* IDENT_TOKEN */:
-                    case 0 /* STRING_TOKEN */:
+                    case 20 /* TokenType.IDENT_TOKEN */:
+                    case 0 /* TokenType.STRING_TOKEN */:
                         accumulator.push(token.value);
                         break;
-                    case 17 /* NUMBER_TOKEN */:
+                    case 17 /* TokenType.NUMBER_TOKEN */:
                         accumulator.push(token.number.toString());
                         break;
-                    case 4 /* COMMA_TOKEN */:
+                    case 4 /* TokenType.COMMA_TOKEN */:
                         results.push(accumulator.join(' '));
                         accumulator.length = 0;
                         break;
@@ -3336,7 +3336,7 @@
             if (accumulator.length) {
                 results.push(accumulator.join(' '));
             }
-            return results.map(function (result) { return (result.indexOf(' ') === -1 ? result : "'" + result + "'"); });
+            return results.map(function (result) { return (result.indexOf(' ') === -1 ? result : "'".concat(result, "'")); });
         }
     };
 
@@ -3344,14 +3344,14 @@
         name: "font-size",
         initialValue: '0',
         prefix: false,
-        type: 3 /* TYPE_VALUE */,
+        type: 3 /* PropertyDescriptorParsingType.TYPE_VALUE */,
         format: 'length'
     };
 
     var fontWeight = {
         name: 'font-weight',
         initialValue: 'normal',
-        type: 0 /* VALUE */,
+        type: 0 /* PropertyDescriptorParsingType.VALUE */,
         prefix: false,
         parse: function (_context, token) {
             if (isNumberToken(token)) {
@@ -3373,7 +3373,7 @@
     var fontVariant = {
         name: 'font-variant',
         initialValue: 'none',
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         prefix: false,
         parse: function (_context, tokens) {
             return tokens.filter(isIdentToken).map(function (token) { return token.value; });
@@ -3384,16 +3384,16 @@
         name: 'font-style',
         initialValue: 'normal',
         prefix: false,
-        type: 2 /* IDENT_VALUE */,
+        type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
         parse: function (_context, overflow) {
             switch (overflow) {
                 case 'oblique':
-                    return "oblique" /* OBLIQUE */;
+                    return "oblique" /* FONT_STYLE.OBLIQUE */;
                 case 'italic':
-                    return "italic" /* ITALIC */;
+                    return "italic" /* FONT_STYLE.ITALIC */;
                 case 'normal':
                 default:
-                    return "normal" /* NORMAL */;
+                    return "normal" /* FONT_STYLE.NORMAL */;
             }
         }
     };
@@ -3403,14 +3403,14 @@
     var content = {
         name: 'content',
         initialValue: 'none',
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         prefix: false,
         parse: function (_context, tokens) {
             if (tokens.length === 0) {
                 return [];
             }
             var first = tokens[0];
-            if (first.type === 20 /* IDENT_TOKEN */ && first.value === 'none') {
+            if (first.type === 20 /* TokenType.IDENT_TOKEN */ && first.value === 'none') {
                 return [];
             }
             return tokens;
@@ -3421,13 +3421,13 @@
         name: 'counter-increment',
         initialValue: 'none',
         prefix: true,
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         parse: function (_context, tokens) {
             if (tokens.length === 0) {
                 return null;
             }
             var first = tokens[0];
-            if (first.type === 20 /* IDENT_TOKEN */ && first.value === 'none') {
+            if (first.type === 20 /* TokenType.IDENT_TOKEN */ && first.value === 'none') {
                 return null;
             }
             var increments = [];
@@ -3435,7 +3435,7 @@
             for (var i = 0; i < filtered.length; i++) {
                 var counter = filtered[i];
                 var next = filtered[i + 1];
-                if (counter.type === 20 /* IDENT_TOKEN */) {
+                if (counter.type === 20 /* TokenType.IDENT_TOKEN */) {
                     var increment = next && isNumberToken(next) ? next.number : 1;
                     increments.push({ counter: counter.value, increment: increment });
                 }
@@ -3448,7 +3448,7 @@
         name: 'counter-reset',
         initialValue: 'none',
         prefix: true,
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         parse: function (_context, tokens) {
             if (tokens.length === 0) {
                 return [];
@@ -3471,7 +3471,7 @@
         name: 'duration',
         initialValue: '0s',
         prefix: false,
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         parse: function (context, tokens) {
             return tokens.filter(isDimensionToken).map(function (token) { return time.parse(context, token); });
         }
@@ -3481,13 +3481,13 @@
         name: 'quotes',
         initialValue: 'none',
         prefix: true,
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         parse: function (_context, tokens) {
             if (tokens.length === 0) {
                 return null;
             }
             var first = tokens[0];
-            if (first.type === 20 /* IDENT_TOKEN */ && first.value === 'none') {
+            if (first.type === 20 /* TokenType.IDENT_TOKEN */ && first.value === 'none') {
                 return null;
             }
             var quotes = [];
@@ -3517,7 +3517,7 @@
     var boxShadow = {
         name: 'box-shadow',
         initialValue: 'none',
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         prefix: false,
         parse: function (context, tokens) {
             if (tokens.length === 1 && isIdentWithValue(tokens[0], 'none')) {
@@ -3566,20 +3566,20 @@
         name: 'paint-order',
         initialValue: 'normal',
         prefix: false,
-        type: 1 /* LIST */,
+        type: 1 /* PropertyDescriptorParsingType.LIST */,
         parse: function (_context, tokens) {
-            var DEFAULT_VALUE = [0 /* FILL */, 1 /* STROKE */, 2 /* MARKERS */];
+            var DEFAULT_VALUE = [0 /* PAINT_ORDER_LAYER.FILL */, 1 /* PAINT_ORDER_LAYER.STROKE */, 2 /* PAINT_ORDER_LAYER.MARKERS */];
             var layers = [];
             tokens.filter(isIdentToken).forEach(function (token) {
                 switch (token.value) {
                     case 'stroke':
-                        layers.push(1 /* STROKE */);
+                        layers.push(1 /* PAINT_ORDER_LAYER.STROKE */);
                         break;
                     case 'fill':
-                        layers.push(0 /* FILL */);
+                        layers.push(0 /* PAINT_ORDER_LAYER.FILL */);
                         break;
                     case 'markers':
-                        layers.push(2 /* MARKERS */);
+                        layers.push(2 /* PAINT_ORDER_LAYER.MARKERS */);
                         break;
                 }
             });
@@ -3596,14 +3596,14 @@
         name: "-webkit-text-stroke-color",
         initialValue: 'currentcolor',
         prefix: false,
-        type: 3 /* TYPE_VALUE */,
+        type: 3 /* PropertyDescriptorParsingType.TYPE_VALUE */,
         format: 'color'
     };
 
     var webkitTextStrokeWidth = {
         name: "-webkit-text-stroke-width",
         initialValue: '0',
-        type: 0 /* VALUE */,
+        type: 0 /* PropertyDescriptorParsingType.VALUE */,
         prefix: false,
         parse: function (_context, token) {
             if (isDimensionToken(token)) {
@@ -3685,7 +3685,7 @@
             this.zIndex = parse(context, zIndex, declaration.zIndex);
         }
         CSSParsedDeclaration.prototype.isVisible = function () {
-            return this.display > 0 && this.opacity > 0 && this.visibility === 0 /* VISIBLE */;
+            return this.display > 0 && this.opacity > 0 && this.visibility === 0 /* VISIBILITY.VISIBLE */;
         };
         CSSParsedDeclaration.prototype.isTransparent = function () {
             return isTransparent(this.backgroundColor);
@@ -3694,21 +3694,21 @@
             return this.transform !== null;
         };
         CSSParsedDeclaration.prototype.isPositioned = function () {
-            return this.position !== 0 /* STATIC */;
+            return this.position !== 0 /* POSITION.STATIC */;
         };
         CSSParsedDeclaration.prototype.isPositionedWithZIndex = function () {
             return this.isPositioned() && !this.zIndex.auto;
         };
         CSSParsedDeclaration.prototype.isFloating = function () {
-            return this.float !== 0 /* NONE */;
+            return this.float !== 0 /* FLOAT.NONE */;
         };
         CSSParsedDeclaration.prototype.isInlineLevel = function () {
-            return (contains(this.display, 4 /* INLINE */) ||
-                contains(this.display, 33554432 /* INLINE_BLOCK */) ||
-                contains(this.display, 268435456 /* INLINE_FLEX */) ||
-                contains(this.display, 536870912 /* INLINE_GRID */) ||
-                contains(this.display, 67108864 /* INLINE_LIST_ITEM */) ||
-                contains(this.display, 134217728 /* INLINE_TABLE */));
+            return (contains(this.display, 4 /* DISPLAY.INLINE */) ||
+                contains(this.display, 33554432 /* DISPLAY.INLINE_BLOCK */) ||
+                contains(this.display, 268435456 /* DISPLAY.INLINE_FLEX */) ||
+                contains(this.display, 536870912 /* DISPLAY.INLINE_GRID */) ||
+                contains(this.display, 67108864 /* DISPLAY.INLINE_LIST_ITEM */) ||
+                contains(this.display, 134217728 /* DISPLAY.INLINE_TABLE */));
         };
         return CSSParsedDeclaration;
     }());
@@ -3733,16 +3733,16 @@
         tokenizer.write(value);
         var parser = new Parser(tokenizer.read());
         switch (descriptor.type) {
-            case 2 /* IDENT_VALUE */:
+            case 2 /* PropertyDescriptorParsingType.IDENT_VALUE */:
                 var token = parser.parseComponentValue();
                 return descriptor.parse(context, isIdentToken(token) ? token.value : descriptor.initialValue);
-            case 0 /* VALUE */:
+            case 0 /* PropertyDescriptorParsingType.VALUE */:
                 return descriptor.parse(context, parser.parseComponentValue());
-            case 1 /* LIST */:
+            case 1 /* PropertyDescriptorParsingType.LIST */:
                 return descriptor.parse(context, parser.parseComponentValues());
-            case 4 /* TOKEN_VALUE */:
+            case 4 /* PropertyDescriptorParsingType.TOKEN_VALUE */:
                 return parser.parseComponentValue();
-            case 3 /* TYPE_VALUE */:
+            case 3 /* PropertyDescriptorParsingType.TYPE_VALUE */:
                 switch (descriptor.format) {
                     case 'angle':
                         return angle.parse(context, parser.parseComponentValue());
@@ -3768,20 +3768,20 @@
         var attribute = element.getAttribute(elementDebuggerAttribute);
         switch (attribute) {
             case 'all':
-                return 1 /* ALL */;
+                return 1 /* DebuggerType.ALL */;
             case 'clone':
-                return 2 /* CLONE */;
+                return 2 /* DebuggerType.CLONE */;
             case 'parse':
-                return 3 /* PARSE */;
+                return 3 /* DebuggerType.PARSE */;
             case 'render':
-                return 4 /* RENDER */;
+                return 4 /* DebuggerType.RENDER */;
             default:
-                return 0 /* NONE */;
+                return 0 /* DebuggerType.NONE */;
         }
     };
     var isDebugging = function (element, type) {
         var elementType = getElementDebugType(element);
-        return elementType === 1 /* ALL */ || type === elementType;
+        return elementType === 1 /* DebuggerType.ALL */ || type === elementType;
     };
 
     var ElementContainer = /** @class */ (function () {
@@ -3790,7 +3790,7 @@
             this.textNodes = [];
             this.elements = [];
             this.flags = 0;
-            if (isDebugging(element, 3 /* PARSE */)) {
+            if (isDebugging(element, 3 /* DebuggerType.PARSE */)) {
                 debugger;
             }
             this.styles = new CSSParsedDeclaration(context, window.getComputedStyle(element, null));
@@ -3804,8 +3804,8 @@
                 }
             }
             this.bounds = parseBounds(this.context, element);
-            if (isDebugging(element, 4 /* RENDER */)) {
-                this.flags |= 16 /* DEBUG_RENDER */;
+            if (isDebugging(element, 4 /* DebuggerType.RENDER */)) {
+                this.flags |= 16 /* FLAGS.DEBUG_RENDER */;
             }
         }
         return ElementContainer;
@@ -4199,7 +4199,7 @@
             var range = document.createRange();
             if (range.getBoundingClientRect) {
                 var testElement = document.createElement('boundtest');
-                testElement.style.height = TEST_HEIGHT + "px";
+                testElement.style.height = "".concat(TEST_HEIGHT, "px");
                 testElement.style.display = 'block';
                 document.body.appendChild(testElement);
                 range.selectNode(testElement);
@@ -4289,8 +4289,8 @@
             ctx.fillStyle = 'red';
             ctx.fillRect(0, 0, size, size);
             var node = document.createElement('div');
-            node.style.backgroundImage = "url(" + greenImageSrc + ")";
-            node.style.height = size + "px";
+            node.style.backgroundImage = "url(".concat(greenImageSrc, ")");
+            node.style.height = "".concat(size, "px");
             // Firefox 55 does not render inline <img /> tags
             return isGreenPixel(data)
                 ? loadSerializedSVG$1(createForeignObjectSVG(size, size, 0, 0, node))
@@ -4323,7 +4323,7 @@
             var img = new Image();
             img.onload = function () { return resolve(img); };
             img.onerror = reject;
-            img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(new XMLSerializer().serializeToString(svg));
+            img.src = "data:image/svg+xml;charset=utf-8,".concat(encodeURIComponent(new XMLSerializer().serializeToString(svg)));
         });
     };
     var FEATURES = {
@@ -4467,7 +4467,7 @@
     var breakWords = function (str, styles) {
         var breaker = LineBreaker(str, {
             lineBreak: styles.lineBreak,
-            wordBreak: styles.overflowWrap === "break-word" /* BREAK_WORD */ ? 'break-word' : styles.wordBreak
+            wordBreak: styles.overflowWrap === "break-word" /* OVERFLOW_WRAP.BREAK_WORD */ ? 'break-word' : styles.wordBreak
         });
         var words = [];
         var bk;
@@ -4508,11 +4508,11 @@
     }());
     var transform = function (text, transform) {
         switch (transform) {
-            case 1 /* LOWERCASE */:
+            case 1 /* TEXT_TRANSFORM.LOWERCASE */:
                 return text.toLowerCase();
-            case 3 /* CAPITALIZE */:
+            case 3 /* TEXT_TRANSFORM.CAPITALIZE */:
                 return text.replace(CAPITALIZE, capitalize);
-            case 2 /* UPPERCASE */:
+            case 2 /* TEXT_TRANSFORM.UPPERCASE */:
                 return text.toUpperCase();
             default:
                 return text;
@@ -4557,9 +4557,9 @@
             var _this = _super.call(this, context, img) || this;
             var s = new XMLSerializer();
             var bounds = parseBounds(context, img);
-            img.setAttribute('width', bounds.width + "px");
-            img.setAttribute('height', bounds.height + "px");
-            _this.svg = "data:image/svg+xml," + encodeURIComponent(s.serializeToString(img));
+            img.setAttribute('width', "".concat(bounds.width, "px"));
+            img.setAttribute('height', "".concat(bounds.height, "px"));
+            _this.svg = "data:image/svg+xml,".concat(encodeURIComponent(s.serializeToString(img)));
             _this.intrinsicWidth = img.width.baseVal.value;
             _this.intrinsicHeight = img.height.baseVal.value;
             _this.context.cache.addImage(_this.svg);
@@ -4591,7 +4591,7 @@
 
     var CHECKBOX_BORDER_RADIUS = [
         {
-            type: 15 /* DIMENSION_TOKEN */,
+            type: 15 /* TokenType.DIMENSION_TOKEN */,
             flags: 0,
             unit: 'px',
             number: 3
@@ -4599,7 +4599,7 @@
     ];
     var RADIO_BORDER_RADIUS = [
         {
-            type: 16 /* PERCENTAGE_TOKEN */,
+            type: 16 /* TokenType.PERCENTAGE_TOKEN */,
             flags: 0,
             number: 50
         }
@@ -4644,9 +4644,9 @@
                     _this.styles.borderRightStyle =
                         _this.styles.borderBottomStyle =
                             _this.styles.borderLeftStyle =
-                                1 /* SOLID */;
-                _this.styles.backgroundClip = [0 /* BORDER_BOX */];
-                _this.styles.backgroundOrigin = [0 /* BORDER_BOX */];
+                                1 /* BORDER_STYLE.SOLID */;
+                _this.styles.backgroundClip = [0 /* BACKGROUND_CLIP.BORDER_BOX */];
+                _this.styles.backgroundOrigin = [0 /* BACKGROUND_ORIGIN.BORDER_BOX */];
                 _this.bounds = reformatInputBounds(_this.bounds);
             }
             switch (_this.type) {
@@ -4739,13 +4739,13 @@
                     var container = createContainer(context, childNode);
                     if (container.styles.isVisible()) {
                         if (createsRealStackingContext(childNode, container, root)) {
-                            container.flags |= 4 /* CREATES_REAL_STACKING_CONTEXT */;
+                            container.flags |= 4 /* FLAGS.CREATES_REAL_STACKING_CONTEXT */;
                         }
                         else if (createsStackingContext(container.styles)) {
-                            container.flags |= 2 /* CREATES_STACKING_CONTEXT */;
+                            container.flags |= 2 /* FLAGS.CREATES_STACKING_CONTEXT */;
                         }
                         if (LIST_OWNERS.indexOf(childNode.tagName) !== -1) {
-                            container.flags |= 8 /* IS_LIST_OWNER */;
+                            container.flags |= 8 /* FLAGS.IS_LIST_OWNER */;
                         }
                         parent.elements.push(container);
                         childNode.slot;
@@ -4794,7 +4794,7 @@
     };
     var parseTree = function (context, element) {
         var container = createContainer(context, element);
-        container.flags |= 4 /* CREATES_REAL_STACKING_CONTEXT */;
+        container.flags |= 4 /* FLAGS.CREATES_REAL_STACKING_CONTEXT */;
         parseNodeTree(context, element, container, container);
         return container;
     };
@@ -5062,7 +5062,7 @@
     var CJK_HUNDRED_COEFFICIENTS = 1 << 3;
     var createCJKCounter = function (value, numbers, multipliers, negativeSign, suffix, flags) {
         if (value < -9999 || value > 9999) {
-            return createCounterText(value, 4 /* CJK_DECIMAL */, suffix.length > 0);
+            return createCounterText(value, 4 /* LIST_STYLE_TYPE.CJK_DECIMAL */, suffix.length > 0);
         }
         var tmp = Math.abs(value);
         var string = suffix;
@@ -5098,101 +5098,101 @@
         var koreanSuffix = appendSuffix ? ', ' : '';
         var spaceSuffix = appendSuffix ? ' ' : '';
         switch (type) {
-            case 0 /* DISC */:
+            case 0 /* LIST_STYLE_TYPE.DISC */:
                 return '•' + spaceSuffix;
-            case 1 /* CIRCLE */:
+            case 1 /* LIST_STYLE_TYPE.CIRCLE */:
                 return '◦' + spaceSuffix;
-            case 2 /* SQUARE */:
+            case 2 /* LIST_STYLE_TYPE.SQUARE */:
                 return '◾' + spaceSuffix;
-            case 5 /* DECIMAL_LEADING_ZERO */:
+            case 5 /* LIST_STYLE_TYPE.DECIMAL_LEADING_ZERO */:
                 var string = createCounterStyleFromRange(value, 48, 57, true, defaultSuffix);
-                return string.length < 4 ? "0" + string : string;
-            case 4 /* CJK_DECIMAL */:
+                return string.length < 4 ? "0".concat(string) : string;
+            case 4 /* LIST_STYLE_TYPE.CJK_DECIMAL */:
                 return createCounterStyleFromSymbols(value, '〇一二三四五六七八九', cjkSuffix);
-            case 6 /* LOWER_ROMAN */:
-                return createAdditiveCounter(value, 1, 3999, ROMAN_UPPER, 3 /* DECIMAL */, defaultSuffix).toLowerCase();
-            case 7 /* UPPER_ROMAN */:
-                return createAdditiveCounter(value, 1, 3999, ROMAN_UPPER, 3 /* DECIMAL */, defaultSuffix);
-            case 8 /* LOWER_GREEK */:
+            case 6 /* LIST_STYLE_TYPE.LOWER_ROMAN */:
+                return createAdditiveCounter(value, 1, 3999, ROMAN_UPPER, 3 /* LIST_STYLE_TYPE.DECIMAL */, defaultSuffix).toLowerCase();
+            case 7 /* LIST_STYLE_TYPE.UPPER_ROMAN */:
+                return createAdditiveCounter(value, 1, 3999, ROMAN_UPPER, 3 /* LIST_STYLE_TYPE.DECIMAL */, defaultSuffix);
+            case 8 /* LIST_STYLE_TYPE.LOWER_GREEK */:
                 return createCounterStyleFromRange(value, 945, 969, false, defaultSuffix);
-            case 9 /* LOWER_ALPHA */:
+            case 9 /* LIST_STYLE_TYPE.LOWER_ALPHA */:
                 return createCounterStyleFromRange(value, 97, 122, false, defaultSuffix);
-            case 10 /* UPPER_ALPHA */:
+            case 10 /* LIST_STYLE_TYPE.UPPER_ALPHA */:
                 return createCounterStyleFromRange(value, 65, 90, false, defaultSuffix);
-            case 11 /* ARABIC_INDIC */:
+            case 11 /* LIST_STYLE_TYPE.ARABIC_INDIC */:
                 return createCounterStyleFromRange(value, 1632, 1641, true, defaultSuffix);
-            case 12 /* ARMENIAN */:
-            case 49 /* UPPER_ARMENIAN */:
-                return createAdditiveCounter(value, 1, 9999, ARMENIAN, 3 /* DECIMAL */, defaultSuffix);
-            case 35 /* LOWER_ARMENIAN */:
-                return createAdditiveCounter(value, 1, 9999, ARMENIAN, 3 /* DECIMAL */, defaultSuffix).toLowerCase();
-            case 13 /* BENGALI */:
+            case 12 /* LIST_STYLE_TYPE.ARMENIAN */:
+            case 49 /* LIST_STYLE_TYPE.UPPER_ARMENIAN */:
+                return createAdditiveCounter(value, 1, 9999, ARMENIAN, 3 /* LIST_STYLE_TYPE.DECIMAL */, defaultSuffix);
+            case 35 /* LIST_STYLE_TYPE.LOWER_ARMENIAN */:
+                return createAdditiveCounter(value, 1, 9999, ARMENIAN, 3 /* LIST_STYLE_TYPE.DECIMAL */, defaultSuffix).toLowerCase();
+            case 13 /* LIST_STYLE_TYPE.BENGALI */:
                 return createCounterStyleFromRange(value, 2534, 2543, true, defaultSuffix);
-            case 14 /* CAMBODIAN */:
-            case 30 /* KHMER */:
+            case 14 /* LIST_STYLE_TYPE.CAMBODIAN */:
+            case 30 /* LIST_STYLE_TYPE.KHMER */:
                 return createCounterStyleFromRange(value, 6112, 6121, true, defaultSuffix);
-            case 15 /* CJK_EARTHLY_BRANCH */:
+            case 15 /* LIST_STYLE_TYPE.CJK_EARTHLY_BRANCH */:
                 return createCounterStyleFromSymbols(value, '子丑寅卯辰巳午未申酉戌亥', cjkSuffix);
-            case 16 /* CJK_HEAVENLY_STEM */:
+            case 16 /* LIST_STYLE_TYPE.CJK_HEAVENLY_STEM */:
                 return createCounterStyleFromSymbols(value, '甲乙丙丁戊己庚辛壬癸', cjkSuffix);
-            case 17 /* CJK_IDEOGRAPHIC */:
-            case 48 /* TRAD_CHINESE_INFORMAL */:
+            case 17 /* LIST_STYLE_TYPE.CJK_IDEOGRAPHIC */:
+            case 48 /* LIST_STYLE_TYPE.TRAD_CHINESE_INFORMAL */:
                 return createCJKCounter(value, '零一二三四五六七八九', CHINESE_INFORMAL_MULTIPLIERS, '負', cjkSuffix, CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS | CJK_HUNDRED_COEFFICIENTS);
-            case 47 /* TRAD_CHINESE_FORMAL */:
+            case 47 /* LIST_STYLE_TYPE.TRAD_CHINESE_FORMAL */:
                 return createCJKCounter(value, '零壹貳參肆伍陸柒捌玖', CHINESE_FORMAL_MULTIPLIERS, '負', cjkSuffix, CJK_ZEROS | CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS | CJK_HUNDRED_COEFFICIENTS);
-            case 42 /* SIMP_CHINESE_INFORMAL */:
+            case 42 /* LIST_STYLE_TYPE.SIMP_CHINESE_INFORMAL */:
                 return createCJKCounter(value, '零一二三四五六七八九', CHINESE_INFORMAL_MULTIPLIERS, '负', cjkSuffix, CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS | CJK_HUNDRED_COEFFICIENTS);
-            case 41 /* SIMP_CHINESE_FORMAL */:
+            case 41 /* LIST_STYLE_TYPE.SIMP_CHINESE_FORMAL */:
                 return createCJKCounter(value, '零壹贰叁肆伍陆柒捌玖', CHINESE_FORMAL_MULTIPLIERS, '负', cjkSuffix, CJK_ZEROS | CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS | CJK_HUNDRED_COEFFICIENTS);
-            case 26 /* JAPANESE_INFORMAL */:
+            case 26 /* LIST_STYLE_TYPE.JAPANESE_INFORMAL */:
                 return createCJKCounter(value, '〇一二三四五六七八九', '十百千万', JAPANESE_NEGATIVE, cjkSuffix, 0);
-            case 25 /* JAPANESE_FORMAL */:
+            case 25 /* LIST_STYLE_TYPE.JAPANESE_FORMAL */:
                 return createCJKCounter(value, '零壱弐参四伍六七八九', '拾百千万', JAPANESE_NEGATIVE, cjkSuffix, CJK_ZEROS | CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS);
-            case 31 /* KOREAN_HANGUL_FORMAL */:
+            case 31 /* LIST_STYLE_TYPE.KOREAN_HANGUL_FORMAL */:
                 return createCJKCounter(value, '영일이삼사오육칠팔구', '십백천만', KOREAN_NEGATIVE, koreanSuffix, CJK_ZEROS | CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS);
-            case 33 /* KOREAN_HANJA_INFORMAL */:
+            case 33 /* LIST_STYLE_TYPE.KOREAN_HANJA_INFORMAL */:
                 return createCJKCounter(value, '零一二三四五六七八九', '十百千萬', KOREAN_NEGATIVE, koreanSuffix, 0);
-            case 32 /* KOREAN_HANJA_FORMAL */:
+            case 32 /* LIST_STYLE_TYPE.KOREAN_HANJA_FORMAL */:
                 return createCJKCounter(value, '零壹貳參四五六七八九', '拾百千', KOREAN_NEGATIVE, koreanSuffix, CJK_ZEROS | CJK_TEN_COEFFICIENTS | CJK_TEN_HIGH_COEFFICIENTS);
-            case 18 /* DEVANAGARI */:
+            case 18 /* LIST_STYLE_TYPE.DEVANAGARI */:
                 return createCounterStyleFromRange(value, 0x966, 0x96f, true, defaultSuffix);
-            case 20 /* GEORGIAN */:
-                return createAdditiveCounter(value, 1, 19999, GEORGIAN, 3 /* DECIMAL */, defaultSuffix);
-            case 21 /* GUJARATI */:
+            case 20 /* LIST_STYLE_TYPE.GEORGIAN */:
+                return createAdditiveCounter(value, 1, 19999, GEORGIAN, 3 /* LIST_STYLE_TYPE.DECIMAL */, defaultSuffix);
+            case 21 /* LIST_STYLE_TYPE.GUJARATI */:
                 return createCounterStyleFromRange(value, 0xae6, 0xaef, true, defaultSuffix);
-            case 22 /* GURMUKHI */:
+            case 22 /* LIST_STYLE_TYPE.GURMUKHI */:
                 return createCounterStyleFromRange(value, 0xa66, 0xa6f, true, defaultSuffix);
-            case 22 /* HEBREW */:
-                return createAdditiveCounter(value, 1, 10999, HEBREW, 3 /* DECIMAL */, defaultSuffix);
-            case 23 /* HIRAGANA */:
+            case 22 /* LIST_STYLE_TYPE.HEBREW */:
+                return createAdditiveCounter(value, 1, 10999, HEBREW, 3 /* LIST_STYLE_TYPE.DECIMAL */, defaultSuffix);
+            case 23 /* LIST_STYLE_TYPE.HIRAGANA */:
                 return createCounterStyleFromSymbols(value, 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわゐゑをん');
-            case 24 /* HIRAGANA_IROHA */:
+            case 24 /* LIST_STYLE_TYPE.HIRAGANA_IROHA */:
                 return createCounterStyleFromSymbols(value, 'いろはにほへとちりぬるをわかよたれそつねならむうゐのおくやまけふこえてあさきゆめみしゑひもせす');
-            case 27 /* KANNADA */:
+            case 27 /* LIST_STYLE_TYPE.KANNADA */:
                 return createCounterStyleFromRange(value, 0xce6, 0xcef, true, defaultSuffix);
-            case 28 /* KATAKANA */:
+            case 28 /* LIST_STYLE_TYPE.KATAKANA */:
                 return createCounterStyleFromSymbols(value, 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヰヱヲン', cjkSuffix);
-            case 29 /* KATAKANA_IROHA */:
+            case 29 /* LIST_STYLE_TYPE.KATAKANA_IROHA */:
                 return createCounterStyleFromSymbols(value, 'イロハニホヘトチリヌルヲワカヨタレソツネナラムウヰノオクヤマケフコエテアサキユメミシヱヒモセス', cjkSuffix);
-            case 34 /* LAO */:
+            case 34 /* LIST_STYLE_TYPE.LAO */:
                 return createCounterStyleFromRange(value, 0xed0, 0xed9, true, defaultSuffix);
-            case 37 /* MONGOLIAN */:
+            case 37 /* LIST_STYLE_TYPE.MONGOLIAN */:
                 return createCounterStyleFromRange(value, 0x1810, 0x1819, true, defaultSuffix);
-            case 38 /* MYANMAR */:
+            case 38 /* LIST_STYLE_TYPE.MYANMAR */:
                 return createCounterStyleFromRange(value, 0x1040, 0x1049, true, defaultSuffix);
-            case 39 /* ORIYA */:
+            case 39 /* LIST_STYLE_TYPE.ORIYA */:
                 return createCounterStyleFromRange(value, 0xb66, 0xb6f, true, defaultSuffix);
-            case 40 /* PERSIAN */:
+            case 40 /* LIST_STYLE_TYPE.PERSIAN */:
                 return createCounterStyleFromRange(value, 0x6f0, 0x6f9, true, defaultSuffix);
-            case 43 /* TAMIL */:
+            case 43 /* LIST_STYLE_TYPE.TAMIL */:
                 return createCounterStyleFromRange(value, 0xbe6, 0xbef, true, defaultSuffix);
-            case 44 /* TELUGU */:
+            case 44 /* LIST_STYLE_TYPE.TELUGU */:
                 return createCounterStyleFromRange(value, 0xc66, 0xc6f, true, defaultSuffix);
-            case 45 /* THAI */:
+            case 45 /* LIST_STYLE_TYPE.THAI */:
                 return createCounterStyleFromRange(value, 0xe50, 0xe59, true, defaultSuffix);
-            case 46 /* TIBETAN */:
+            case 46 /* LIST_STYLE_TYPE.TIBETAN */:
                 return createCounterStyleFromRange(value, 0xf20, 0xf29, true, defaultSuffix);
-            case 3 /* DECIMAL */:
+            case 3 /* LIST_STYLE_TYPE.DECIMAL */:
             default:
                 return createCounterStyleFromRange(value, 48, 57, true, defaultSuffix);
         }
@@ -5242,7 +5242,7 @@
                             onclone = this.options.onclone;
                             referenceElement = this.clonedReferenceElement;
                             if (typeof referenceElement === 'undefined') {
-                                return [2 /*return*/, Promise.reject("Error finding the " + this.referenceElement.nodeName + " in the cloned document")];
+                                return [2 /*return*/, Promise.reject("Error finding the ".concat(this.referenceElement.nodeName, " in the cloned document"))];
                             }
                             if (!(documentClone.fonts && documentClone.fonts.ready)) return [3 /*break*/, 2];
                             return [4 /*yield*/, documentClone.fonts.ready];
@@ -5266,7 +5266,7 @@
                 });
             }); });
             documentClone.open();
-            documentClone.write(serializeDoctype(document.doctype) + "<html></html>");
+            documentClone.write("".concat(serializeDoctype(document.doctype), "<html></html>"));
             // Chrome scrolls the parent document for some reason after the write to the cloned window???
             restoreOwnerScroll(this.referenceElement.ownerDocument, scrollX, scrollY);
             documentClone.replaceChild(documentClone.adoptNode(this.documentElement), documentClone.documentElement);
@@ -5274,7 +5274,7 @@
             return iframeLoad;
         };
         DocumentCloner.prototype.createElementClone = function (node) {
-            if (isDebugging(node, 2 /* CLONE */)) {
+            if (isDebugging(node, 2 /* DebuggerType.CLONE */)) {
                 debugger;
             }
             if (isCanvasElement(node)) {
@@ -5482,16 +5482,16 @@
             var anonymousReplacedElement = document.createElement('html2canvaspseudoelement');
             copyCSSStyles(style, anonymousReplacedElement);
             declaration.content.forEach(function (token) {
-                if (token.type === 0 /* STRING_TOKEN */) {
+                if (token.type === 0 /* TokenType.STRING_TOKEN */) {
                     anonymousReplacedElement.appendChild(document.createTextNode(token.value));
                 }
-                else if (token.type === 22 /* URL_TOKEN */) {
+                else if (token.type === 22 /* TokenType.URL_TOKEN */) {
                     var img = document.createElement('img');
                     img.src = token.value;
                     img.style.opacity = '1';
                     anonymousReplacedElement.appendChild(img);
                 }
-                else if (token.type === 18 /* FUNCTION */) {
+                else if (token.type === 18 /* TokenType.FUNCTION */) {
                     if (token.name === 'attr') {
                         var attr = token.values.filter(isIdentToken);
                         if (attr.length) {
@@ -5504,7 +5504,7 @@
                             var counterState = _this.counters.getCounterValue(counter.value);
                             var counterType = counterStyle && isIdentToken(counterStyle)
                                 ? listStyleType.parse(_this.context, counterStyle.value)
-                                : 3 /* DECIMAL */;
+                                : 3 /* LIST_STYLE_TYPE.DECIMAL */;
                             anonymousReplacedElement.appendChild(document.createTextNode(createCounterText(counterState, counterType, false)));
                         }
                     }
@@ -5514,8 +5514,8 @@
                             var counterStates = _this.counters.getCounterValues(counter.value);
                             var counterType_1 = counterStyle && isIdentToken(counterStyle)
                                 ? listStyleType.parse(_this.context, counterStyle.value)
-                                : 3 /* DECIMAL */;
-                            var separator = delim && delim.type === 0 /* STRING_TOKEN */ ? delim.value : '';
+                                : 3 /* LIST_STYLE_TYPE.DECIMAL */;
+                            var separator = delim && delim.type === 0 /* TokenType.STRING_TOKEN */ ? delim.value : '';
                             var text = counterStates
                                 .map(function (value) { return createCounterText(value, counterType_1, false); })
                                 .join(separator);
@@ -5524,7 +5524,7 @@
                     }
                     else ;
                 }
-                else if (token.type === 20 /* IDENT_TOKEN */) {
+                else if (token.type === 20 /* TokenType.IDENT_TOKEN */) {
                     switch (token.value) {
                         case 'open-quote':
                             anonymousReplacedElement.appendChild(document.createTextNode(getQuote(declaration.quotes, _this.quoteDepth++, true)));
@@ -5538,10 +5538,10 @@
                     }
                 }
             });
-            anonymousReplacedElement.className = PSEUDO_HIDE_ELEMENT_CLASS_BEFORE + " " + PSEUDO_HIDE_ELEMENT_CLASS_AFTER;
+            anonymousReplacedElement.className = "".concat(PSEUDO_HIDE_ELEMENT_CLASS_BEFORE, " ").concat(PSEUDO_HIDE_ELEMENT_CLASS_AFTER);
             var newClassName = pseudoElt === PseudoElementType.BEFORE
-                ? " " + PSEUDO_HIDE_ELEMENT_CLASS_BEFORE
-                : " " + PSEUDO_HIDE_ELEMENT_CLASS_AFTER;
+                ? " ".concat(PSEUDO_HIDE_ELEMENT_CLASS_BEFORE)
+                : " ".concat(PSEUDO_HIDE_ELEMENT_CLASS_AFTER);
             if (isSVGElementNode(clone)) {
                 clone.className.baseValue += newClassName;
             }
@@ -5640,10 +5640,10 @@
                 str += doctype.internalSubset;
             }
             if (doctype.publicId) {
-                str += "\"" + doctype.publicId + "\"";
+                str += "\"".concat(doctype.publicId, "\"");
             }
             if (doctype.systemId) {
-                str += "\"" + doctype.systemId + "\"";
+                str += "\"".concat(doctype.systemId, "\"");
             }
             str += '>';
         }
@@ -5667,7 +5667,7 @@
     var PSEUDO_HIDE_ELEMENT_CLASS_AFTER = '___html2canvas___pseudoelement_after';
     var PSEUDO_HIDE_ELEMENT_STYLE = "{\n    content: \"\" !important;\n    display: none !important;\n}";
     var createPseudoHideStyles = function (body) {
-        createStyles(body, "." + PSEUDO_HIDE_ELEMENT_CLASS_BEFORE + PSEUDO_BEFORE + PSEUDO_HIDE_ELEMENT_STYLE + "\n         ." + PSEUDO_HIDE_ELEMENT_CLASS_AFTER + PSEUDO_AFTER + PSEUDO_HIDE_ELEMENT_STYLE);
+        createStyles(body, ".".concat(PSEUDO_HIDE_ELEMENT_CLASS_BEFORE).concat(PSEUDO_BEFORE).concat(PSEUDO_HIDE_ELEMENT_STYLE, "\n         .").concat(PSEUDO_HIDE_ELEMENT_CLASS_AFTER).concat(PSEUDO_AFTER).concat(PSEUDO_HIDE_ELEMENT_STYLE));
     };
     var createStyles = function (body, styles) {
         var document = body.ownerDocument;
@@ -5754,7 +5754,7 @@
                             src = _a.sent();
                             _a.label = 2;
                         case 2:
-                            this.context.logger.debug("Added image " + key.substring(0, 256));
+                            this.context.logger.debug("Added image ".concat(key.substring(0, 256)));
                             return [4 /*yield*/, new Promise(function (resolve, reject) {
                                     var img = new Image();
                                     img.onload = function () { return resolve(img); };
@@ -5769,7 +5769,7 @@
                                         setTimeout(function () { return resolve(img); }, 500);
                                     }
                                     if (_this._options.imageTimeout > 0) {
-                                        setTimeout(function () { return reject("Timed out (" + _this._options.imageTimeout + "ms) loading image"); }, _this._options.imageTimeout);
+                                        setTimeout(function () { return reject("Timed out (".concat(_this._options.imageTimeout, "ms) loading image")); }, _this._options.imageTimeout);
                                     }
                                 })];
                         case 3: return [2 /*return*/, _a.sent()];
@@ -5806,19 +5806,19 @@
                         }
                     }
                     else {
-                        reject("Failed to proxy resource " + key + " with status code " + xhr.status);
+                        reject("Failed to proxy resource ".concat(key, " with status code ").concat(xhr.status));
                     }
                 };
                 xhr.onerror = reject;
                 var queryString = proxy.indexOf('?') > -1 ? '&' : '?';
-                xhr.open('GET', "" + proxy + queryString + "url=" + encodeURIComponent(src) + "&responseType=" + responseType);
+                xhr.open('GET', "".concat(proxy).concat(queryString, "url=").concat(encodeURIComponent(src), "&responseType=").concat(responseType));
                 if (responseType !== 'text' && xhr instanceof XMLHttpRequest) {
                     xhr.responseType = responseType;
                 }
                 if (_this._options.imageTimeout) {
                     var timeout_1 = _this._options.imageTimeout;
                     xhr.timeout = timeout_1;
-                    xhr.ontimeout = function () { return reject("Timed out (" + timeout_1 + "ms) proxying " + key); };
+                    xhr.ontimeout = function () { return reject("Timed out (".concat(timeout_1, "ms) proxying ").concat(key)); };
                 }
                 xhr.send();
             });
@@ -5836,7 +5836,7 @@
 
     var Vector = /** @class */ (function () {
         function Vector(x, y) {
-            this.type = 0 /* VECTOR */;
+            this.type = 0 /* PathType.VECTOR */;
             this.x = x;
             this.y = y;
         }
@@ -5851,7 +5851,7 @@
     };
     var BezierCurve = /** @class */ (function () {
         function BezierCurve(start, startControl, endControl, end) {
-            this.type = 1 /* BEZIER_CURVE */;
+            this.type = 1 /* PathType.BEZIER_CURVE */;
             this.start = start;
             this.startControl = startControl;
             this.endControl = endControl;
@@ -5874,7 +5874,7 @@
         };
         return BezierCurve;
     }());
-    var isBezierCurve = function (path) { return path.type === 1 /* BEZIER_CURVE */; };
+    var isBezierCurve = function (path) { return path.type === 1 /* PathType.BEZIER_CURVE */; };
 
     var BoundCurves = /** @class */ (function () {
         function BoundCurves(element) {
@@ -6061,8 +6061,8 @@
             this.offsetX = offsetX;
             this.offsetY = offsetY;
             this.matrix = matrix;
-            this.type = 0 /* TRANSFORM */;
-            this.target = 2 /* BACKGROUND_BORDERS */ | 4 /* CONTENT */;
+            this.type = 0 /* EffectType.TRANSFORM */;
+            this.target = 2 /* EffectTarget.BACKGROUND_BORDERS */ | 4 /* EffectTarget.CONTENT */;
         }
         return TransformEffect;
     }());
@@ -6070,23 +6070,23 @@
         function ClipEffect(path, target) {
             this.path = path;
             this.target = target;
-            this.type = 1 /* CLIP */;
+            this.type = 1 /* EffectType.CLIP */;
         }
         return ClipEffect;
     }());
     var OpacityEffect = /** @class */ (function () {
         function OpacityEffect(opacity) {
             this.opacity = opacity;
-            this.type = 2 /* OPACITY */;
-            this.target = 2 /* BACKGROUND_BORDERS */ | 4 /* CONTENT */;
+            this.type = 2 /* EffectType.OPACITY */;
+            this.target = 2 /* EffectTarget.BACKGROUND_BORDERS */ | 4 /* EffectTarget.CONTENT */;
         }
         return OpacityEffect;
     }());
     var isTransformEffect = function (effect) {
-        return effect.type === 0 /* TRANSFORM */;
+        return effect.type === 0 /* EffectType.TRANSFORM */;
     };
-    var isClipEffect = function (effect) { return effect.type === 1 /* CLIP */; };
-    var isOpacityEffect = function (effect) { return effect.type === 2 /* OPACITY */; };
+    var isClipEffect = function (effect) { return effect.type === 1 /* EffectType.CLIP */; };
+    var isOpacityEffect = function (effect) { return effect.type === 2 /* EffectType.OPACITY */; };
 
     var equalPath = function (a, b) {
         if (a.length === b.length) {
@@ -6138,32 +6138,32 @@
                 var matrix = this.container.styles.transform;
                 this.effects.push(new TransformEffect(offsetX, offsetY, matrix));
             }
-            if (this.container.styles.overflowX !== 0 /* VISIBLE */) {
+            if (this.container.styles.overflowX !== 0 /* OVERFLOW.VISIBLE */) {
                 var borderBox = calculateBorderBoxPath(this.curves);
                 var paddingBox = calculatePaddingBoxPath(this.curves);
                 if (equalPath(borderBox, paddingBox)) {
-                    this.effects.push(new ClipEffect(borderBox, 2 /* BACKGROUND_BORDERS */ | 4 /* CONTENT */));
+                    this.effects.push(new ClipEffect(borderBox, 2 /* EffectTarget.BACKGROUND_BORDERS */ | 4 /* EffectTarget.CONTENT */));
                 }
                 else {
-                    this.effects.push(new ClipEffect(borderBox, 2 /* BACKGROUND_BORDERS */));
-                    this.effects.push(new ClipEffect(paddingBox, 4 /* CONTENT */));
+                    this.effects.push(new ClipEffect(borderBox, 2 /* EffectTarget.BACKGROUND_BORDERS */));
+                    this.effects.push(new ClipEffect(paddingBox, 4 /* EffectTarget.CONTENT */));
                 }
             }
         }
         ElementPaint.prototype.getEffects = function (target) {
-            var inFlow = [2 /* ABSOLUTE */, 3 /* FIXED */].indexOf(this.container.styles.position) === -1;
+            var inFlow = [2 /* POSITION.ABSOLUTE */, 3 /* POSITION.FIXED */].indexOf(this.container.styles.position) === -1;
             var parent = this.parent;
             var effects = this.effects.slice(0);
             while (parent) {
                 var croplessEffects = parent.effects.filter(function (effect) { return !isClipEffect(effect); });
-                if (inFlow || parent.container.styles.position !== 0 /* STATIC */ || !parent.parent) {
+                if (inFlow || parent.container.styles.position !== 0 /* POSITION.STATIC */ || !parent.parent) {
                     effects.unshift.apply(effects, croplessEffects);
-                    inFlow = [2 /* ABSOLUTE */, 3 /* FIXED */].indexOf(parent.container.styles.position) === -1;
-                    if (parent.container.styles.overflowX !== 0 /* VISIBLE */) {
+                    inFlow = [2 /* POSITION.ABSOLUTE */, 3 /* POSITION.FIXED */].indexOf(parent.container.styles.position) === -1;
+                    if (parent.container.styles.overflowX !== 0 /* OVERFLOW.VISIBLE */) {
                         var borderBox = calculateBorderBoxPath(parent.curves);
                         var paddingBox = calculatePaddingBoxPath(parent.curves);
                         if (!equalPath(borderBox, paddingBox)) {
-                            effects.unshift(new ClipEffect(paddingBox, 2 /* BACKGROUND_BORDERS */ | 4 /* CONTENT */));
+                            effects.unshift(new ClipEffect(paddingBox, 2 /* EffectTarget.BACKGROUND_BORDERS */ | 4 /* EffectTarget.CONTENT */));
                         }
                     }
                 }
@@ -6178,13 +6178,13 @@
     }());
     var parseStackTree = function (parent, stackingContext, realStackingContext, listItems) {
         parent.container.elements.forEach(function (child) {
-            var treatAsRealStackingContext = contains(child.flags, 4 /* CREATES_REAL_STACKING_CONTEXT */);
-            var createsStackingContext = contains(child.flags, 2 /* CREATES_STACKING_CONTEXT */);
+            var treatAsRealStackingContext = contains(child.flags, 4 /* FLAGS.CREATES_REAL_STACKING_CONTEXT */);
+            var createsStackingContext = contains(child.flags, 2 /* FLAGS.CREATES_STACKING_CONTEXT */);
             var paintContainer = new ElementPaint(child, parent);
-            if (contains(child.styles.display, 2048 /* LIST_ITEM */)) {
+            if (contains(child.styles.display, 2048 /* DISPLAY.LIST_ITEM */)) {
                 listItems.push(paintContainer);
             }
-            var listOwnerItems = contains(child.flags, 8 /* IS_LIST_OWNER */) ? [] : listItems;
+            var listOwnerItems = contains(child.flags, 8 /* FLAGS.IS_LIST_OWNER */) ? [] : listItems;
             if (treatAsRealStackingContext || createsStackingContext) {
                 var parentStack = treatAsRealStackingContext || child.styles.isPositioned() ? realStackingContext : stackingContext;
                 var stack = new StackingContext(paintContainer);
@@ -6241,7 +6241,7 @@
                 }
                 parseStackTree(paintContainer, stackingContext, realStackingContext, listOwnerItems);
             }
-            if (contains(child.flags, 8 /* IS_LIST_OWNER */)) {
+            if (contains(child.flags, 8 /* FLAGS.IS_LIST_OWNER */)) {
                 processListItems(child, listOwnerItems);
             }
         });
@@ -6382,19 +6382,19 @@
     };
 
     var calculateBackgroundPositioningArea = function (backgroundOrigin, element) {
-        if (backgroundOrigin === 0 /* BORDER_BOX */) {
+        if (backgroundOrigin === 0 /* BACKGROUND_ORIGIN.BORDER_BOX */) {
             return element.bounds;
         }
-        if (backgroundOrigin === 2 /* CONTENT_BOX */) {
+        if (backgroundOrigin === 2 /* BACKGROUND_ORIGIN.CONTENT_BOX */) {
             return contentBox(element);
         }
         return paddingBox(element);
     };
     var calculateBackgroundPaintingArea = function (backgroundClip, element) {
-        if (backgroundClip === 0 /* BORDER_BOX */) {
+        if (backgroundClip === 0 /* BACKGROUND_CLIP.BORDER_BOX */) {
             return element.bounds;
         }
-        if (backgroundClip === 2 /* CONTENT_BOX */) {
+        if (backgroundClip === 2 /* BACKGROUND_CLIP.CONTENT_BOX */) {
             return contentBox(element);
         }
         return paddingBox(element);
@@ -6522,21 +6522,21 @@
         var x = _a[0], y = _a[1];
         var width = _b[0], height = _b[1];
         switch (repeat) {
-            case 2 /* REPEAT_X */:
+            case 2 /* BACKGROUND_REPEAT.REPEAT_X */:
                 return [
                     new Vector(Math.round(backgroundPositioningArea.left), Math.round(backgroundPositioningArea.top + y)),
                     new Vector(Math.round(backgroundPositioningArea.left + backgroundPositioningArea.width), Math.round(backgroundPositioningArea.top + y)),
                     new Vector(Math.round(backgroundPositioningArea.left + backgroundPositioningArea.width), Math.round(height + backgroundPositioningArea.top + y)),
                     new Vector(Math.round(backgroundPositioningArea.left), Math.round(height + backgroundPositioningArea.top + y))
                 ];
-            case 3 /* REPEAT_Y */:
+            case 3 /* BACKGROUND_REPEAT.REPEAT_Y */:
                 return [
                     new Vector(Math.round(backgroundPositioningArea.left + x), Math.round(backgroundPositioningArea.top)),
                     new Vector(Math.round(backgroundPositioningArea.left + x + width), Math.round(backgroundPositioningArea.top)),
                     new Vector(Math.round(backgroundPositioningArea.left + x + width), Math.round(backgroundPositioningArea.height + backgroundPositioningArea.top)),
                     new Vector(Math.round(backgroundPositioningArea.left + x), Math.round(backgroundPositioningArea.height + backgroundPositioningArea.top))
                 ];
-            case 1 /* NO_REPEAT */:
+            case 1 /* BACKGROUND_REPEAT.NO_REPEAT */:
                 return [
                     new Vector(Math.round(backgroundPositioningArea.left + x), Math.round(backgroundPositioningArea.top + y)),
                     new Vector(Math.round(backgroundPositioningArea.left + x + width), Math.round(backgroundPositioningArea.top + y)),
@@ -6596,7 +6596,7 @@
             return { baseline: baseline, middle: middle };
         };
         FontMetrics.prototype.getMetrics = function (fontFamily, fontSize) {
-            var key = fontFamily + " " + fontSize;
+            var key = "".concat(fontFamily, " ").concat(fontSize);
             if (typeof this._data[key] === 'undefined') {
                 this._data[key] = this.parseMetrics(fontFamily, fontSize);
             }
@@ -6624,15 +6624,15 @@
             if (!options.canvas) {
                 _this.canvas.width = Math.floor(options.width * options.scale);
                 _this.canvas.height = Math.floor(options.height * options.scale);
-                _this.canvas.style.width = options.width + "px";
-                _this.canvas.style.height = options.height + "px";
+                _this.canvas.style.width = "".concat(options.width, "px");
+                _this.canvas.style.height = "".concat(options.height, "px");
             }
             _this.fontMetrics = new FontMetrics(document);
             _this.ctx.scale(_this.options.scale, _this.options.scale);
             _this.ctx.translate(-options.x, -options.y);
             _this.ctx.textBaseline = 'bottom';
             _this._activeEffects = [];
-            _this.context.logger.debug("Canvas renderer initialized (" + options.width + "x" + options.height + ") with scale " + options.scale);
+            _this.context.logger.debug("Canvas renderer initialized (".concat(options.width, "x").concat(options.height, ") with scale ").concat(options.scale));
             return _this;
         }
         CanvasRenderer.prototype.applyEffects = function (effects) {
@@ -6684,7 +6684,7 @@
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            if (contains(paint.container.flags, 16 /* DEBUG_RENDER */)) {
+                            if (contains(paint.container.flags, 16 /* FLAGS.DEBUG_RENDER */)) {
                                 debugger;
                             }
                             if (!paint.container.styles.isVisible()) return [3 /*break*/, 3];
@@ -6719,8 +6719,8 @@
                 .join('');
             var fontFamily = fixIOSSystemFonts(styles.fontFamily).join(', ');
             var fontSize = isDimensionToken(styles.fontSize)
-                ? "" + styles.fontSize.number + styles.fontSize.unit
-                : styles.fontSize.number + "px";
+                ? "".concat(styles.fontSize.number).concat(styles.fontSize.unit)
+                : "".concat(styles.fontSize.number, "px");
             return [
                 [styles.fontStyle, fontVariant, styles.fontWeight, fontSize, fontFamily].join(' '),
                 fontFamily,
@@ -6734,7 +6734,7 @@
                 return __generator(this, function (_c) {
                     _a = this.createFontStyle(styles), font = _a[0], fontFamily = _a[1], fontSize = _a[2];
                     this.ctx.font = font;
-                    this.ctx.direction = styles.direction === 1 /* RTL */ ? 'rtl' : 'ltr';
+                    this.ctx.direction = styles.direction === 1 /* DIRECTION.RTL */ ? 'rtl' : 'ltr';
                     this.ctx.textAlign = 'left';
                     this.ctx.textBaseline = 'alphabetic';
                     _b = this.fontMetrics.getMetrics(fontFamily, fontSize), baseline = _b.baseline, middle = _b.middle;
@@ -6742,7 +6742,7 @@
                     text.textBounds.forEach(function (text) {
                         paintOrder.forEach(function (paintOrderLayer) {
                             switch (paintOrderLayer) {
-                                case 0 /* FILL */:
+                                case 0 /* PAINT_ORDER_LAYER.FILL */:
                                     _this.ctx.fillStyle = asString(styles.color);
                                     _this.renderTextWithLetterSpacing(text, styles.letterSpacing, baseline);
                                     var textShadows = styles.textShadow;
@@ -6766,16 +6766,16 @@
                                         _this.ctx.fillStyle = asString(styles.textDecorationColor || styles.color);
                                         styles.textDecorationLine.forEach(function (textDecorationLine) {
                                             switch (textDecorationLine) {
-                                                case 1 /* UNDERLINE */:
+                                                case 1 /* TEXT_DECORATION_LINE.UNDERLINE */:
                                                     // Draws a line at the baseline of the font
                                                     // TODO As some browsers display the line as more than 1px if the font-size is big,
                                                     // need to take that into account both in position and size
                                                     _this.ctx.fillRect(text.bounds.left, Math.round(text.bounds.top + baseline), text.bounds.width, 1);
                                                     break;
-                                                case 2 /* OVERLINE */:
+                                                case 2 /* TEXT_DECORATION_LINE.OVERLINE */:
                                                     _this.ctx.fillRect(text.bounds.left, Math.round(text.bounds.top), text.bounds.width, 1);
                                                     break;
-                                                case 3 /* LINE_THROUGH */:
+                                                case 3 /* TEXT_DECORATION_LINE.LINE_THROUGH */:
                                                     // TODO try and find exact position for line-through
                                                     _this.ctx.fillRect(text.bounds.left, Math.ceil(text.bounds.top + middle), text.bounds.width, 1);
                                                     break;
@@ -6783,7 +6783,7 @@
                                         });
                                     }
                                     break;
-                                case 1 /* STROKE */:
+                                case 1 /* PAINT_ORDER_LAYER.STROKE */:
                                     if (styles.webkitTextStrokeWidth && text.text.trim().length) {
                                         _this.ctx.strokeStyle = asString(styles.webkitTextStrokeColor);
                                         _this.ctx.lineWidth = styles.webkitTextStrokeWidth;
@@ -6819,7 +6819,7 @@
                 return __generator(this, function (_c) {
                     switch (_c.label) {
                         case 0:
-                            this.applyEffects(paint.getEffects(4 /* CONTENT */));
+                            this.applyEffects(paint.getEffects(4 /* EffectTarget.CONTENT */));
                             container = paint.container;
                             curves = paint.curves;
                             styles = container.styles;
@@ -6847,7 +6847,7 @@
                             return [3 /*break*/, 8];
                         case 7:
                             _c.sent();
-                            this.context.logger.error("Error loading image " + container.src);
+                            this.context.logger.error("Error loading image ".concat(container.src));
                             return [3 /*break*/, 8];
                         case 8:
                             if (container instanceof CanvasElementContainer) {
@@ -6864,7 +6864,7 @@
                             return [3 /*break*/, 12];
                         case 11:
                             _c.sent();
-                            this.context.logger.error("Error loading svg " + container.svg.substring(0, 255));
+                            this.context.logger.error("Error loading svg ".concat(container.svg.substring(0, 255)));
                             return [3 /*break*/, 12];
                         case 12:
                             if (!(container instanceof IFrameElementContainer && container.tree)) return [3 /*break*/, 14];
@@ -6924,10 +6924,10 @@
                                 bounds = contentBox(container);
                                 x = 0;
                                 switch (container.styles.textAlign) {
-                                    case 1 /* CENTER */:
+                                    case 1 /* TEXT_ALIGN.CENTER */:
                                         x += bounds.width / 2;
                                         break;
-                                    case 2 /* RIGHT */:
+                                    case 2 /* TEXT_ALIGN.RIGHT */:
                                         x += bounds.width;
                                         break;
                                 }
@@ -6945,10 +6945,10 @@
                                 this.ctx.textBaseline = 'alphabetic';
                                 this.ctx.textAlign = 'left';
                             }
-                            if (!contains(container.styles.display, 2048 /* LIST_ITEM */)) return [3 /*break*/, 20];
+                            if (!contains(container.styles.display, 2048 /* DISPLAY.LIST_ITEM */)) return [3 /*break*/, 20];
                             if (!(container.styles.listStyleImage !== null)) return [3 /*break*/, 19];
                             img = container.styles.listStyleImage;
-                            if (!(img.type === 0 /* URL */)) return [3 /*break*/, 18];
+                            if (!(img.type === 0 /* CSSImageType.URL */)) return [3 /*break*/, 18];
                             image = void 0;
                             url = img.url;
                             _c.label = 15;
@@ -6961,11 +6961,11 @@
                             return [3 /*break*/, 18];
                         case 17:
                             _c.sent();
-                            this.context.logger.error("Error loading list-style-image " + url);
+                            this.context.logger.error("Error loading list-style-image ".concat(url));
                             return [3 /*break*/, 18];
                         case 18: return [3 /*break*/, 20];
                         case 19:
-                            if (paint.listValue && container.styles.listStyleType !== -1 /* NONE */) {
+                            if (paint.listValue && container.styles.listStyleType !== -1 /* LIST_STYLE_TYPE.NONE */) {
                                 fontFamily = this.createFontStyle(styles)[0];
                                 this.ctx.font = fontFamily;
                                 this.ctx.fillStyle = asString(styles.color);
@@ -6988,7 +6988,7 @@
                 return __generator(this, function (_p) {
                     switch (_p.label) {
                         case 0:
-                            if (contains(stack.element.container.flags, 16 /* DEBUG_RENDER */)) {
+                            if (contains(stack.element.container.flags, 16 /* FLAGS.DEBUG_RENDER */)) {
                                 debugger;
                             }
                             // https://www.w3.org/TR/css-position-3/#painting-order
@@ -7160,7 +7160,7 @@
                                 return __generator(this, function (_h) {
                                     switch (_h.label) {
                                         case 0:
-                                            if (!(backgroundImage.type === 0 /* URL */)) return [3 /*break*/, 5];
+                                            if (!(backgroundImage.type === 0 /* CSSImageType.URL */)) return [3 /*break*/, 5];
                                             image = void 0;
                                             url = backgroundImage.url;
                                             _h.label = 1;
@@ -7172,7 +7172,7 @@
                                             return [3 /*break*/, 4];
                                         case 3:
                                             _h.sent();
-                                            this_1.context.logger.error("Error loading background-image " + url);
+                                            this_1.context.logger.error("Error loading background-image ".concat(url));
                                             return [3 /*break*/, 4];
                                         case 4:
                                             if (image) {
@@ -7304,7 +7304,7 @@
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            this.applyEffects(paint.getEffects(2 /* BACKGROUND_BORDERS */));
+                            this.applyEffects(paint.getEffects(2 /* EffectTarget.BACKGROUND_BORDERS */));
                             styles = paint.container.styles;
                             hasBackground = !isTransparent(styles.backgroundColor) || styles.backgroundImage.length;
                             borders = [
@@ -7360,20 +7360,20 @@
                         case 3:
                             if (!(_i < borders_1.length)) return [3 /*break*/, 13];
                             border = borders_1[_i];
-                            if (!(border.style !== 0 /* NONE */ && !isTransparent(border.color) && border.width > 0)) return [3 /*break*/, 11];
-                            if (!(border.style === 2 /* DASHED */)) return [3 /*break*/, 5];
-                            return [4 /*yield*/, this.renderDashedDottedBorder(border.color, border.width, side, paint.curves, 2 /* DASHED */)];
+                            if (!(border.style !== 0 /* BORDER_STYLE.NONE */ && !isTransparent(border.color) && border.width > 0)) return [3 /*break*/, 11];
+                            if (!(border.style === 2 /* BORDER_STYLE.DASHED */)) return [3 /*break*/, 5];
+                            return [4 /*yield*/, this.renderDashedDottedBorder(border.color, border.width, side, paint.curves, 2 /* BORDER_STYLE.DASHED */)];
                         case 4:
                             _a.sent();
                             return [3 /*break*/, 11];
                         case 5:
-                            if (!(border.style === 3 /* DOTTED */)) return [3 /*break*/, 7];
-                            return [4 /*yield*/, this.renderDashedDottedBorder(border.color, border.width, side, paint.curves, 3 /* DOTTED */)];
+                            if (!(border.style === 3 /* BORDER_STYLE.DOTTED */)) return [3 /*break*/, 7];
+                            return [4 /*yield*/, this.renderDashedDottedBorder(border.color, border.width, side, paint.curves, 3 /* BORDER_STYLE.DOTTED */)];
                         case 6:
                             _a.sent();
                             return [3 /*break*/, 11];
                         case 7:
-                            if (!(border.style === 4 /* DOUBLE */)) return [3 /*break*/, 9];
+                            if (!(border.style === 4 /* BORDER_STYLE.DOUBLE */)) return [3 /*break*/, 9];
                             return [4 /*yield*/, this.renderDoubleBorder(border.color, border.width, side, paint.curves)];
                         case 8:
                             _a.sent();
@@ -7400,7 +7400,7 @@
                     this.ctx.save();
                     strokePaths = parsePathForBorderStroke(curvePoints, side);
                     boxPaths = parsePathForBorder(curvePoints, side);
-                    if (style === 2 /* DASHED */) {
+                    if (style === 2 /* BORDER_STYLE.DASHED */) {
                         this.path(boxPaths);
                         this.ctx.clip();
                     }
@@ -7427,7 +7427,7 @@
                         length = Math.abs(startY - endY);
                     }
                     this.ctx.beginPath();
-                    if (style === 3 /* DOTTED */) {
+                    if (style === 3 /* BORDER_STYLE.DOTTED */) {
                         this.formatPath(strokePaths);
                     }
                     else {
@@ -7435,7 +7435,7 @@
                     }
                     dashLength = width < 3 ? width * 3 : width * 2;
                     spaceLength = width < 3 ? width * 2 : width;
-                    if (style === 3 /* DOTTED */) {
+                    if (style === 3 /* BORDER_STYLE.DOTTED */) {
                         dashLength = width;
                         spaceLength = width;
                     }
@@ -7458,14 +7458,14 @@
                                 : maxSpace;
                     }
                     if (useLineDash) {
-                        if (style === 3 /* DOTTED */) {
+                        if (style === 3 /* BORDER_STYLE.DOTTED */) {
                             this.ctx.setLineDash([0, dashLength + spaceLength]);
                         }
                         else {
                             this.ctx.setLineDash([dashLength, spaceLength]);
                         }
                     }
-                    if (style === 3 /* DOTTED */) {
+                    if (style === 3 /* BORDER_STYLE.DOTTED */) {
                         this.ctx.lineCap = 'round';
                         this.ctx.lineWidth = width;
                     }
@@ -7476,7 +7476,7 @@
                     this.ctx.stroke();
                     this.ctx.setLineDash([]);
                     // dashed round edge gap
-                    if (style === 2 /* DASHED */) {
+                    if (style === 2 /* BORDER_STYLE.DASHED */) {
                         if (isBezierCurve(boxPaths[0])) {
                             path1 = boxPaths[3];
                             path2 = boxPaths[0];
@@ -7533,22 +7533,22 @@
     };
     var calculateBackgroundCurvedPaintingArea = function (clip, curves) {
         switch (clip) {
-            case 0 /* BORDER_BOX */:
+            case 0 /* BACKGROUND_CLIP.BORDER_BOX */:
                 return calculateBorderBoxPath(curves);
-            case 2 /* CONTENT_BOX */:
+            case 2 /* BACKGROUND_CLIP.CONTENT_BOX */:
                 return calculateContentBoxPath(curves);
-            case 1 /* PADDING_BOX */:
+            case 1 /* BACKGROUND_CLIP.PADDING_BOX */:
             default:
                 return calculatePaddingBoxPath(curves);
         }
     };
     var canvasTextAlign = function (textAlign) {
         switch (textAlign) {
-            case 1 /* CENTER */:
+            case 1 /* TEXT_ALIGN.CENTER */:
                 return 'center';
-            case 2 /* RIGHT */:
+            case 2 /* TEXT_ALIGN.RIGHT */:
                 return 'right';
-            case 0 /* LEFT */:
+            case 0 /* TEXT_ALIGN.LEFT */:
             default:
                 return 'left';
         }
@@ -7570,11 +7570,11 @@
             _this.options = options;
             _this.canvas.width = Math.floor(options.width * options.scale);
             _this.canvas.height = Math.floor(options.height * options.scale);
-            _this.canvas.style.width = options.width + "px";
-            _this.canvas.style.height = options.height + "px";
+            _this.canvas.style.width = "".concat(options.width, "px");
+            _this.canvas.style.height = "".concat(options.height, "px");
             _this.ctx.scale(_this.options.scale, _this.options.scale);
             _this.ctx.translate(-options.x, -options.y);
-            _this.context.logger.debug("EXPERIMENTAL ForeignObject renderer initialized (" + options.width + "x" + options.height + " at " + options.x + "," + options.y + ") with scale " + options.scale);
+            _this.context.logger.debug("EXPERIMENTAL ForeignObject renderer initialized (".concat(options.width, "x").concat(options.height, " at ").concat(options.x, ",").concat(options.y, ") with scale ").concat(options.scale));
             return _this;
         }
         ForeignObjectRenderer.prototype.render = function (element) {
@@ -7606,7 +7606,7 @@
                 resolve(img);
             };
             img.onerror = reject;
-            img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(new XMLSerializer().serializeToString(svg));
+            img.src = "data:image/svg+xml;charset=utf-8,".concat(encodeURIComponent(new XMLSerializer().serializeToString(svg)));
         });
     };
 
@@ -7627,7 +7627,7 @@
                 // eslint-disable-next-line no-console
                 if (typeof window !== 'undefined' && window.console && typeof console.debug === 'function') {
                     // eslint-disable-next-line no-console
-                    console.debug.apply(console, __spreadArray([this.id, this.getTime() + "ms"], args));
+                    console.debug.apply(console, __spreadArray([this.id, "".concat(this.getTime(), "ms")], args, false));
                 }
                 else {
                     this.info.apply(this, args);
@@ -7647,7 +7647,7 @@
                 // eslint-disable-next-line no-console
                 if (typeof window !== 'undefined' && window.console && typeof console.info === 'function') {
                     // eslint-disable-next-line no-console
-                    console.info.apply(console, __spreadArray([this.id, this.getTime() + "ms"], args));
+                    console.info.apply(console, __spreadArray([this.id, "".concat(this.getTime(), "ms")], args, false));
                 }
             }
         };
@@ -7661,7 +7661,7 @@
                 // eslint-disable-next-line no-console
                 if (typeof window !== 'undefined' && window.console && typeof console.warn === 'function') {
                     // eslint-disable-next-line no-console
-                    console.warn.apply(console, __spreadArray([this.id, this.getTime() + "ms"], args));
+                    console.warn.apply(console, __spreadArray([this.id, "".concat(this.getTime(), "ms")], args, false));
                 }
                 else {
                     this.info.apply(this, args);
@@ -7678,7 +7678,7 @@
                 // eslint-disable-next-line no-console
                 if (typeof window !== 'undefined' && window.console && typeof console.error === 'function') {
                     // eslint-disable-next-line no-console
-                    console.error.apply(console, __spreadArray([this.id, this.getTime() + "ms"], args));
+                    console.error.apply(console, __spreadArray([this.id, "".concat(this.getTime(), "ms")], args, false));
                 }
                 else {
                     this.info.apply(this, args);
@@ -7693,7 +7693,7 @@
         function Context(options, windowBounds) {
             var _a;
             this.windowBounds = windowBounds;
-            this.instanceName = "#" + Context.instanceCount++;
+            this.instanceName = "#".concat(Context.instanceCount++);
             this.logger = new Logger({ id: this.instanceName, enabled: options.logging });
             this.cache = (_a = options.cache) !== null && _a !== void 0 ? _a : new Cache(this, options);
         }
@@ -7748,7 +7748,7 @@
                         inlineImages: foreignObjectRendering,
                         copyStyles: foreignObjectRendering
                     };
-                    context.logger.debug("Starting document clone with size " + windowBounds.width + "x" + windowBounds.height + " scrolled to " + -windowBounds.left + "," + -windowBounds.top);
+                    context.logger.debug("Starting document clone with size ".concat(windowBounds.width, "x").concat(windowBounds.height, " scrolled to ").concat(-windowBounds.left, ",").concat(-windowBounds.top));
                     documentCloner = new DocumentCloner(context, element, cloneOptions);
                     clonedElement = documentCloner.clonedReferenceElement;
                     if (!clonedElement) {
@@ -7778,13 +7778,13 @@
                     canvas = _u.sent();
                     return [3 /*break*/, 5];
                 case 3:
-                    context.logger.debug("Document cloned, element located at " + left + "," + top + " with size " + width + "x" + height + " using computed rendering");
+                    context.logger.debug("Document cloned, element located at ".concat(left, ",").concat(top, " with size ").concat(width, "x").concat(height, " using computed rendering"));
                     context.logger.debug("Starting DOM parsing");
                     root = parseTree(context, clonedElement);
                     if (backgroundColor === root.styles.backgroundColor) {
                         root.styles.backgroundColor = COLORS.TRANSPARENT;
                     }
-                    context.logger.debug("Starting renderer for element at " + renderOptions.x + "," + renderOptions.y + " with size " + renderOptions.width + "x" + renderOptions.height);
+                    context.logger.debug("Starting renderer for element at ".concat(renderOptions.x, ",").concat(renderOptions.y, " with size ").concat(renderOptions.width, "x").concat(renderOptions.height));
                     renderer = new CanvasRenderer(context, renderOptions);
                     return [4 /*yield*/, renderer.render(root)];
                 case 4:
@@ -7826,5 +7826,5 @@
 
     return html2canvas;
 
-})));
+}));
 //# sourceMappingURL=html2canvas.js.map

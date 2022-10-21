@@ -13,12 +13,12 @@ exports.backgroundSize = {
     name: 'background-size',
     initialValue: '0',
     prefix: false,
-    type: 1 /* LIST */,
+    type: 1 /* PropertyDescriptorParsingType.LIST */,
     parse: function (_context, tokens) {
-        return parser_1.parseFunctionArgs(tokens).map(function (values) { return values.filter(isBackgroundSizeInfoToken); });
+        return (0, parser_1.parseFunctionArgs)(tokens).map(function (values) { return values.filter(isBackgroundSizeInfoToken); });
     }
 };
 var isBackgroundSizeInfoToken = function (value) {
-    return parser_1.isIdentToken(value) || length_percentage_1.isLengthPercentage(value);
+    return (0, parser_1.isIdentToken)(value) || (0, length_percentage_1.isLengthPercentage)(value);
 };
 //# sourceMappingURL=background-size.js.map

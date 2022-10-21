@@ -5,17 +5,17 @@ exports.textAlign = {
     name: 'text-align',
     initialValue: 'left',
     prefix: false,
-    type: 2 /* IDENT_VALUE */,
+    type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
     parse: function (_context, textAlign) {
         switch (textAlign) {
             case 'right':
-                return 2 /* RIGHT */;
+                return 2 /* TEXT_ALIGN.RIGHT */;
             case 'center':
             case 'justify':
-                return 1 /* CENTER */;
+                return 1 /* TEXT_ALIGN.CENTER */;
             case 'left':
             default:
-                return 0 /* LEFT */;
+                return 0 /* TEXT_ALIGN.LEFT */;
         }
     }
 };

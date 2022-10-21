@@ -88,7 +88,7 @@ var DocumentCloner = /** @class */ (function () {
                         onclone = this.options.onclone;
                         referenceElement = this.clonedReferenceElement;
                         if (typeof referenceElement === 'undefined') {
-                            return [2 /*return*/, Promise.reject("Error finding the " + this.referenceElement.nodeName + " in the cloned document")];
+                            return [2 /*return*/, Promise.reject("Error finding the ".concat(this.referenceElement.nodeName, " in the cloned document"))];
                         }
                         if (!(documentClone.fonts && documentClone.fonts.ready)) return [3 /*break*/, 2];
                         return [4 /*yield*/, documentClone.fonts.ready];
@@ -112,7 +112,7 @@ var DocumentCloner = /** @class */ (function () {
             });
         }); });
         documentClone.open();
-        documentClone.write(serializeDoctype(document.doctype) + "<html></html>");
+        documentClone.write("".concat(serializeDoctype(document.doctype), "<html></html>"));
         // Chrome scrolls the parent document for some reason after the write to the cloned window???
         restoreOwnerScroll(this.referenceElement.ownerDocument, scrollX, scrollY);
         documentClone.replaceChild(documentClone.adoptNode(this.documentElement), documentClone.documentElement);
@@ -120,21 +120,21 @@ var DocumentCloner = /** @class */ (function () {
         return iframeLoad;
     };
     DocumentCloner.prototype.createElementClone = function (node) {
-        if (debugger_1.isDebugging(node, 2 /* CLONE */)) {
+        if ((0, debugger_1.isDebugging)(node, 2 /* DebuggerType.CLONE */)) {
             debugger;
         }
-        if (node_parser_1.isCanvasElement(node)) {
+        if ((0, node_parser_1.isCanvasElement)(node)) {
             return this.createCanvasClone(node);
         }
-        if (node_parser_1.isVideoElement(node)) {
+        if ((0, node_parser_1.isVideoElement)(node)) {
             return this.createVideoClone(node);
         }
-        if (node_parser_1.isStyleElement(node)) {
+        if ((0, node_parser_1.isStyleElement)(node)) {
             return this.createStyleClone(node);
         }
         var clone = node.cloneNode(false);
-        if (node_parser_1.isImageElement(clone)) {
-            if (node_parser_1.isImageElement(node) && node.currentSrc && node.currentSrc !== node.src) {
+        if ((0, node_parser_1.isImageElement)(clone)) {
+            if ((0, node_parser_1.isImageElement)(node) && node.currentSrc && node.currentSrc !== node.src) {
                 clone.src = node.currentSrc;
                 clone.srcset = '';
             }
@@ -142,14 +142,14 @@ var DocumentCloner = /** @class */ (function () {
                 clone.loading = 'eager';
             }
         }
-        if (node_parser_1.isCustomElement(clone)) {
+        if ((0, node_parser_1.isCustomElement)(clone)) {
             return this.createCustomElementClone(clone);
         }
         return clone;
     };
     DocumentCloner.prototype.createCustomElementClone = function (node) {
         var clone = document.createElement('html2canvascustomelement');
-        exports.copyCSSStyles(node.style, clone);
+        (0, exports.copyCSSStyles)(node.style, clone);
         return clone;
     };
     DocumentCloner.prototype.createStyleClone = function (node) {
@@ -239,11 +239,11 @@ var DocumentCloner = /** @class */ (function () {
         return blankCanvas;
     };
     DocumentCloner.prototype.appendChildNode = function (clone, child, copyStyles) {
-        if (!node_parser_1.isElementNode(child) ||
-            (!node_parser_1.isScriptElement(child) &&
+        if (!(0, node_parser_1.isElementNode)(child) ||
+            (!(0, node_parser_1.isScriptElement)(child) &&
                 !child.hasAttribute(IGNORE_ATTRIBUTE) &&
                 (typeof this.options.ignoreElements !== 'function' || !this.options.ignoreElements(child)))) {
-            if (!this.options.copyStyles || !node_parser_1.isElementNode(child) || !node_parser_1.isStyleElement(child)) {
+            if (!this.options.copyStyles || !(0, node_parser_1.isElementNode)(child) || !(0, node_parser_1.isStyleElement)(child)) {
                 clone.appendChild(this.cloneNode(child, copyStyles));
             }
         }
@@ -251,7 +251,7 @@ var DocumentCloner = /** @class */ (function () {
     DocumentCloner.prototype.cloneChildNodes = function (node, clone, copyStyles) {
         var _this = this;
         for (var child = node.shadowRoot ? node.shadowRoot.firstChild : node.firstChild; child; child = child.nextSibling) {
-            if (node_parser_1.isElementNode(child) && node_parser_1.isSlotElement(child) && typeof child.assignedNodes === 'function') {
+            if ((0, node_parser_1.isElementNode)(child) && (0, node_parser_1.isSlotElement)(child) && typeof child.assignedNodes === 'function') {
                 var assignedNodes = child.assignedNodes();
                 if (assignedNodes.length) {
                     assignedNodes.forEach(function (assignedNode) { return _this.appendChildNode(clone, assignedNode, copyStyles); });
@@ -263,31 +263,31 @@ var DocumentCloner = /** @class */ (function () {
         }
     };
     DocumentCloner.prototype.cloneNode = function (node, copyStyles) {
-        if (node_parser_1.isTextNode(node)) {
+        if ((0, node_parser_1.isTextNode)(node)) {
             return document.createTextNode(node.data);
         }
         if (!node.ownerDocument) {
             return node.cloneNode(false);
         }
         var window = node.ownerDocument.defaultView;
-        if (window && node_parser_1.isElementNode(node) && (node_parser_1.isHTMLElementNode(node) || node_parser_1.isSVGElementNode(node))) {
+        if (window && (0, node_parser_1.isElementNode)(node) && ((0, node_parser_1.isHTMLElementNode)(node) || (0, node_parser_1.isSVGElementNode)(node))) {
             var clone = this.createElementClone(node);
             clone.style.transitionProperty = 'none';
             var style = window.getComputedStyle(node);
             var styleBefore = window.getComputedStyle(node, ':before');
             var styleAfter = window.getComputedStyle(node, ':after');
-            if (this.referenceElement === node && node_parser_1.isHTMLElementNode(clone)) {
+            if (this.referenceElement === node && (0, node_parser_1.isHTMLElementNode)(clone)) {
                 this.clonedReferenceElement = clone;
             }
-            if (node_parser_1.isBodyElement(clone)) {
+            if ((0, node_parser_1.isBodyElement)(clone)) {
                 createPseudoHideStyles(clone);
             }
             var counters = this.counters.parse(new index_1.CSSParsedCounterDeclaration(this.context, style));
             var before = this.resolvePseudoContent(node, clone, styleBefore, PseudoElementType.BEFORE);
-            if (node_parser_1.isCustomElement(node)) {
+            if ((0, node_parser_1.isCustomElement)(node)) {
                 copyStyles = true;
             }
-            if (!node_parser_1.isVideoElement(node)) {
+            if (!(0, node_parser_1.isVideoElement)(node)) {
                 this.cloneChildNodes(node, clone, copyStyles);
             }
             if (before) {
@@ -298,15 +298,15 @@ var DocumentCloner = /** @class */ (function () {
                 clone.appendChild(after);
             }
             this.counters.pop(counters);
-            if ((style && (this.options.copyStyles || node_parser_1.isSVGElementNode(node)) && !node_parser_1.isIFrameElement(node)) ||
+            if ((style && (this.options.copyStyles || (0, node_parser_1.isSVGElementNode)(node)) && !(0, node_parser_1.isIFrameElement)(node)) ||
                 copyStyles) {
-                exports.copyCSSStyles(style, clone);
+                (0, exports.copyCSSStyles)(style, clone);
             }
             if (node.scrollTop !== 0 || node.scrollLeft !== 0) {
                 this.scrolledElements.push([clone, node.scrollLeft, node.scrollTop]);
             }
-            if ((node_parser_1.isTextareaElement(node) || node_parser_1.isSelectElement(node)) &&
-                (node_parser_1.isTextareaElement(clone) || node_parser_1.isSelectElement(clone))) {
+            if (((0, node_parser_1.isTextareaElement)(node) || (0, node_parser_1.isSelectElement)(node)) &&
+                ((0, node_parser_1.isTextareaElement)(clone) || (0, node_parser_1.isSelectElement)(clone))) {
                 clone.value = node.value;
             }
             return clone;
@@ -326,18 +326,18 @@ var DocumentCloner = /** @class */ (function () {
         this.counters.parse(new index_1.CSSParsedCounterDeclaration(this.context, style));
         var declaration = new index_1.CSSParsedPseudoDeclaration(this.context, style);
         var anonymousReplacedElement = document.createElement('html2canvaspseudoelement');
-        exports.copyCSSStyles(style, anonymousReplacedElement);
+        (0, exports.copyCSSStyles)(style, anonymousReplacedElement);
         declaration.content.forEach(function (token) {
-            if (token.type === 0 /* STRING_TOKEN */) {
+            if (token.type === 0 /* TokenType.STRING_TOKEN */) {
                 anonymousReplacedElement.appendChild(document.createTextNode(token.value));
             }
-            else if (token.type === 22 /* URL_TOKEN */) {
+            else if (token.type === 22 /* TokenType.URL_TOKEN */) {
                 var img = document.createElement('img');
                 img.src = token.value;
                 img.style.opacity = '1';
                 anonymousReplacedElement.appendChild(img);
             }
-            else if (token.type === 18 /* FUNCTION */) {
+            else if (token.type === 18 /* TokenType.FUNCTION */) {
                 if (token.name === 'attr') {
                     var attr = token.values.filter(parser_1.isIdentToken);
                     if (attr.length) {
@@ -346,24 +346,24 @@ var DocumentCloner = /** @class */ (function () {
                 }
                 else if (token.name === 'counter') {
                     var _a = token.values.filter(parser_1.nonFunctionArgSeparator), counter = _a[0], counterStyle = _a[1];
-                    if (counter && parser_1.isIdentToken(counter)) {
+                    if (counter && (0, parser_1.isIdentToken)(counter)) {
                         var counterState = _this.counters.getCounterValue(counter.value);
-                        var counterType = counterStyle && parser_1.isIdentToken(counterStyle)
+                        var counterType = counterStyle && (0, parser_1.isIdentToken)(counterStyle)
                             ? list_style_type_1.listStyleType.parse(_this.context, counterStyle.value)
-                            : 3 /* DECIMAL */;
-                        anonymousReplacedElement.appendChild(document.createTextNode(counter_1.createCounterText(counterState, counterType, false)));
+                            : 3 /* LIST_STYLE_TYPE.DECIMAL */;
+                        anonymousReplacedElement.appendChild(document.createTextNode((0, counter_1.createCounterText)(counterState, counterType, false)));
                     }
                 }
                 else if (token.name === 'counters') {
                     var _b = token.values.filter(parser_1.nonFunctionArgSeparator), counter = _b[0], delim = _b[1], counterStyle = _b[2];
-                    if (counter && parser_1.isIdentToken(counter)) {
+                    if (counter && (0, parser_1.isIdentToken)(counter)) {
                         var counterStates = _this.counters.getCounterValues(counter.value);
-                        var counterType_1 = counterStyle && parser_1.isIdentToken(counterStyle)
+                        var counterType_1 = counterStyle && (0, parser_1.isIdentToken)(counterStyle)
                             ? list_style_type_1.listStyleType.parse(_this.context, counterStyle.value)
-                            : 3 /* DECIMAL */;
-                        var separator = delim && delim.type === 0 /* STRING_TOKEN */ ? delim.value : '';
+                            : 3 /* LIST_STYLE_TYPE.DECIMAL */;
+                        var separator = delim && delim.type === 0 /* TokenType.STRING_TOKEN */ ? delim.value : '';
                         var text = counterStates
-                            .map(function (value) { return counter_1.createCounterText(value, counterType_1, false); })
+                            .map(function (value) { return (0, counter_1.createCounterText)(value, counterType_1, false); })
                             .join(separator);
                         anonymousReplacedElement.appendChild(document.createTextNode(text));
                     }
@@ -372,13 +372,13 @@ var DocumentCloner = /** @class */ (function () {
                     //   console.log('FUNCTION_TOKEN', token);
                 }
             }
-            else if (token.type === 20 /* IDENT_TOKEN */) {
+            else if (token.type === 20 /* TokenType.IDENT_TOKEN */) {
                 switch (token.value) {
                     case 'open-quote':
-                        anonymousReplacedElement.appendChild(document.createTextNode(quotes_1.getQuote(declaration.quotes, _this.quoteDepth++, true)));
+                        anonymousReplacedElement.appendChild(document.createTextNode((0, quotes_1.getQuote)(declaration.quotes, _this.quoteDepth++, true)));
                         break;
                     case 'close-quote':
-                        anonymousReplacedElement.appendChild(document.createTextNode(quotes_1.getQuote(declaration.quotes, --_this.quoteDepth, false)));
+                        anonymousReplacedElement.appendChild(document.createTextNode((0, quotes_1.getQuote)(declaration.quotes, --_this.quoteDepth, false)));
                         break;
                     default:
                         // safari doesn't parse string tokens correctly because of lack of quotes
@@ -386,11 +386,11 @@ var DocumentCloner = /** @class */ (function () {
                 }
             }
         });
-        anonymousReplacedElement.className = PSEUDO_HIDE_ELEMENT_CLASS_BEFORE + " " + PSEUDO_HIDE_ELEMENT_CLASS_AFTER;
+        anonymousReplacedElement.className = "".concat(PSEUDO_HIDE_ELEMENT_CLASS_BEFORE, " ").concat(PSEUDO_HIDE_ELEMENT_CLASS_AFTER);
         var newClassName = pseudoElt === PseudoElementType.BEFORE
-            ? " " + PSEUDO_HIDE_ELEMENT_CLASS_BEFORE
-            : " " + PSEUDO_HIDE_ELEMENT_CLASS_AFTER;
-        if (node_parser_1.isSVGElementNode(clone)) {
+            ? " ".concat(PSEUDO_HIDE_ELEMENT_CLASS_BEFORE)
+            : " ".concat(PSEUDO_HIDE_ELEMENT_CLASS_AFTER);
+        if ((0, node_parser_1.isSVGElementNode)(clone)) {
             clone.className.baseValue += newClassName;
         }
         else {
@@ -490,10 +490,10 @@ var serializeDoctype = function (doctype) {
             str += doctype.internalSubset;
         }
         if (doctype.publicId) {
-            str += "\"" + doctype.publicId + "\"";
+            str += "\"".concat(doctype.publicId, "\"");
         }
         if (doctype.systemId) {
-            str += "\"" + doctype.systemId + "\"";
+            str += "\"".concat(doctype.systemId, "\"");
         }
         str += '>';
     }
@@ -517,7 +517,7 @@ var PSEUDO_HIDE_ELEMENT_CLASS_BEFORE = '___html2canvas___pseudoelement_before';
 var PSEUDO_HIDE_ELEMENT_CLASS_AFTER = '___html2canvas___pseudoelement_after';
 var PSEUDO_HIDE_ELEMENT_STYLE = "{\n    content: \"\" !important;\n    display: none !important;\n}";
 var createPseudoHideStyles = function (body) {
-    createStyles(body, "." + PSEUDO_HIDE_ELEMENT_CLASS_BEFORE + PSEUDO_BEFORE + PSEUDO_HIDE_ELEMENT_STYLE + "\n         ." + PSEUDO_HIDE_ELEMENT_CLASS_AFTER + PSEUDO_AFTER + PSEUDO_HIDE_ELEMENT_STYLE);
+    createStyles(body, ".".concat(PSEUDO_HIDE_ELEMENT_CLASS_BEFORE).concat(PSEUDO_BEFORE).concat(PSEUDO_HIDE_ELEMENT_STYLE, "\n         .").concat(PSEUDO_HIDE_ELEMENT_CLASS_AFTER).concat(PSEUDO_AFTER).concat(PSEUDO_HIDE_ELEMENT_STYLE));
 };
 var createStyles = function (body, styles) {
     var document = body.ownerDocument;

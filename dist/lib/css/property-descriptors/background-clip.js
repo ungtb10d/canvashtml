@@ -6,18 +6,18 @@ exports.backgroundClip = {
     name: 'background-clip',
     initialValue: 'border-box',
     prefix: false,
-    type: 1 /* LIST */,
+    type: 1 /* PropertyDescriptorParsingType.LIST */,
     parse: function (_context, tokens) {
         return tokens.map(function (token) {
-            if (parser_1.isIdentToken(token)) {
+            if ((0, parser_1.isIdentToken)(token)) {
                 switch (token.value) {
                     case 'padding-box':
-                        return 1 /* PADDING_BOX */;
+                        return 1 /* BACKGROUND_CLIP.PADDING_BOX */;
                     case 'content-box':
-                        return 2 /* CONTENT_BOX */;
+                        return 2 /* BACKGROUND_CLIP.CONTENT_BOX */;
                 }
             }
-            return 0 /* BORDER_BOX */;
+            return 0 /* BACKGROUND_CLIP.BORDER_BOX */;
         });
     }
 };

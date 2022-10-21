@@ -11,10 +11,10 @@ exports.paddingBox = paddingBox;
 var contentBox = function (element) {
     var styles = element.styles;
     var bounds = element.bounds;
-    var paddingLeft = length_percentage_1.getAbsoluteValue(styles.paddingLeft, bounds.width);
-    var paddingRight = length_percentage_1.getAbsoluteValue(styles.paddingRight, bounds.width);
-    var paddingTop = length_percentage_1.getAbsoluteValue(styles.paddingTop, bounds.width);
-    var paddingBottom = length_percentage_1.getAbsoluteValue(styles.paddingBottom, bounds.width);
+    var paddingLeft = (0, length_percentage_1.getAbsoluteValue)(styles.paddingLeft, bounds.width);
+    var paddingRight = (0, length_percentage_1.getAbsoluteValue)(styles.paddingRight, bounds.width);
+    var paddingTop = (0, length_percentage_1.getAbsoluteValue)(styles.paddingTop, bounds.width);
+    var paddingBottom = (0, length_percentage_1.getAbsoluteValue)(styles.paddingBottom, bounds.width);
     return bounds.add(paddingLeft + styles.borderLeftWidth, paddingTop + styles.borderTopWidth, -(styles.borderRightWidth + styles.borderLeftWidth + paddingLeft + paddingRight), -(styles.borderTopWidth + styles.borderBottomWidth + paddingTop + paddingBottom));
 };
 exports.contentBox = contentBox;

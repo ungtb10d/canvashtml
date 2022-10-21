@@ -5,17 +5,17 @@ exports.textTransform = {
     name: 'text-transform',
     initialValue: 'none',
     prefix: false,
-    type: 2 /* IDENT_VALUE */,
+    type: 2 /* PropertyDescriptorParsingType.IDENT_VALUE */,
     parse: function (_context, textTransform) {
         switch (textTransform) {
             case 'uppercase':
-                return 2 /* UPPERCASE */;
+                return 2 /* TEXT_TRANSFORM.UPPERCASE */;
             case 'lowercase':
-                return 1 /* LOWERCASE */;
+                return 1 /* TEXT_TRANSFORM.LOWERCASE */;
             case 'capitalize':
-                return 3 /* CAPITALIZE */;
+                return 3 /* TEXT_TRANSFORM.CAPITALIZE */;
         }
-        return 0 /* NONE */;
+        return 0 /* TEXT_TRANSFORM.NONE */;
     }
 };
 //# sourceMappingURL=text-transform.js.map

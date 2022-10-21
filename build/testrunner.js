@@ -6,7 +6,7 @@
 (function () {
     'use strict';
 
-    /*! *****************************************************************************
+    /******************************************************************************
     Copyright (c) Microsoft Corporation.
 
     Permission to use, copy, modify, and/or distribute this software for any
@@ -2610,7 +2610,7 @@
                     resolve();
                 }
                 else {
-                    reject("Failed to send screenshot with status " + xhr.status);
+                    reject("Failed to send screenshot with status ".concat(xhr.status));
                 }
             };
             xhr.onerror = reject;
@@ -2678,7 +2678,7 @@
                             }
                             contentWindow.addEventListener('unhandledrejection', function (event) {
                                 console.error(event.reason);
-                                throw new Error("unhandledrejection: " + JSON.stringify(event.reason));
+                                throw new Error("unhandledrejection: ".concat(JSON.stringify(event.reason)));
                             });
                             return [4 /*yield*/, contentWindow
                                     // @ts-ignore
@@ -2702,5 +2702,5 @@
         });
     });
 
-}());
+})();
 //# sourceMappingURL=testrunner.js.map

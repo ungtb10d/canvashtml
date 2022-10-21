@@ -31,16 +31,16 @@ var IFrameElementContainer = /** @class */ (function (_super) {
             if (iframe.contentWindow &&
                 iframe.contentWindow.document &&
                 iframe.contentWindow.document.documentElement) {
-                _this.tree = node_parser_1.parseTree(context, iframe.contentWindow.document.documentElement);
+                _this.tree = (0, node_parser_1.parseTree)(context, iframe.contentWindow.document.documentElement);
                 // http://www.w3.org/TR/css3-background/#special-backgrounds
                 var documentBackgroundColor = iframe.contentWindow.document.documentElement
-                    ? color_1.parseColor(context, getComputedStyle(iframe.contentWindow.document.documentElement).backgroundColor)
+                    ? (0, color_1.parseColor)(context, getComputedStyle(iframe.contentWindow.document.documentElement).backgroundColor)
                     : color_1.COLORS.TRANSPARENT;
                 var bodyBackgroundColor = iframe.contentWindow.document.body
-                    ? color_1.parseColor(context, getComputedStyle(iframe.contentWindow.document.body).backgroundColor)
+                    ? (0, color_1.parseColor)(context, getComputedStyle(iframe.contentWindow.document.body).backgroundColor)
                     : color_1.COLORS.TRANSPARENT;
-                _this.backgroundColor = color_1.isTransparent(documentBackgroundColor)
-                    ? color_1.isTransparent(bodyBackgroundColor)
+                _this.backgroundColor = (0, color_1.isTransparent)(documentBackgroundColor)
+                    ? (0, color_1.isTransparent)(bodyBackgroundColor)
                         ? _this.styles.backgroundColor
                         : bodyBackgroundColor
                     : documentBackgroundColor;

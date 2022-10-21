@@ -22,7 +22,7 @@ var parseTextBounds = function (context, value, styles, node) {
             if (features_1.FEATURES.SUPPORT_RANGE_BOUNDS) {
                 var clientRects = createRange(node, offset, text.length).getClientRects();
                 if (clientRects.length > 1) {
-                    var subSegments = exports.segmentGraphemes(text);
+                    var subSegments = (0, exports.segmentGraphemes)(text);
                     var subOffset_1 = 0;
                     subSegments.forEach(function (subSegment) {
                         textBounds.push(new TextBounds(subSegment, bounds_1.Bounds.fromDOMRectList(context, createRange(node, subOffset_1 + offset, subSegment.length).getClientRects())));
@@ -55,7 +55,7 @@ var getWrapperBounds = function (context, node) {
         var parentNode = node.parentNode;
         if (parentNode) {
             parentNode.replaceChild(wrapper, node);
-            var bounds = bounds_1.parseBounds(context, wrapper);
+            var bounds = (0, bounds_1.parseBounds)(context, wrapper);
             if (wrapper.firstChild) {
                 parentNode.replaceChild(wrapper.firstChild, wrapper);
             }
@@ -81,7 +81,7 @@ var segmentGraphemes = function (value) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return Array.from(segmenter.segment(value)).map(function (segment) { return segment.segment; });
     }
-    return text_segmentation_1.splitGraphemes(value);
+    return (0, text_segmentation_1.splitGraphemes)(value);
 };
 exports.segmentGraphemes = segmentGraphemes;
 var segmentWords = function (value, styles) {
@@ -96,31 +96,31 @@ var segmentWords = function (value, styles) {
     return breakWords(value, styles);
 };
 var breakText = function (value, styles) {
-    return styles.letterSpacing !== 0 ? exports.segmentGraphemes(value) : segmentWords(value, styles);
+    return styles.letterSpacing !== 0 ? (0, exports.segmentGraphemes)(value) : segmentWords(value, styles);
 };
 // https://drafts.csswg.org/css-text/#word-separator
 var wordSeparators = [0x0020, 0x00a0, 0x1361, 0x10100, 0x10101, 0x1039, 0x1091];
 var breakWords = function (str, styles) {
-    var breaker = css_line_break_1.LineBreaker(str, {
+    var breaker = (0, css_line_break_1.LineBreaker)(str, {
         lineBreak: styles.lineBreak,
-        wordBreak: styles.overflowWrap === "break-word" /* BREAK_WORD */ ? 'break-word' : styles.wordBreak
+        wordBreak: styles.overflowWrap === "break-word" /* OVERFLOW_WRAP.BREAK_WORD */ ? 'break-word' : styles.wordBreak
     });
     var words = [];
     var bk;
     var _loop_1 = function () {
         if (bk.value) {
             var value = bk.value.slice();
-            var codePoints = css_line_break_1.toCodePoints(value);
+            var codePoints = (0, css_line_break_1.toCodePoints)(value);
             var word_1 = '';
             codePoints.forEach(function (codePoint) {
                 if (wordSeparators.indexOf(codePoint) === -1) {
-                    word_1 += css_line_break_1.fromCodePoint(codePoint);
+                    word_1 += (0, css_line_break_1.fromCodePoint)(codePoint);
                 }
                 else {
                     if (word_1.length) {
                         words.push(word_1);
                     }
-                    words.push(css_line_break_1.fromCodePoint(codePoint));
+                    words.push((0, css_line_break_1.fromCodePoint)(codePoint));
                     word_1 = '';
                 }
             });

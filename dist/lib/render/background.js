@@ -7,38 +7,38 @@ var length_percentage_1 = require("../css/types/length-percentage");
 var parser_1 = require("../css/syntax/parser");
 var box_sizing_1 = require("./box-sizing");
 var calculateBackgroundPositioningArea = function (backgroundOrigin, element) {
-    if (backgroundOrigin === 0 /* BORDER_BOX */) {
+    if (backgroundOrigin === 0 /* BACKGROUND_ORIGIN.BORDER_BOX */) {
         return element.bounds;
     }
-    if (backgroundOrigin === 2 /* CONTENT_BOX */) {
-        return box_sizing_1.contentBox(element);
+    if (backgroundOrigin === 2 /* BACKGROUND_ORIGIN.CONTENT_BOX */) {
+        return (0, box_sizing_1.contentBox)(element);
     }
-    return box_sizing_1.paddingBox(element);
+    return (0, box_sizing_1.paddingBox)(element);
 };
 exports.calculateBackgroundPositioningArea = calculateBackgroundPositioningArea;
 var calculateBackgroundPaintingArea = function (backgroundClip, element) {
-    if (backgroundClip === 0 /* BORDER_BOX */) {
+    if (backgroundClip === 0 /* BACKGROUND_CLIP.BORDER_BOX */) {
         return element.bounds;
     }
-    if (backgroundClip === 2 /* CONTENT_BOX */) {
-        return box_sizing_1.contentBox(element);
+    if (backgroundClip === 2 /* BACKGROUND_CLIP.CONTENT_BOX */) {
+        return (0, box_sizing_1.contentBox)(element);
     }
-    return box_sizing_1.paddingBox(element);
+    return (0, box_sizing_1.paddingBox)(element);
 };
 exports.calculateBackgroundPaintingArea = calculateBackgroundPaintingArea;
 var calculateBackgroundRendering = function (container, index, intrinsicSize) {
-    var backgroundPositioningArea = exports.calculateBackgroundPositioningArea(exports.getBackgroundValueForIndex(container.styles.backgroundOrigin, index), container);
-    var backgroundPaintingArea = exports.calculateBackgroundPaintingArea(exports.getBackgroundValueForIndex(container.styles.backgroundClip, index), container);
-    var backgroundImageSize = exports.calculateBackgroundSize(exports.getBackgroundValueForIndex(container.styles.backgroundSize, index), intrinsicSize, backgroundPositioningArea);
+    var backgroundPositioningArea = (0, exports.calculateBackgroundPositioningArea)((0, exports.getBackgroundValueForIndex)(container.styles.backgroundOrigin, index), container);
+    var backgroundPaintingArea = (0, exports.calculateBackgroundPaintingArea)((0, exports.getBackgroundValueForIndex)(container.styles.backgroundClip, index), container);
+    var backgroundImageSize = (0, exports.calculateBackgroundSize)((0, exports.getBackgroundValueForIndex)(container.styles.backgroundSize, index), intrinsicSize, backgroundPositioningArea);
     var sizeWidth = backgroundImageSize[0], sizeHeight = backgroundImageSize[1];
-    var position = length_percentage_1.getAbsoluteValueForTuple(exports.getBackgroundValueForIndex(container.styles.backgroundPosition, index), backgroundPositioningArea.width - sizeWidth, backgroundPositioningArea.height - sizeHeight);
-    var path = exports.calculateBackgroundRepeatPath(exports.getBackgroundValueForIndex(container.styles.backgroundRepeat, index), position, backgroundImageSize, backgroundPositioningArea, backgroundPaintingArea);
+    var position = (0, length_percentage_1.getAbsoluteValueForTuple)((0, exports.getBackgroundValueForIndex)(container.styles.backgroundPosition, index), backgroundPositioningArea.width - sizeWidth, backgroundPositioningArea.height - sizeHeight);
+    var path = (0, exports.calculateBackgroundRepeatPath)((0, exports.getBackgroundValueForIndex)(container.styles.backgroundRepeat, index), position, backgroundImageSize, backgroundPositioningArea, backgroundPaintingArea);
     var offsetX = Math.round(backgroundPositioningArea.left + position[0]);
     var offsetY = Math.round(backgroundPositioningArea.top + position[1]);
     return [path, offsetX, offsetY, sizeWidth, sizeHeight];
 };
 exports.calculateBackgroundRendering = calculateBackgroundRendering;
-var isAuto = function (token) { return parser_1.isIdentToken(token) && token.value === background_size_1.BACKGROUND_SIZE.AUTO; };
+var isAuto = function (token) { return (0, parser_1.isIdentToken)(token) && token.value === background_size_1.BACKGROUND_SIZE.AUTO; };
 exports.isAuto = isAuto;
 var hasIntrinsicValue = function (value) { return typeof value === 'number'; };
 var calculateBackgroundSize = function (size, _a, bounds) {
@@ -47,11 +47,11 @@ var calculateBackgroundSize = function (size, _a, bounds) {
     if (!first) {
         return [0, 0];
     }
-    if (length_percentage_1.isLengthPercentage(first) && second && length_percentage_1.isLengthPercentage(second)) {
-        return [length_percentage_1.getAbsoluteValue(first, bounds.width), length_percentage_1.getAbsoluteValue(second, bounds.height)];
+    if ((0, length_percentage_1.isLengthPercentage)(first) && second && (0, length_percentage_1.isLengthPercentage)(second)) {
+        return [(0, length_percentage_1.getAbsoluteValue)(first, bounds.width), (0, length_percentage_1.getAbsoluteValue)(second, bounds.height)];
     }
     var hasIntrinsicProportion = hasIntrinsicValue(intrinsicProportion);
-    if (parser_1.isIdentToken(first) && (first.value === background_size_1.BACKGROUND_SIZE.CONTAIN || first.value === background_size_1.BACKGROUND_SIZE.COVER)) {
+    if ((0, parser_1.isIdentToken)(first) && (first.value === background_size_1.BACKGROUND_SIZE.CONTAIN || first.value === background_size_1.BACKGROUND_SIZE.COVER)) {
         if (hasIntrinsicValue(intrinsicProportion)) {
             var targetRatio = bounds.width / bounds.height;
             return targetRatio < intrinsicProportion !== (first.value === background_size_1.BACKGROUND_SIZE.COVER)
@@ -64,7 +64,7 @@ var calculateBackgroundSize = function (size, _a, bounds) {
     var hasIntrinsicHeight = hasIntrinsicValue(intrinsicHeight);
     var hasIntrinsicDimensions = hasIntrinsicWidth || hasIntrinsicHeight;
     // If the background-size is auto or auto auto:
-    if (exports.isAuto(first) && (!second || exports.isAuto(second))) {
+    if ((0, exports.isAuto)(first) && (!second || (0, exports.isAuto)(second))) {
         // If the image has both horizontal and vertical intrinsic dimensions, it's rendered at that size.
         if (hasIntrinsicWidth && hasIntrinsicHeight) {
             return [intrinsicWidth, intrinsicHeight];
@@ -97,16 +97,16 @@ var calculateBackgroundSize = function (size, _a, bounds) {
     if (hasIntrinsicProportion) {
         var width_3 = 0;
         var height_3 = 0;
-        if (length_percentage_1.isLengthPercentage(first)) {
-            width_3 = length_percentage_1.getAbsoluteValue(first, bounds.width);
+        if ((0, length_percentage_1.isLengthPercentage)(first)) {
+            width_3 = (0, length_percentage_1.getAbsoluteValue)(first, bounds.width);
         }
-        else if (length_percentage_1.isLengthPercentage(second)) {
-            height_3 = length_percentage_1.getAbsoluteValue(second, bounds.height);
+        else if ((0, length_percentage_1.isLengthPercentage)(second)) {
+            height_3 = (0, length_percentage_1.getAbsoluteValue)(second, bounds.height);
         }
-        if (exports.isAuto(first)) {
+        if ((0, exports.isAuto)(first)) {
             width_3 = height_3 * intrinsicProportion;
         }
-        else if (!second || exports.isAuto(second)) {
+        else if (!second || (0, exports.isAuto)(second)) {
             height_3 = width_3 / intrinsicProportion;
         }
         return [width_3, height_3];
@@ -117,19 +117,19 @@ var calculateBackgroundSize = function (size, _a, bounds) {
     // it becomes the corresponding dimension of the background positioning area.
     var width = null;
     var height = null;
-    if (length_percentage_1.isLengthPercentage(first)) {
-        width = length_percentage_1.getAbsoluteValue(first, bounds.width);
+    if ((0, length_percentage_1.isLengthPercentage)(first)) {
+        width = (0, length_percentage_1.getAbsoluteValue)(first, bounds.width);
     }
-    else if (second && length_percentage_1.isLengthPercentage(second)) {
-        height = length_percentage_1.getAbsoluteValue(second, bounds.height);
+    else if (second && (0, length_percentage_1.isLengthPercentage)(second)) {
+        height = (0, length_percentage_1.getAbsoluteValue)(second, bounds.height);
     }
-    if (width !== null && (!second || exports.isAuto(second))) {
+    if (width !== null && (!second || (0, exports.isAuto)(second))) {
         height =
             hasIntrinsicWidth && hasIntrinsicHeight
                 ? (width / intrinsicWidth) * intrinsicHeight
                 : bounds.height;
     }
-    if (height !== null && exports.isAuto(first)) {
+    if (height !== null && (0, exports.isAuto)(first)) {
         width =
             hasIntrinsicWidth && hasIntrinsicHeight
                 ? (height / intrinsicHeight) * intrinsicWidth
@@ -153,21 +153,21 @@ var calculateBackgroundRepeatPath = function (repeat, _a, _b, backgroundPosition
     var x = _a[0], y = _a[1];
     var width = _b[0], height = _b[1];
     switch (repeat) {
-        case 2 /* REPEAT_X */:
+        case 2 /* BACKGROUND_REPEAT.REPEAT_X */:
             return [
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left), Math.round(backgroundPositioningArea.top + y)),
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left + backgroundPositioningArea.width), Math.round(backgroundPositioningArea.top + y)),
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left + backgroundPositioningArea.width), Math.round(height + backgroundPositioningArea.top + y)),
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left), Math.round(height + backgroundPositioningArea.top + y))
             ];
-        case 3 /* REPEAT_Y */:
+        case 3 /* BACKGROUND_REPEAT.REPEAT_Y */:
             return [
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left + x), Math.round(backgroundPositioningArea.top)),
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left + x + width), Math.round(backgroundPositioningArea.top)),
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left + x + width), Math.round(backgroundPositioningArea.height + backgroundPositioningArea.top)),
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left + x), Math.round(backgroundPositioningArea.height + backgroundPositioningArea.top))
             ];
-        case 1 /* NO_REPEAT */:
+        case 1 /* BACKGROUND_REPEAT.NO_REPEAT */:
             return [
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left + x), Math.round(backgroundPositioningArea.top + y)),
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left + x + width), Math.round(backgroundPositioningArea.top + y)),

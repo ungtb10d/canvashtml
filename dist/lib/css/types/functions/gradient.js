@@ -6,7 +6,7 @@ var length_percentage_1 = require("../length-percentage");
 var parseColorStop = function (context, args) {
     var color = color_1.color.parse(context, args[0]);
     var stop = args[1];
-    return stop && length_percentage_1.isLengthPercentage(stop) ? { color: color, stop: stop } : { color: color, stop: null };
+    return stop && (0, length_percentage_1.isLengthPercentage)(stop) ? { color: color, stop: stop } : { color: color, stop: null };
 };
 exports.parseColorStop = parseColorStop;
 var processColorStops = function (stops, lineLength) {
@@ -23,7 +23,7 @@ var processColorStops = function (stops, lineLength) {
     for (var i = 0; i < stops.length; i++) {
         var stop_1 = stops[i].stop;
         if (stop_1 !== null) {
-            var absoluteValue = length_percentage_1.getAbsoluteValue(stop_1, lineLength);
+            var absoluteValue = (0, length_percentage_1.getAbsoluteValue)(stop_1, lineLength);
             if (absoluteValue > previous) {
                 processStops.push(absoluteValue);
             }
@@ -63,8 +63,8 @@ exports.processColorStops = processColorStops;
 var getAngleFromCorner = function (corner, width, height) {
     var centerX = width / 2;
     var centerY = height / 2;
-    var x = length_percentage_1.getAbsoluteValue(corner[0], width) - centerX;
-    var y = centerY - length_percentage_1.getAbsoluteValue(corner[1], height);
+    var x = (0, length_percentage_1.getAbsoluteValue)(corner[0], width) - centerX;
+    var y = centerY - (0, length_percentage_1.getAbsoluteValue)(corner[1], height);
     return (Math.atan2(y, x) + Math.PI * 2) % (Math.PI * 2);
 };
 var calculateGradientDirection = function (angle, width, height) {
@@ -105,24 +105,24 @@ var calculateRadius = function (gradient, x, y, width, height) {
     var rx = 0;
     var ry = 0;
     switch (gradient.size) {
-        case 0 /* CLOSEST_SIDE */:
+        case 0 /* CSSRadialExtent.CLOSEST_SIDE */:
             // The ending shape is sized so that that it exactly meets the side of the gradient box closest to the gradient’s center.
             // If the shape is an ellipse, it exactly meets the closest side in each dimension.
-            if (gradient.shape === 0 /* CIRCLE */) {
+            if (gradient.shape === 0 /* CSSRadialShape.CIRCLE */) {
                 rx = ry = Math.min(Math.abs(x), Math.abs(x - width), Math.abs(y), Math.abs(y - height));
             }
-            else if (gradient.shape === 1 /* ELLIPSE */) {
+            else if (gradient.shape === 1 /* CSSRadialShape.ELLIPSE */) {
                 rx = Math.min(Math.abs(x), Math.abs(x - width));
                 ry = Math.min(Math.abs(y), Math.abs(y - height));
             }
             break;
-        case 2 /* CLOSEST_CORNER */:
+        case 2 /* CSSRadialExtent.CLOSEST_CORNER */:
             // The ending shape is sized so that that it passes through the corner of the gradient box closest to the gradient’s center.
             // If the shape is an ellipse, the ending shape is given the same aspect-ratio it would have if closest-side were specified.
-            if (gradient.shape === 0 /* CIRCLE */) {
+            if (gradient.shape === 0 /* CSSRadialShape.CIRCLE */) {
                 rx = ry = Math.min(distance(x, y), distance(x, y - height), distance(x - width, y), distance(x - width, y - height));
             }
-            else if (gradient.shape === 1 /* ELLIPSE */) {
+            else if (gradient.shape === 1 /* CSSRadialShape.ELLIPSE */) {
                 // Compute the ratio ry/rx (which is to be the same as for "closest-side")
                 var c = Math.min(Math.abs(y), Math.abs(y - height)) / Math.min(Math.abs(x), Math.abs(x - width));
                 var _a = findCorner(width, height, x, y, true), cx = _a[0], cy = _a[1];
@@ -130,23 +130,23 @@ var calculateRadius = function (gradient, x, y, width, height) {
                 ry = c * rx;
             }
             break;
-        case 1 /* FARTHEST_SIDE */:
+        case 1 /* CSSRadialExtent.FARTHEST_SIDE */:
             // Same as closest-side, except the ending shape is sized based on the farthest side(s)
-            if (gradient.shape === 0 /* CIRCLE */) {
+            if (gradient.shape === 0 /* CSSRadialShape.CIRCLE */) {
                 rx = ry = Math.max(Math.abs(x), Math.abs(x - width), Math.abs(y), Math.abs(y - height));
             }
-            else if (gradient.shape === 1 /* ELLIPSE */) {
+            else if (gradient.shape === 1 /* CSSRadialShape.ELLIPSE */) {
                 rx = Math.max(Math.abs(x), Math.abs(x - width));
                 ry = Math.max(Math.abs(y), Math.abs(y - height));
             }
             break;
-        case 3 /* FARTHEST_CORNER */:
+        case 3 /* CSSRadialExtent.FARTHEST_CORNER */:
             // Same as closest-corner, except the ending shape is sized based on the farthest corner.
             // If the shape is an ellipse, the ending shape is given the same aspect ratio it would have if farthest-side were specified.
-            if (gradient.shape === 0 /* CIRCLE */) {
+            if (gradient.shape === 0 /* CSSRadialShape.CIRCLE */) {
                 rx = ry = Math.max(distance(x, y), distance(x, y - height), distance(x - width, y), distance(x - width, y - height));
             }
-            else if (gradient.shape === 1 /* ELLIPSE */) {
+            else if (gradient.shape === 1 /* CSSRadialShape.ELLIPSE */) {
                 // Compute the ratio ry/rx (which is to be the same as for "farthest-side")
                 var c = Math.max(Math.abs(y), Math.abs(y - height)) / Math.max(Math.abs(x), Math.abs(x - width));
                 var _b = findCorner(width, height, x, y, false), cx = _b[0], cy = _b[1];
@@ -156,8 +156,8 @@ var calculateRadius = function (gradient, x, y, width, height) {
             break;
     }
     if (Array.isArray(gradient.size)) {
-        rx = length_percentage_1.getAbsoluteValue(gradient.size[0], width);
-        ry = gradient.size.length === 2 ? length_percentage_1.getAbsoluteValue(gradient.size[1], height) : rx;
+        rx = (0, length_percentage_1.getAbsoluteValue)(gradient.size[0], width);
+        ry = gradient.size.length === 2 ? (0, length_percentage_1.getAbsoluteValue)(gradient.size[1], height) : rx;
     }
     return [rx, ry];
 };

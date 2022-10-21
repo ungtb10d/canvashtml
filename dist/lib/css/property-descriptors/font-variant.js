@@ -5,7 +5,7 @@ var parser_1 = require("../syntax/parser");
 exports.fontVariant = {
     name: 'font-variant',
     initialValue: 'none',
-    type: 1 /* LIST */,
+    type: 1 /* PropertyDescriptorParsingType.LIST */,
     prefix: false,
     parse: function (_context, tokens) {
         return tokens.filter(parser_1.isIdentToken).map(function (token) { return token.value; });

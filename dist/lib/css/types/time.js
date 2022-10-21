@@ -4,7 +4,7 @@ exports.time = void 0;
 exports.time = {
     name: 'time',
     parse: function (_context, value) {
-        if (value.type === 15 /* DIMENSION_TOKEN */) {
+        if (value.type === 15 /* TokenType.DIMENSION_TOKEN */) {
             switch (value.unit.toLowerCase()) {
                 case 's':
                     return 1000 * value.number;
